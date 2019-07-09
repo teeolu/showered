@@ -45,7 +45,6 @@ export const authReducer = handleActions(
             }
         },
         [requestLoginAction]: (state, action) => {
-            console.log("receiveLoginAction action ", action)
             return {
                 ...state,
                 isLoading: true,

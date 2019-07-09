@@ -64,11 +64,10 @@ function* userinfoActionWatcher({ payload }) {
         const result = yield call(userinfoApi, token);
 
         if (result.success) {
+            navigation.navigate(navigateTo)
             yield put(receiveUserinfoAction(payload));
-            if (navigation) {
-                navigation.navigate(navigateTo)
-            }
         } else {
+            navigation.navigate('Login')
             const error = result instanceof Error ? result : new Error(result.message ? result.message : `HTTP Error: status = ${result.status}`);
             yield put(receiveLoginAction(error));
         }

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, Image, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 
-import { Block, Card, Text, Icon, Label } from '../components';
-import * as theme from '../constants/theme';
+import { Block, Card, Text, Icon, Label } from '../../components';
+import * as theme from '../../constants/theme';
 
 const styles = StyleSheet.create({
   overview: {
@@ -42,6 +42,10 @@ class Overview extends Component {
     )
   }
 
+  navigateToBrowse = () => {
+    this.props.navigation.navigate('Browse')
+  }
+
   render() {
     return (
       <SafeAreaView style={styles.overview}>
@@ -50,7 +54,7 @@ class Overview extends Component {
             <Block flex={1.2} center middle style={{ marginRight: 20 }}>
               <Text light height={43} size={36} spacing={-0.45}>86</Text>
               <Text ligth caption center style={{ paddingHorizontal: 16, marginTop: 3 }}>
-                OPERATING SCORE
+                OPERATING SCO
               </Text>
             </Block>
             <Block>
@@ -64,18 +68,40 @@ class Overview extends Component {
           <Block row style={[styles.margin, { marginTop: 18 }]}>
             <Card middle style={{ marginRight: 7 }}>
               <Icon vehicle />
-              <Text h2 style={{ marginTop: 17 }}>1,428</Text>
-              <Text paragraph color="gray">Vehicles on track</Text>
+              <Text paragraph onPress={this.navigateToBrowse} style={{ marginTop: 17 }}></Text>
             </Card>
             
             <Card middle style={{ marginLeft: 7 }}>
               <Icon distance />
-              <Text h2 style={{ marginTop: 17 }}>158.3</Text>
-              <Text paragraph color="gray">Distance driven</Text>
+              <Text paragraph onPress={this.navigateToBrowse} style={{ marginTop: 17 }}>RESTAURANT</Text>
             </Card>
           </Block>
 
-          <Card
+          <Block row style={[styles.margin, { marginTop: 18 }]}>
+            <Card middle style={{ marginRight: 7 }}>
+              <Icon vehicle />
+              <Text paragraph onPress={this.navigateToBrowse} style={{ marginTop: 17 }}>SPA</Text>
+            </Card>
+            
+            <Card middle style={{ marginLeft: 7 }}>
+              <Icon distance />
+              <Text paragraph onPress={this.navigateToBrowse} style={{ marginTop: 17 }}>BOUTIQUE</Text>
+            </Card>
+          </Block>
+
+          <Block row style={[styles.margin, { marginTop: 18 }]}>
+            <Card middle style={{ marginRight: 7 }}>
+              <Icon vehicle />
+              <Text paragraph onPress={this.navigateToBrowse} style={{ marginTop: 17 }}>HOTEL</Text>
+            </Card>
+            
+            <Card middle style={{ marginLeft: 7 }}>
+              <Icon distance />
+              <Text paragraph onPress={this.navigateToBrowse} style={{ marginTop: 17 }}>BOUTIQUE</Text>
+            </Card>
+          </Block>
+
+          {/* <Card
             title="TODAY'S TRIPS"
             style={[styles.margin, { marginTop: 18 }]}
           >
@@ -184,11 +210,11 @@ class Overview extends Component {
                 </Block>
               </Block>
             </Block>
-          </Card>
+          </Card> */}
         </ScrollView>
       </SafeAreaView>
     )
-  }
+  } 
 }
 
 export default Overview;
