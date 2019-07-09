@@ -5,6 +5,9 @@ import Button from './Button';
 import Card from './Card';
 import Icon from './Icon';
 import Label from './Label';
+import Badge from './Badge';
+import Container from './Container'
+
 
 export {
   Block,
@@ -14,4 +17,6 @@ export {
   Card,
   Icon,
   Label,
+  Badge,
+  Container
 }

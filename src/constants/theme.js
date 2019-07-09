@@ -18,6 +18,11 @@ const colors = {
   border: '#D6DDF6',
   card: 'rgba(46,91,255,0.08)',
   shadow: 'rgba(46,91,255,0.07)',
+
+  accent: "#F3534A",
+  primary: "#0AC4BA",
+  secondary: "#2BDA8E",
+  tertiary: "#FFE358",
 };
 
 const sizes = {
@@ -26,9 +31,14 @@ const sizes = {
   h2: 34,
   h3: 28,
   h4: 15,
+  base: 16,
   paragraph: 15,
   caption: 13,
   captionMedium: 12,
+
+  font: 14,
+  radius: 6,
+  padding: 25,
 };
 
 const fonts = {
