@@ -1,28 +1,34 @@
-class Auth {
-    constructor() {
-        // todo
-    }
+import { AsyncStorage } from 'react-native';
 
-    static isAuthenticated() {
-        const token = localStorage.getItem('token');
-        console.log(`Auth.isAuthenticated: token => ${JSON.stringify(token)}`);
-        return token ? true : false;
-    }
+export const isAuthenticated = async () => {
+    const token = await this.getToken();
+    return token ? true : false;
+}
 
-    static setToken(token) {
-        console.log(`Auth.setToken: token => ${JSON.stringify(token)}`);
-        localStorage.setItem('token', token);
-    }
-
-    static getToken() {
-        return localStorage.getItem('token');
-    }
-
-    static removeToken() {
-        const token = localStorage.getItem('token');
-        console.log(`Auth.removeToken: token => ${JSON.stringify(token)}`);
-        localStorage.removeItem('token');
+export const setToken = async (token) => {
+    console.log("settoken ", token)
+    try {
+        await AsyncStorage.setItem('@showered@token', token);
+    } catch (error) {
+        throw new Error(error.message)
     }
 }
 
-export default Auth;
+export const getToken = async () => {
+    try {
+        const token = await AsyncStorage.getItem('@showered@token');
+        if (token !== null) {
+            return token;
+        }
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}
+
+export const removeToken = async () => {
+    try {
+        await AsyncStorage.removeItem('@showered@token');
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}

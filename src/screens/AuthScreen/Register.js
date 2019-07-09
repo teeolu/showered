@@ -111,7 +111,7 @@ class Register extends Component {
       lastName: lastName.value,
       password: password.value,
       navigation,
-      navigateTo: 'Overview'
+      navigateTo: 'Login'
     });
   }
 

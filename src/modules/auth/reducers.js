@@ -5,6 +5,7 @@ import {
     receiveSignupAction,
     requestLoginAction,
     receiveLoginAction,
+    receiveUserinfoAction
 } from './action';
 
 const defaultState = {
@@ -19,7 +20,6 @@ export const authStatus = {
 export const authReducer = handleActions(
     {
         [requestSignupAction]: (state, action) => {
-            console.log("action payload ", action)
             return {
                 ...state,
                 isLoading: true,
@@ -45,7 +45,7 @@ export const authReducer = handleActions(
             }
         },
         [requestLoginAction]: (state, action) => {
-            console.log("action payload ", action)
+            console.log("receiveLoginAction action ", action)
             return {
                 ...state,
                 isLoading: true,
@@ -67,6 +67,26 @@ export const authReducer = handleActions(
                     ...state,
                     isLoading: false,
                     request: authStatus.login
+                };
+            }
+        },
+        [receiveUserinfoAction]: {
+            next(state, action) {
+                const { payload } = action;
+                return {
+                    ...state,
+                    userdata: {
+                        firstName: payload.firstName,
+                        lastName: payload.lastName,
+                        email: payload.email
+                    }
+                };
+            },
+            throw(state, action) {
+                const { payload } = action;
+                return {
+                    ...state,
+                    ...payload
                 };
             }
         }
