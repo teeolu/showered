@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 });
 
 class Overview extends Component {
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => ({
     headerLeftContainerStyle: {
       paddingLeft: 24
     },
@@ -32,7 +32,7 @@ class Overview extends Component {
       paddingRight: 24
     },
     headerLeft: (
-      <TouchableOpacity><Icon menu /></TouchableOpacity>
+      <TouchableOpacity onPress={navigation.openDrawer}><Icon menu /></TouchableOpacity>
     ),
     headerRight: (
       <TouchableOpacity><Icon notification /></TouchableOpacity>
@@ -40,7 +40,7 @@ class Overview extends Component {
     headerTitle: (
       <Block row middle><Text h4>Overview</Text></Block>
     )
-  }
+  })
 
   navigateToBrowse = () => {
     this.props.navigation.navigate('Browse')
@@ -101,7 +101,7 @@ class Overview extends Component {
             </Card>
           </Block>
 
-          {/* <Card
+          <Card
             title="TODAY'S TRIPS"
             style={[styles.margin, { marginTop: 18 }]}
           >
@@ -210,7 +210,7 @@ class Overview extends Component {
                 </Block>
               </Block>
             </Block>
-          </Card> */}
+          </Card> 
         </ScrollView>
       </SafeAreaView>
     )

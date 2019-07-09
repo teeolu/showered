@@ -39,6 +39,11 @@ const sizes = {
   font: 14,
   radius: 6,
   padding: 25,
+
+  margin: 36,
+  title: 24,
+  border: 16,
+  radius: 12,
 };
 
 const fonts = {

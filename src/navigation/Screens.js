@@ -8,6 +8,7 @@ import Settings from '../screens/Settings';
 import Map from '../screens/Map';
 import Vehicles from '../screens/Vehicles';
 import BrowseContainer from '../containers/BrowseContainer';
+import CategoryDetailsContainer from '../containers/CategoryDetailsContainer';
 
 export default createDrawerNavigator({
   OverviewStack,
@@ -16,5 +17,6 @@ export default createDrawerNavigator({
   Settings,
   Map,
   Vehicles,
-  Browse: BrowseContainer
+  Browse: BrowseContainer,
+  CategoryDetails: CategoryDetailsContainer
 });
