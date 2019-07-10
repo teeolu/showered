@@ -56,7 +56,7 @@ class Browse extends Component {
   }
 
   render() {
-    const { profile } = this.props;
+    const { profile, navigation } = this.props;
     const { categories } = this.state;
     const tabs = ['Restaurants', 'Cinema', 'Boutiques', 'Spa', 'Stores'];
 
@@ -114,6 +114,7 @@ class Browse extends Component {
                   category={category} 
                   styles={styles}
                   key={category.id}
+                  navigation={navigation}
                   active={this.state.active}/>
             ))}
           </View>
