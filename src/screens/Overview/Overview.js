@@ -1,14 +1,60 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, Image, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import { TouchableOpacity, Image, SafeAreaView, ImageBackground, ScrollView, Dimensions, StyleSheet, Animated, View, FlatList } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Octicons from 'react-native-vector-icons/Octicons';
 
 import { Block, Card, Text, Icon, Label } from '../../components';
 import * as theme from '../../constants/theme';
+import { articlesInfo } from '../../constants/mocks';
+const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   overview: {
     flex: 1,
     flexDirection: 'column',
     backgroundColor: theme.colors.white,
+  },
+  flex: {
+    flex: 1,
+  },
+  rating: {
+    fontSize: theme.sizes.font * 2,
+    color: theme.colors.white,
+    fontWeight: 'bold'
+  },
+  dots: {
+    width: 10,
+    height: 10,
+    borderWidth: 2.5,
+    borderRadius: 5,
+    marginHorizontal: 6,
+    backgroundColor: theme.colors.gray,
+    borderColor: 'transparent',
+  },
+  activeDot: {
+    width: 12.5,
+    height: 12.5,
+    borderRadius: 6.25,
+    borderColor: theme.colors.active,
+  },
+  destinationInfo: {
+    position: 'absolute',
+    borderRadius: theme.sizes.radius,
+    paddingHorizontal: theme.sizes.padding,
+    paddingVertical: theme.sizes.padding / 2,
+    bottom: -theme.sizes.padding,
+    right: theme.sizes.padding,
+    left: theme.sizes.padding,
+    backgroundColor: theme.colors.white,
+  },
+  destinations: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  avatar: {
+    width: theme.sizes.padding,
+    height: theme.sizes.padding,
+    borderRadius: theme.sizes.padding / 2,
   },
   margin: {
     marginHorizontal: 25,
@@ -20,7 +66,30 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-  }
+  },
+  column: {
+    flexDirection: 'column'
+  },
+  shadow: {
+    shadowColor: theme.colors.black,
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+  },
+  row: {
+    flexDirection: 'row'
+  },
+  destination: {
+    width: width - (theme.sizes.padding * 2),
+    height: width * 0.6,
+    marginHorizontal: theme.sizes.margin,
+    paddingHorizontal: theme.sizes.padding,
+    paddingVertical: theme.sizes.padding * 0.66,
+    borderRadius: theme.sizes.radius
+  },
 });
 
 class Overview extends Component {
@@ -42,6 +111,102 @@ class Overview extends Component {
     )
   })
 
+  scrollX = new Animated.Value(0);
+
+  renderDots() {
+    const dotPosition = Animated.divide(this.scrollX, width);
+    return (
+      <View style={[
+        styles.flex, styles.row,
+        { justifyContent: 'center', alignItems: 'center', marginTop: (theme.sizes.margin * 2) }
+      ]}>
+        {articlesInfo.map((item, index) => {
+          const borderWidth = dotPosition.interpolate({
+            inputRange: [index -1, index, index + 1],
+            outputRange: [0, 2.5, 0],
+            extrapolate: 'clamp'
+          });
+          return (
+            <Animated.View
+              key={`step-${item.id}`}
+              style={[styles.dots, styles.activeDot, { borderWidth: borderWidth } ]}
+            />
+          )
+        })}
+      </View>
+    )
+  }
+
+  renderDestination = item => {
+    const { navigation } = this.props;
+    return (
+      <TouchableOpacity activeOpacity={0.8}>
+        <ImageBackground
+          style={[styles.flex, styles.destination, styles.shadow]}
+          imageStyle={{ borderRadius: theme.sizes.radius }}
+          source={{ uri: item.preview }}
+        >
+          <View style={[styles.row, { justifyContent: 'space-between' }]}>
+            <View style={{ flex: 0 }}>
+              <Image source={{ uri: item.user.avatar }} style={styles.avatar} />
+            </View>
+            <View style={[styles.column, { flex: 2, paddingHorizontal: theme.sizes.padding / 2 }]}>
+              <Text style={{ color: theme.colors.white, fontWeight: 'bold' }}>{item.user.name}</Text>
+              <Text style={{ color: theme.colors.white }}>
+                <Octicons
+                  name="location"
+                  size={theme.sizes.font * 0.8}
+                  color={theme.colors.white}
+                />
+                <Text> {item.location}</Text>
+              </Text>
+            </View>
+            <View style={{ flex: 0, justifyContent: 'center', alignItems: 'flex-end', }}>
+              <Text style={styles.rating}>{item.rating}</Text>
+            </View>
+          </View>
+          <View style={[styles.column, styles.destinationInfo, styles.shadow]}>
+            <Text style={{ fontSize: theme.sizes.font * 1.25, fontWeight: '500', paddingBottom: 8, }}>
+              {item.title}
+            </Text>
+            <View style={[ styles.row, { justifyContent: 'space-between', alignItems: 'flex-end', }]}>
+              <Text style={{ color: theme.colors.caption }}>
+                {item.description.split('').slice(0, 50)}...
+              </Text>
+              <FontAwesome
+                name="chevron-right"
+                size={theme.sizes.font * 0.75}
+                color={theme.colors.caption}
+              />
+            </View>
+          </View>
+        </ImageBackground>
+      </TouchableOpacity>
+    )
+  }
+
+  renderHeading = () => {
+      return (
+        <View style={[ styles.column, styles.destinations ]}>
+          <FlatList
+            horizontal
+            pagingEnabled
+            scrollEnabled
+            showsHorizontalScrollIndicator={false}
+            decelerationRate={0}
+            scrollEventThrottle={16}
+            snapToAlignment="center"
+            style={{ overflow:'visible' }}
+            data={articlesInfo}
+            keyExtractor={(item, index) => `${item.id}`}
+            onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: this.scrollX }} }])}
+            renderItem={({ item }) => this.renderDestination(item)}
+          />
+          {this.renderDots()}
+        </View>
+      );
+  }
+
   navigateToBrowse = () => {
     this.props.navigation.navigate('Browse')
   }
@@ -50,20 +215,7 @@ class Overview extends Component {
     return (
       <SafeAreaView style={styles.overview}>
         <ScrollView contentContainerStyle={{ paddingVertical: 25 }}>
-          <Card row middle style={styles.margin}>
-            <Block flex={1.2} center middle style={{ marginRight: 20 }}>
-              <Text light height={43} size={36} spacing={-0.45}>86</Text>
-              <Text ligth caption center style={{ paddingHorizontal: 16, marginTop: 3 }}>
-                OPERATING SCO
-              </Text>
-            </Block>
-            <Block>
-              <Text paragraph color="black3">
-                All cars are operating well.
-                There were 1,233 trips since your last login.
-              </Text>
-            </Block>
-          </Card>
+          {this.renderHeading()}
 
           <Block row style={[styles.margin, { marginTop: 18 }]}>
             <Card middle style={{ marginRight: 7 }}>

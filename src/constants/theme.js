@@ -40,7 +40,7 @@ const sizes = {
   radius: 6,
   padding: 25,
 
-  margin: 36,
+  margin: 25,
   title: 24,
   border: 16,
   radius: 12,
