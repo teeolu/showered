@@ -33,11 +33,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'flex-start',
     },
-    content: {
-        // backgroundColor: theme.colors.active,
-        // borderTopLeftRadius: theme.sizes.border,
-        // borderTopRightRadius: theme.sizes.border,
-    },
     contentHeader: {
         backgroundColor: 'transparent',
         padding: theme.sizes.padding,
@@ -88,12 +83,12 @@ const styles = StyleSheet.create({
         color: theme.colors.caption
     },
     driver: {
-      marginBottom: 11,
+        marginBottom: 11,
     },
     avatar: {
-      width: 48,
-      height: 48,
-      borderRadius: 24,
+        width: 48,
+        height: 48,
+        borderRadius: 24,
     }
 });
 
@@ -217,126 +212,90 @@ class CategoryDetails extends Component {
                             title="Our menus"
                             style={[styles.margin, { marginTop: 18 }]}
                         >
-                            <Block style={styles.driver}>
-                                <TouchableOpacity activeOpacity={0.8}>
-                                    <Block row center>
-                                        <Block>
-                                            <Image
-                                                style={styles.avatar}
-                                                source={{ uri: 'https://images.unsplash.com/photo-1506244856291-8910ea843e81?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80' }}
-                                            />
-                                        </Block>
-                                        <Block flex={2}>
-                                            <Text h4>Grand Tesoro</Text>
-                                            <Text paragraph color="gray">Chevrolet Bolt</Text>
-                                        </Block>
-                                        <Block>
-                                            <Text paragraph right color="black">$6,432</Text>
-                                            <Text paragraph right color="gray">1,232 miles</Text>
-                                        </Block>
-                                    </Block>
-                                </TouchableOpacity>
-                            </Block>
-                            <Block style={styles.driver}>
-                                <TouchableOpacity activeOpacity={0.8}>
-                                    <Block row center>
-                                        <Block>
-                                            <Image
-                                                style={styles.avatar}
-                                                source={{ uri: 'https://images.unsplash.com/photo-1521657249896-063c0c611fe5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80' }}
-                                            />
-                                        </Block>
-                                        <Block flex={2}>
-                                            <Text h4>Invision App</Text>
-                                            <Text paragraph color="gray">Tesla Model X</Text>
-                                        </Block>
-                                        <Block>
-                                            <Text paragraph right color="black">$6,432</Text>
-                                            <Text paragraph right color="gray">1,232 miles</Text>
-                                        </Block>
-                                    </Block>
-                                </TouchableOpacity>
-                            </Block>
-                            <Block style={styles.driver}>
-                                <TouchableOpacity activeOpacity={0.8}>
-                                    <Block row center>
-                                        <Block>
-                                            <Image
-                                                style={styles.avatar}
-                                                source={{ uri: 'https://images.unsplash.com/photo-1536700503339-1e4b06520771?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80' }}
-                                            />
-                                        </Block>
-                                        <Block flex={2}>
-                                            <Text h4>React UI Kit</Text>
-                                            <Text paragraph color="gray">Volvo Intellisafe</Text>
-                                        </Block>
-                                        <Block>
-                                            <Text paragraph right color="black">$6,432</Text>
-                                            <Text paragraph right color="gray">1,232 miles</Text>
-                                        </Block>
-                                    </Block>
-                                </TouchableOpacity>
-                            </Block>
-                            <Block style={styles.driver}>
-                                <TouchableOpacity activeOpacity={0.8}>
-                                    <Block row center>
-                                        <Block>
-                                            <Image
-                                                style={styles.avatar}
-                                                source={{ uri: 'https://images.unsplash.com/photo-1506244856291-8910ea843e81?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80' }}
-                                            />
-                                        </Block>
-                                        <Block flex={2}>
-                                            <Text h4>Grand Tesoro</Text>
-                                            <Text paragraph color="gray">Chevrolet Bolt</Text>
-                                        </Block>
-                                        <Block>
-                                            <Text paragraph right color="black">$6,432</Text>
-                                            <Text paragraph right color="gray">1,232 miles</Text>
-                                        </Block>
-                                    </Block>
-                                </TouchableOpacity>
-                            </Block>
-                            <Block style={styles.driver}>
-                                <TouchableOpacity activeOpacity={0.8}>
-                                    <Block row center>
-                                        <Block>
-                                            <Image
-                                                style={styles.avatar}
-                                                source={{ uri: 'https://images.unsplash.com/photo-1521657249896-063c0c611fe5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80' }}
-                                            />
-                                        </Block>
-                                        <Block flex={2}>
-                                            <Text h4>Invision App</Text>
-                                            <Text paragraph color="gray">Tesla Model X</Text>
-                                        </Block>
-                                        <Block>
-                                            <Text paragraph right color="black">$6,432</Text>
-                                            <Text paragraph right color="gray">1,232 miles</Text>
-                                        </Block>
-                                    </Block>
-                                </TouchableOpacity>
-                            </Block>
-                            <Block style={styles.driver}>
-                                <TouchableOpacity activeOpacity={0.8}>
-                                    <Block row center>
-                                        <Block>
-                                            <Image
-                                                style={styles.avatar}
-                                                source={{ uri: 'https://images.unsplash.com/photo-1536700503339-1e4b06520771?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80' }}
-                                            />
-                                        </Block>
-                                        <Block flex={2}>
-                                            <Text h4>React UI Kit</Text>
-                                            <Text paragraph color="gray">Volvo Intellisafe</Text>
-                                        </Block>
-                                        <Block>
-                                            <Text paragraph right color="black">$6,432</Text>
-                                            <Text paragraph right color="gray">1,232 miles</Text>
-                                        </Block>
-                                    </Block>
-                                </TouchableOpacity>
-                            </Block>
+                            <Card row middle style={styles.margin}>
+                                <Block flex={1.2} center middle style={{ marginRight: 20 }}>
+                                    <Text light height={43} size={36} spacing={-0.45}>86</Text>
+                                    <Text ligth caption center style={{ paddingHorizontal: 16, marginTop: 3 }}>
+                                        OPERATING SCORE
+                            </Text>
+                                </Block>
+                                <Block>
+                                    <Text paragraph color="black3">
+                                        All cars are operating well.
+                                        There were 1,233 trips since your last login.
+                            </Text>
+                                </Block>
+                            </Card>
+                            <Card row middle style={styles.margin}>
+                                <Block flex={1.2} center middle style={{ marginRight: 20 }}>
+                                    <Text light height={43} size={36} spacing={-0.45}>86</Text>
+                                    <Text ligth caption center style={{ paddingHorizontal: 16, marginTop: 3 }}>
+                                        OPERATING SCORE
+                            </Text>
+                                </Block>
+                                <Block>
+                                    <Text paragraph color="black3">
+                                        All cars are operating well.
+                                        There were 1,233 trips since your last login.
+                            </Text>
+                                </Block>
+                            </Card>
+                            <Card row middle style={styles.margin}>
+                                <Block flex={1.2} center middle style={{ marginRight: 20 }}>
+                                    <Text light height={43} size={36} spacing={-0.45}>86</Text>
+                                    <Text ligth caption center style={{ paddingHorizontal: 16, marginTop: 3 }}>
+                                        OPERATING SCORE
+                            </Text>
+                                </Block>
+                                <Block>
+                                    <Text paragraph color="black3">
+                                        All cars are operating well.
+                                        There were 1,233 trips since your last login.
+                            </Text>
+                                </Block>
+                            </Card>
+                            <Card row middle style={styles.margin}>
+                                <Block flex={1.2} center middle style={{ marginRight: 20 }}>
+                                    <Text light height={43} size={36} spacing={-0.45}>86</Text>
+                                    <Text ligth caption center style={{ paddingHorizontal: 16, marginTop: 3 }}>
+                                        OPERATING SCORE
+                            </Text>
+                                </Block>
+                                <Block>
+                                    <Text paragraph color="black3">
+                                        All cars are operating well.
+                                        There were 1,233 trips since your last login.
+                            </Text>
+                                </Block>
+                            </Card>
+                            <Card row middle style={styles.margin}>
+                                <Block flex={1.2} center middle style={{ marginRight: 20 }}>
+                                    <Text light height={43} size={36} spacing={-0.45}>86</Text>
+                                    <Text ligth caption center style={{ paddingHorizontal: 16, marginTop: 3 }}>
+                                        OPERATING SCORE
+                            </Text>
+                                </Block>
+                                <Block>
+                                    <Text paragraph color="black3">
+                                        All cars are operating well.
+                                        There were 1,233 trips since your last login.
+                            </Text>
+                                </Block>
+                            </Card>
+                            <Card row middle style={styles.margin}>
+                                <Block flex={1.2} center middle style={{ marginRight: 20 }}>
+                                    <Text light height={43} size={36} spacing={-0.45}>86</Text>
+                                    <Text ligth caption center style={{ paddingHorizontal: 16, marginTop: 3 }}>
+                                        OPERATING SCORE
+                            </Text>
+                                </Block>
+                                <Block>
+                                    <Text paragraph color="black3">
+                                        All cars are operating well.
+                                        There were 1,233 trips since your last login.
+                            </Text>
+                                </Block>
+                            </Card>
                         </Card>
                     </View>
                 </View>

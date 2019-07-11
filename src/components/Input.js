@@ -7,38 +7,38 @@ const { width } = Dimensions.get("window");
 
 export default class Input extends Component {
   handleBlur = type => event => {
-    var properties = {...this.props.inputInfo};
+    var properties = { ...this.props.inputInfo };
     var { rules, value } = properties[this.props.type];
 
     const setError = (error) => {
-      this.props.blur({...error, type })
+      this.props.blur({ ...error, type })
     }
 
-    if(value.length === 0 ){
+    if (value.length === 0) {
       return setError({ error: true, errorMessage: 'Field can\'t be empty' })
     }
-    if(rules.maxLength && value.length > rules.maxLength){
+    if (rules.maxLength && value.length > rules.maxLength) {
       return setError({ error: true, errorMessage: 'value too long' })
     }
-    if(rules.minLength && value.length < rules.minLength){
+    if (rules.minLength && value.length < rules.minLength) {
       return setError({ error: true, errorMessage: 'value too short' })
     }
-    if(rules.email){
+    if (rules.email) {
       var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       var valid = re.test(value);
-      if(!valid){
+      if (!valid) {
         return setError({ error: true, errorMessage: 'Email must be a valid mail' });
       }
     }
-    if(rules.password){
+    if (rules.password) {
       var re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,15}$/;
       var valid = re.test(value);
-      if(!valid){
+      if (!valid) {
         return setError({ error: true, errorMessage: 'Atleast a number, a capital letter, and minimum of 8 characters' })
       }
     }
-    if(rules.confirmPassword){
-      if(value !== properties["password"].value){
+    if (rules.confirmPassword) {
+      if (value !== properties["password"].value) {
         return setError({ error: true, errorMessage: 'Must be equal to password input' })
       }
     }
@@ -46,7 +46,7 @@ export default class Input extends Component {
   }
 
   render() {
-    const { label, rightLabel, type, autoFocus, inputInfo = {}, full, email, phone, number, password, style, ...props } = this.props;
+    const { label, rightLabel, type, description, autoFocus, multiline, numberOfLines, inputInfo = {}, full, email, phone, number, password, style, ...props } = this.props;
     const inputStyles = [
       styles.input,
       full && styles.full,
@@ -66,16 +66,23 @@ export default class Input extends Component {
           </Text>
           {rightLabel}
         </View>
+        {description && (
+          <Text style={{ paddingRight: theme.sizes.base }} paragraph color="black3">
+            {description}
+          </Text>
+        )}
         {inputInfo && inputInfo[type] && inputInfo[type].error && (
           <Text paragraph color="black3">
             {inputInfo[type].errorMessage}
           </Text>
         )}
         <TextInput
-          style={inputStyles}
+          style={[inputStyles]}
           secureTextEntry={password}
           autoCapitalize="none"
           autoCorrect={false}
+          multiline={multiline || false}
+          numberOfLines={multiline && 10}
           autoFocus={autoFocus && true}
           onBlur={this.handleBlur(type)}
           keyboardType={inputType}

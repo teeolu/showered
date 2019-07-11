@@ -92,7 +92,9 @@ class Browse extends Component {
           shadowRadius: 13,
           elevation: 2, flexDirection: 'row', ...styles.tabs
         }}>
-          <ScrollView horizontal>
+          <ScrollView 
+            horizontal
+            showsHorizontalScrollIndicator={false}>
             {tabs.map(tab => this.renderTab(tab))}
           </ScrollView>
         </View>
