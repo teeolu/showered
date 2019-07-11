@@ -220,7 +220,7 @@ class Overview extends Component {
           <Block row style={[styles.margin, { marginTop: 18 }]}>
             <Card middle style={{ marginRight: 7 }}>
               <Icon vehicle />
-              <Text paragraph onPress={this.navigateToBrowse} style={{ marginTop: 17 }}></Text>
+              <Text paragraph onPress={this.navigateToBrowse} style={{ marginTop: 17 }}>CINEMA</Text>
             </Card>
             
             <Card middle style={{ marginLeft: 7 }}>
