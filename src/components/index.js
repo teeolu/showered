@@ -6,8 +6,9 @@ import Card from './Card';
 import Icon from './Icon';
 import Label from './Label';
 import Badge from './Badge';
-import Container from './Container'
-
+import Container from './Container';
+import Box from './Box';
+import SelectList from './SelectList';
 
 export {
   Block,
@@ -18,5 +19,7 @@ export {
   Icon,
   Label,
   Badge,
-  Container
+  Container,
+  Box,
+  SelectList
 }

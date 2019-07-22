@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { TouchableOpacity, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 
 import Block from './Block';
 import Text from './Text';
-import Icon from './Icon';
 import * as theme from '../constants/theme';
 
 export default class Card extends Component {

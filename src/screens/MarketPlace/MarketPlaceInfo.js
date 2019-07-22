@@ -8,24 +8,6 @@ class AddMarketplaceInfo extends Component {
         formError: false,
         errorMessage: "",
         fields: {
-            firstName: {
-                value: "",
-                error: false,
-                errorMessage: "",
-                rules: {
-                    maxLength: 40,
-                    minLength: 3
-                }
-            },
-            lastName: {
-                value: "",
-                error: false,
-                errorMessage: "",
-                rules: {
-                    maxLength: 40,
-                    minLength: 3
-                }
-            },
             email: {
                 value: "",
                 error: false,
@@ -53,28 +35,6 @@ class AddMarketplaceInfo extends Component {
                 }
             }
         }
-    }
-
-    handleChange = type => text => {
-        let newState = { ...this.state };
-        newState.fields[type] = { ...newState.fields[type], value: text, error: false, errorMessage: "" }
-
-        this.setState((prevState) => ({
-            ...prevState,
-            ...newState,
-            formError: false,
-            errorMessage: ""
-        }));
-    }
-
-    blurReact = ({ error, errorMessage, type }) => {
-        let newState = { ...this.state };
-        newState.fields[type] = { ...newState.fields[type], error, errorMessage };
-
-        this.setState((prevState) => ({
-            ...prevState,
-            ...newState
-        }));
     }
 
     validateInput = arg => {
@@ -107,7 +67,22 @@ class AddMarketplaceInfo extends Component {
         });
     }
 
+    blurReact = ({ error, errorMessage, type }) => {
+        let newState = { ...this.state };
+        newState.fields[type] = { ...newState.fields[type], error, errorMessage };
+
+        this.setState((prevState) => ({
+            ...prevState,
+            ...newState
+        }));
+    }
+
+    handleText = text => () => {
+        this.props.handleChange("marketPlaceName", text)
+    }
+
     render() {
+        const { handleChange, blur, inputInfo } = this.props;
         return (
             <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
                 <Card
@@ -118,29 +93,23 @@ class AddMarketplaceInfo extends Component {
                 >
                     <Input
                         full
-                        blur={arg => this.blurReact(arg)}
-                        inputInfo={this.state.fields}
+                        blur={blur}
+                        inputInfo={inputInfo}
                         label="Market place name"
                         type="marketPlaceName"
-                        onChangeText={this.handleChange("marketPlaceName")}
+                        onChangeText={handleChange('marketPlaceName')}
                         style={{ marginBottom: 25 }}
                     />
                     <Input
                         full
-                        blur={arg => this.blurReact(arg)}
-                        inputInfo={this.state.fields}
+                        blur={blur}
+                        inputInfo={inputInfo}
                         type="description"
                         label="Description"
                         multiline={true}
-                        onChangeText={this.handleChange("description")}
+                        onChangeText={handleChange("description")}
                         style={{ marginBottom: 25, height:200, textAlignVertical: 'top' }}
                     />
-
-                    {this.state.formError && (
-                        <Text paragraph color="gray">
-                            {this.state.errorMessage}
-                        </Text>
-                    )}
                 </Card>
             </KeyboardAwareScrollView>
         )

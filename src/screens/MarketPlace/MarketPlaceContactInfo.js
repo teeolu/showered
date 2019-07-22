@@ -1,82 +1,18 @@
 import React, { Component } from 'react';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import { Text, Input, Card } from '../../components';
+import { Input, Card, SelectList } from '../../components';
+import { states } from '../../constants';
 
 class MarketPlaceContactInfo extends Component {
     state = {
-        formError: false,
-        errorMessage: "",
-        fields: {
-            firstName: {
-                value: "",
-                error: false,
-                errorMessage: "",
-                rules: {
-                    maxLength: 40,
-                    minLength: 3
-                }
-            },
-            lastName: {
-                value: "",
-                error: false,
-                errorMessage: "",
-                rules: {
-                    maxLength: 40,
-                    minLength: 3
-                }
-            },
-            email: {
-                value: "",
-                error: false,
-                errorMessage: "",
-                rules: {
-                    email: true
-                }
-            },
-            password: {
-                value: "",
-                error: false,
-                errorMessage: "",
-                rules: {
-                    maxLength: 100,
-                    minLength: 8,
-                    password: true
-                }
-            },
-            confirmPassword: {
-                value: "",
-                error: false,
-                errorMessage: "",
-                rules: {
-                    confirmPassword: true
-                }
-            }
-        }
+        isStateModalVisible: false,
+        isCityModalVisible: false
     }
 
-    handleChange = type => text => {
-        let newState = { ...this.state };
-        newState.fields[type] = { ...newState.fields[type], value: text, error: false, errorMessage: "" }
-
-        this.setState((prevState) => ({
-            ...prevState,
-            ...newState,
-            formError: false,
-            errorMessage: ""
-        }));
+    componentWillUnmount() {
+        this.setState({ isStateModalVisible: false, isCityModalVisible: false })
     }
-
-    blurReact = ({ error, errorMessage, type }) => {
-        let newState = { ...this.state };
-        newState.fields[type] = { ...newState.fields[type], error, errorMessage };
-
-        this.setState((prevState) => ({
-            ...prevState,
-            ...newState
-        }));
-    }
-
     validateInput = arg => {
         let valid = true;
         Object.keys(arg).map(el => {
@@ -86,73 +22,132 @@ class MarketPlaceContactInfo extends Component {
     }
 
     handleSubmit = event => {
-        const { firstName, lastName, email, password } = this.state.fields;
-        const { requestSignupAction, navigation } = this.props;
+        // const { firstName, lastName, email, password } = inputInfo;
+        // const { requestSignupAction, navigation } = this.props;
 
-        var inValid = this.validateInput(this.state.fields);
-        if (inValid) {
-            return this.setState({
-                formError: true,
-                errorMessage: "Ensure your inputs are valid"
-            })
-        };
+        // var inValid = this.validateInput(this.state.fields);
+        // if (inValid) {
+        //     return this.setState({
+        //         formError: true,
+        //         errorMessage: "Ensure your inputs are valid"
+        //     })
+        // };
 
-        requestSignupAction({
-            email: email.value,
-            firstName: firstName.value,
-            lastName: lastName.value,
-            password: password.value,
-            navigation,
-            navigateTo: 'Login'
-        });
+        // requestSignupAction({
+        //     email: email.value,
+        //     firstName: firstName.value,
+        //     lastName: lastName.value,
+        //     password: password.value,
+        //     navigation,
+        //     navigateTo: 'Login'
+        // });
+    }
+
+    toggleModal = type => () => this.setState((prevState) => ({ [type]: !prevState[type] }));
+
+    renderStateModal = () => {
+        return (
+            <SelectList
+                data={states.states}
+                isVisible={this.state.isStateModalVisible}
+                title="Select state"
+                handleChange={this.props.handleChange}
+                type={"stateName"}
+                toggleModal={this.toggleModal('isStateModalVisible')}
+            />
+        );
+    }
+
+    renderCityModal = () => {
+        const { stateName, handleChange } = this.props;
+        var data = stateName && stateName.length > 0 ? states.states[stateName] : ["You haven't selected a state"]
+        let cityNames = {};
+
+        data.map(el => {
+            cityNames[el] = el;
+        })
+        
+        return (
+            <SelectList
+                data={cityNames}
+                isVisible={this.state.isCityModalVisible}
+                title="Select local government"
+                handleChange={handleChange}
+                type={"cityName"}
+                toggleModal={this.toggleModal('isCityModalVisible')}
+            />
+        );
     }
 
     render() {
-        const { navigation, request, isLoading } = this.props;
+        const { inputInfo, blur, handleChange, stateName, cityName } = this.props;
 
         return (
             <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
                 <Card
                     title="MARKET PLACE CONTACT INFO"
-                    style={{
-                        flex: 1,
-                    }}
+                    style={{ flex: 1 }}
                 >
                     <Input
                         full
-                        blur={arg => this.blurReact(arg)}
-                        inputInfo={this.state.fields}
+                        blur={blur}
+                        inputInfo={inputInfo}
                         email
                         type="email"
-                        label="Market place email address"
-                        onChangeText={this.handleChange("email")}
+                        placeholder="e.g official-email@email.com"
+                        label="Email address"
+                        onChangeText={handleChange("email")}
                         style={{ marginBottom: 25 }}
                     />
                     <Input
                         full
-                        blur={arg => this.blurReact(arg)}
-                        inputInfo={this.state.fields}
+                        blur={blur}
+                        inputInfo={inputInfo}
                         type="number"
-                        label="Market place phone number"
-                        onChangeText={this.handleChange("password")}
+                        label="Phone number"
+                        placeholder="e.g +2348012345678"
+                        onChangeText={handleChange("number")}
                         style={{ marginBottom: 25 }}
                     />
                     <Input
                         full
-                        inputInfo={this.state.fields}
-                        blur={arg => this.blurReact(arg)}
-                        type="confirmPassword"
-                        label="Market place address"
-                        onChangeText={this.handleChange("confirmPassword")}
+                        inputInfo={inputInfo}
+                        blur={blur}
+                        type="stateName"
+                        label="State"
+                        placeholder="Select a state in Nigeria"
+                        value={stateName}
+                        pressAble
+                        editable={false}
+                        onPress={this.toggleModal('isStateModalVisible')}
                         style={{ marginBottom: 25 }}
                     />
-
-                    {this.state.formError && (
-                        <Text paragraph color="gray">
-                            {this.state.errorMessage}
-                        </Text>
-                    )}
+                    <Input
+                        full
+                        inputInfo={inputInfo}
+                        blur={blur}
+                        type="city"
+                        label="City"
+                        placeholder="Select city"
+                        editable={false}
+                        value={cityName}
+                        pressAble
+                        onPress={this.toggleModal('isCityModalVisible')}
+                        onChangeText={handleChange("city")}
+                        style={{ marginBottom: 25 }}
+                    />
+                    <Input
+                        full
+                        inputInfo={inputInfo}
+                        blur={blur}
+                        type="street"
+                        label="Street"
+                        onChangeText={handleChange("street")}
+                        style={{ marginBottom: 25 }}
+                    />
                 </Card>
+                {this.renderStateModal()}
+                {this.renderCityModal()}
             </KeyboardAwareScrollView>
         )
     }

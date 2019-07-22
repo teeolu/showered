@@ -40,7 +40,83 @@ class MarketPlace extends Component {
         super(props);
         this.scrollView;
         this.state = {
-            currentIndex: 0
+            currentIndex: 0,
+            formError: false,
+            errorMessage: "",
+            fields: {
+                category: {
+                    value: '',
+                    errorMessage: 'You didn\'t choose a category',
+                    rules: {}
+                },
+                marketPlaceName: {
+                    value: "",
+                    error: false,
+                    errorMessage: "",
+                    rules: {
+                        maxLength: 40,
+                        minLength: 3
+                    }
+                },
+                description: {
+                    value: "",
+                    error: false,
+                    errorMessage: "",
+                    rules: {
+                        maxLength: 40,
+                        minLength: 3
+                    }
+                },
+                email: {
+                    value: "",
+                    error: false,
+                    errorMessage: "",
+                    rules: {
+                        email: true
+                    }
+                },
+                number: {
+                    value: "",
+                    error: false,
+                    errorMessage: "",
+                    rules: {
+                        length: 14,
+                        hasPrenumber: true
+                    }
+                },
+                stateName: {
+                    value: "",
+                    error: false,
+                    errorMessage: "",
+                    rules: {
+                        maxLength: 20,
+                        minLength: 3
+                    }
+                },
+                cityName: {
+                    value: "",
+                    error: false,
+                    errorMessage: "",
+                    rules: {
+                        maxLength: 20,
+                        minLength: 3
+                    }
+                },
+                street: {
+                    value: "",
+                    error: false,
+                    errorMessage: "",
+                    rules: {
+                        maxLength: 20,
+                        minLength: 3
+                    }
+                },
+                uploadedImageArray: {
+                    error: false,
+                    errorMessage: "",
+                    value: [],
+                }
+            }
         }
     }
 
@@ -48,69 +124,119 @@ class MarketPlace extends Component {
         const { contentOffset } = event.nativeEvent;
 
         const currentIndex = Math.round(contentOffset.x / width);
-    
+
         if (this.state.currentIndex !== currentIndex) {
-          this.setState({ currentIndex })
+            this.setState({ currentIndex })
         }
+    }
+
+    handleChange = type => text => {
+        let newState = { ...this.state };
+        newState.fields[type] = { ...newState.fields[type], value: text, error: false, errorMessage: "" }
+
+        this.setState((prevState) => ({
+            ...prevState,
+            ...newState,
+            formError: false,
+            errorMessage: ""
+        }));
+    }
+
+    blurReact = ({ error, errorMessage, type }) => {
+        let newState = { ...this.state };
+        newState.fields[type] = { ...newState.fields[type], error, errorMessage };
+
+        this.setState((prevState) => ({
+            ...prevState,
+            ...newState
+        }));
     }
 
     nextForm = () => {
         const { currentIndex } = this.state;
         const newIndex = currentIndex <= 2 ? currentIndex + 1 : currentIndex;
 
-          this.scrollView.scrollTo({
+        this.scrollView.scrollTo({
             x: newIndex * width,
             animated: true
-          })
-    
-          this.setState((prevState) => ({ currentIndex: prevState.currentIndex <= 3 ? newIndex : 3 }))
+        })
+
+        this.setState((prevState) => ({ currentIndex: prevState.currentIndex <= 3 ? newIndex : 3 }))
     }
 
     prevForm = () => {
         const newIndex = this.state.currentIndex - 1;
 
-          this.scrollView.scrollTo({
+        this.scrollView.scrollTo({
             x: newIndex * width,
             animated: true
-          })
-    
-          this.setState( (prevState) => ({ currentIndex: prevState.currentIndex >=0 ? newIndex : 0 }))
+        })
+
+        this.setState((prevState) => ({ currentIndex: prevState.currentIndex >= 0 ? newIndex : 0 }))
     }
 
     render() {
+        console.log(this.state.fields.uploadedImageArray)
+        const { 
+            requestImageUploadAction, 
+            imageUploadLoading, 
+            imageUploadUrl,
+            imageUploadError,
+            imageUploadRequest } = this.props;
         return (
             <SafeAreaView style={styles.overview}>
                 <ScrollView>
-                <Card row middle style={styles.margin}>
-                    <Block flex={1.2} center middle style={{ marginRight: 20 }}>
-                        <Text light height={43} size={36} spacing={-0.45}>86</Text>
-                        <Text ligth caption center style={{ paddingHorizontal: 16, marginTop: 3 }}>
-                            OPERATING SCORE
+                    <Card row middle style={styles.margin}>
+                        <Block flex={1.2} center middle style={{ marginRight: 20 }}>
+                            <Text light height={43} size={36} spacing={-0.45}>86</Text>
+                            <Text ligth caption center style={{ paddingHorizontal: 16, marginTop: 3 }}>
+                                OPERATING SCORE
                             </Text>
-                    </Block>
-                    <Block>
-                        <Text paragraph color="black3">
-                            All cars are operating well.
-                            There were 1,233 trips since your last login.
+                        </Block>
+                        <Block>
+                            <Text paragraph color="black3">
+                                All cars are operating well.
+                                There were 1,233 trips since your last login.
                             </Text>
-                    </Block>
-                </Card>
-                    <ScrollView 
+                        </Block>
+                    </Card>
+                    <ScrollView
                         horizontal
                         pagingEnabled
                         scrollEnabled
-                        ref={ref => this.scrollView = ref }
+                        ref={ref => this.scrollView = ref}
                         showsHorizontalScrollIndicator={false}
                         decelerationRate={0}
                         scrollEventThrottle={16}
                         snapToAlignment="center"
                         onScroll={this.onScroll}
-                        style={{ flex: 1 }}
-                    >
-                        <SelectCategory styles={styles} />
-                        <AddMarketplaceInfo styles={styles} />
-                        <MarketPlaceContactInfo styles={styles} />
-                        <UploadMarketPlaceImage styles={styles} />
+                        style={{ flex: 1 }}>
+                        <SelectCategory
+                            styles={styles}
+                            onPress={category => this.setState({ fields: { category: { value: category } } })} />
+                        <AddMarketplaceInfo
+                            styles={styles}
+                            handleChange={this.handleChange}
+                            inputInfo={this.state.fields}
+                            blur={arg => this.blurReact(arg)} />
+                        <MarketPlaceContactInfo
+                            styles={styles}
+                            handleChange={this.handleChange}
+                            inputInfo={this.state.fields}
+                            cityName={this.state.fields.cityName.value}
+                            stateName={this.state.fields.stateName.value}
+                            blur={arg => this.blurReact(arg)} />
+                        <UploadMarketPlaceImage
+                            requestImageUploadAction={requestImageUploadAction}
+                            handleChange={this.handleChange}
+                            imageUploadRequest={imageUploadRequest}
+                            imageUploadLoading={imageUploadLoading}
+                            imageUploadUrl={imageUploadUrl}
+                            uploadedImageArray={this.state.fields.uploadedImageArray.value}
+                            imageUploadError={imageUploadError}
+                            inputInfo={this.state.fields}
+                            marketPlaceName={this.state.fields.marketPlaceName.value}
+                            blur={arg => this.blurReact(arg)} />
                     </ScrollView>
                 </ScrollView>
                 <View
@@ -119,7 +245,7 @@ class MarketPlace extends Component {
                         flexDirection: 'row',
                         justifyContent: 'center',
                         backgroundColor: theme.colors.white,
-                        padding: theme.sizes.base 
+                        padding: theme.sizes.base
                     }}
                 >
                     <Button onPress={this.prevForm} style={{ backgroundColor: theme.colors.shadow, width: '40%', marginRight: theme.sizes.base }}>

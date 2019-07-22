@@ -92,14 +92,14 @@ class Login extends Component {
       >
         <Block center middle>
           <Block middle>
-            <Image
-              source={require('../../assets/images/Base/Logo.png')}
-              style={{ height: 28, width: 102 }}
-            />
+          <Image
+source={require('../../assets/images/Base/Logo.png')}
+style={{ height: 28, width: 102 }}
+/>
           </Block>
           <Block flex={2.5} center>
             <Text h3 style={{ marginBottom: 6 }}>
-              Sign in to Velocity
+              Sign in to Marketplace
             </Text>
             <Text paragraph color="black3">
               Please enter your credentials to proceed.

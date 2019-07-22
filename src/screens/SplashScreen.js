@@ -20,11 +20,12 @@ class SplashScreen extends Component {
         <Block center middle>
         <Block middle>
             <ActivityIndicator size='large' color='blue' />
-            <Image
+            
+          </Block>
+        <Image
               source={require('../assets/images/Base/Logo.png')}
               style={{ height: 28, width: 102 }}
             />
-          </Block>
         </Block>
       </View>
     )

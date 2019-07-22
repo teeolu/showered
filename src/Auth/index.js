@@ -6,7 +6,6 @@ export const isAuthenticated = async () => {
 }
 
 export const setToken = async (token) => {
-    console.log("settoken ", token)
     try {
         await AsyncStorage.setItem('@showered@token', token);
     } catch (error) {

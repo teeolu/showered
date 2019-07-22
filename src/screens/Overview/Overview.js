@@ -3,9 +3,10 @@ import { TouchableOpacity, Image, SafeAreaView, ImageBackground, ScrollView, Dim
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Octicons from 'react-native-vector-icons/Octicons';
 
-import { Block, Card, Text, Icon, Label } from '../../components';
+import { Block, Card, Text, Icon, Label, Box } from '../../components';
 import * as theme from '../../constants/theme';
 import { articlesInfo } from '../../constants/mocks';
+import { categoryNames } from '../MarketPlace/SelectCategory';
 const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
@@ -111,6 +112,12 @@ class Overview extends Component {
     )
   })
 
+  constructor(props){
+    super(props);
+
+    this.navigateToBrowse = this.navigateToBrowse.bind(this);
+  }
+
   scrollX = new Animated.Value(0);
 
   renderDots() {
@@ -122,14 +129,14 @@ class Overview extends Component {
       ]}>
         {articlesInfo.map((item, index) => {
           const borderWidth = dotPosition.interpolate({
-            inputRange: [index -1, index, index + 1],
+            inputRange: [index - 1, index, index + 1],
             outputRange: [0, 2.5, 0],
             extrapolate: 'clamp'
           });
           return (
             <Animated.View
               key={`step-${item.id}`}
-              style={[styles.dots, styles.activeDot, { borderWidth: borderWidth } ]}
+              style={[styles.dots, styles.activeDot, { borderWidth: borderWidth }]}
             />
           )
         })}
@@ -169,7 +176,7 @@ class Overview extends Component {
             <Text style={{ fontSize: theme.sizes.font * 1.25, fontWeight: '500', paddingBottom: 8, }}>
               {item.title}
             </Text>
-            <View style={[ styles.row, { justifyContent: 'space-between', alignItems: 'flex-end', }]}>
+            <View style={[styles.row, { justifyContent: 'space-between', alignItems: 'flex-end', }]}>
               <Text style={{ color: theme.colors.caption }}>
                 {item.description.split('').slice(0, 50)}...
               </Text>
@@ -186,25 +193,25 @@ class Overview extends Component {
   }
 
   renderHeading = () => {
-      return (
-        <View style={[ styles.column, styles.destinations ]}>
-          <FlatList
-            horizontal
-            pagingEnabled
-            scrollEnabled
-            showsHorizontalScrollIndicator={false}
-            decelerationRate={0}
-            scrollEventThrottle={16}
-            snapToAlignment="center"
-            style={{ overflow:'visible' }}
-            data={articlesInfo}
-            keyExtractor={(item, index) => `${item.id}`}
-            onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: this.scrollX }} }])}
-            renderItem={({ item }) => this.renderDestination(item)}
-          />
-          {this.renderDots()}
-        </View>
-      );
+    return (
+      <View style={[styles.column, styles.destinations]}>
+        <FlatList
+          horizontal
+          pagingEnabled
+          scrollEnabled
+          showsHorizontalScrollIndicator={false}
+          decelerationRate={0}
+          scrollEventThrottle={16}
+          snapToAlignment="center"
+          style={{ overflow: 'visible' }}
+          data={articlesInfo}
+          keyExtractor={(item, index) => `${item.id}`}
+          onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: this.scrollX } } }])}
+          renderItem={({ item }) => this.renderDestination(item)}
+        />
+        {this.renderDots()}
+      </View>
+    );
   }
 
   navigateToBrowse = () => {
@@ -217,41 +224,22 @@ class Overview extends Component {
         <ScrollView contentContainerStyle={{ paddingVertical: 25 }}>
           {this.renderHeading()}
 
-          <Block row style={[styles.margin, { marginTop: 18 }]}>
-            <Card middle style={{ marginRight: 7 }}>
-              <Icon vehicle />
-              <Text paragraph onPress={this.navigateToBrowse} style={{ marginTop: 17 }}>CINEMA</Text>
-            </Card>
-            
-            <Card middle style={{ marginLeft: 7 }}>
-              <Icon distance />
-              <Text paragraph onPress={this.navigateToBrowse} style={{ marginTop: 17 }}>RESTAURANT</Text>
-            </Card>
-          </Block>
-
-          <Block row style={[styles.margin, { marginTop: 18 }]}>
-            <Card middle style={{ marginRight: 7 }}>
-              <Icon vehicle />
-              <Text paragraph onPress={this.navigateToBrowse} style={{ marginTop: 17 }}>SPA</Text>
-            </Card>
-            
-            <Card middle style={{ marginLeft: 7 }}>
-              <Icon distance />
-              <Text paragraph onPress={this.navigateToBrowse} style={{ marginTop: 17 }}>BOUTIQUE</Text>
-            </Card>
-          </Block>
-
-          <Block row style={[styles.margin, { marginTop: 18 }]}>
-            <Card middle style={{ marginRight: 7 }}>
-              <Icon vehicle />
-              <Text paragraph onPress={this.navigateToBrowse} style={{ marginTop: 17 }}>HOTEL</Text>
-            </Card>
-            
-            <Card middle style={{ marginLeft: 7 }}>
-              <Icon distance />
-              <Text paragraph onPress={this.navigateToBrowse} style={{ marginTop: 17 }}>BOUTIQUE</Text>
-            </Card>
-          </Block>
+          <Card
+            style={{ marginTop: 18 }}
+          >
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              flexWrap: 1
+            }}>
+              {categoryNames.map(name => (
+                <Box
+                  key={name.name}
+                  onPress={this.navigateToBrowse}
+                  name={name.name} />
+              ))}
+            </View>
+          </Card>
 
           <Card
             title="TODAY'S TRIPS"
@@ -362,11 +350,11 @@ class Overview extends Component {
                 </Block>
               </Block>
             </Block>
-          </Card> 
+          </Card>
         </ScrollView>
       </SafeAreaView>
     )
-  } 
+  }
 }
 
 export default Overview;

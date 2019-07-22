@@ -121,7 +121,7 @@ class Register extends Component {
     return (
       <KeyboardAwareScrollView style={{ marginVertical: 40 }} showsVerticalScrollIndicator={false}>
         <Block center middle style={{ marginBottom: 40, marginTop: 20 }}>
-          <Image
+        <Image
             source={require('../../assets/images/Base/Logo.png')}
             style={{ height: 28, width: 102 }}
           />

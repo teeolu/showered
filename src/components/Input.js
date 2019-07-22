@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, TextInput, Dimensions } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, TextInput, Dimensions } from 'react-native'
 import Text from './Text';
 import * as theme from '../constants/theme';
 
@@ -42,17 +42,46 @@ export default class Input extends Component {
         return setError({ error: true, errorMessage: 'Must be equal to password input' })
       }
     }
+    if(rules.length){
+      if(value.length != rules.length){
+        return setError({ error: true, errorMessage: 'Your phone number should look like +2348012345678' })
+      }
+    }
+    if(rules.hasPrenumber){
+      var index = value.split('+234')
+
+      if(index[0] != ""){
+        return setError({ error: true, errorMessage: 'Your phone number should start with +234' })
+      }
+    }
 
   }
 
   render() {
-    const { label, rightLabel, type, description, autoFocus, multiline, numberOfLines, inputInfo = {}, full, email, phone, number, password, style, ...props } = this.props;
+    const {
+      label,
+      rightLabel,
+      type,
+      description,
+      autoFocus,
+      multiline,
+      numberOfLines,
+      inputInfo = {},
+      full,
+      email,
+      phone,
+      number,
+      password,
+      onPress,
+      pressAble,
+      style,
+      ...props } = this.props;
     const inputStyles = [
       styles.input,
       full && styles.full,
       style,
     ];
-
+    
     const inputType = email
       ? 'email-address' : number
         ? 'numeric' : phone
@@ -66,28 +95,43 @@ export default class Input extends Component {
           </Text>
           {rightLabel}
         </View>
-        {description && (
-          <Text style={{ paddingRight: theme.sizes.base }} paragraph color="black3">
-            {description}
-          </Text>
-        )}
         {inputInfo && inputInfo[type] && inputInfo[type].error && (
           <Text paragraph color="black3">
             {inputInfo[type].errorMessage}
           </Text>
         )}
-        <TextInput
-          style={[inputStyles]}
-          secureTextEntry={password}
-          autoCapitalize="none"
-          autoCorrect={false}
-          multiline={multiline || false}
-          numberOfLines={multiline && 10}
-          autoFocus={autoFocus && true}
-          onBlur={this.handleBlur(type)}
-          keyboardType={inputType}
-          {...props}
-        />
+        {!pressAble ? (
+          <TextInput
+            style={[inputStyles]}
+            secureTextEntry={password}
+            autoCapitalize="none"
+            autoCorrect={false}
+            multiline={multiline || false}
+            numberOfLines={multiline && 10}
+            autoFocus={autoFocus && true}
+            onBlur={this.handleBlur(type)}
+            keyboardType={inputType}
+            {...props}
+          />
+        ) : (
+            <View style={{ width: '100%', height: 45, position: 'relative', ...style}}>
+              <TextInput
+                style={[styles.input, style.full]}
+                secureTextEntry={password}
+                autoCapitalize="none"
+                autoCorrect={false}
+                multiline={multiline || false}
+                numberOfLines={multiline && 10}
+                autoFocus={autoFocus && true}
+                onBlur={this.handleBlur(type)}
+                keyboardType={inputType}
+                {...props}
+              />
+              <TouchableOpacity onPress={onPress} style={{ position: 'absolute', top: 0, right: 0, left: 0, bottom: 0}} />
+            </View>
+          )
+
+        }
       </View>
     )
   }
