@@ -1,4 +1,10 @@
-const URL = 'http://localhost:5000'
+import Constants from "expo-constants";
+
+const { manifest } = Constants;
+export const URL = `http://${manifest.debuggerHost
+  .split(`:`)
+  .shift()
+  .concat(`:5000`)}`;
 
 export const signupUserApi = ( email, firstName, lastName, password) => {
     const payload = {

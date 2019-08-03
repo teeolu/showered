@@ -12,7 +12,7 @@ class Login extends Component {
     errorMessage: "",
     fields: {
       email: {
-        value: "",
+        value: "lol@gmail.com",
         error: false,
         errorMessage: "",
         rules: {
@@ -20,7 +20,7 @@ class Login extends Component {
         }
       },
       password: {
-        value: "",
+        value: "Mymy1998",
         error: false,
         errorMessage: "",
         rules: {
@@ -111,6 +111,7 @@ style={{ height: 28, width: 102 }}
                 inputInfo={this.state.fields}
                 email
                 type="email"
+                value={this.state.fields.email.value}
                 label="Email address"
                 onChangeText={this.handleChange("email")}
                 style={{ marginBottom: 25 }}
@@ -119,6 +120,7 @@ style={{ height: 28, width: 102 }}
                 full
                 blur={arg => this.blurReact(arg)}
                 inputInfo={this.state.fields}
+                value={this.state.fields.password.value}
                 password
                 type="password"
                 label="Password"

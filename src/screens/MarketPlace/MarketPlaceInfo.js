@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { Text, Input, Card } from '../../components';
 
-class AddMarketplaceInfo extends Component {
+class AddMarketplaceInfo extends PureComponent {
     state = {
         formError: false,
         errorMessage: "",

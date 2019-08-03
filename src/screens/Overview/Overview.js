@@ -230,7 +230,7 @@ class Overview extends Component {
             <View style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              flexWrap: 1
+              flexWrap: "wrap"
             }}>
               {categoryNames.map(name => (
                 <Box

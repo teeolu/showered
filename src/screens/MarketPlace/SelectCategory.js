@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Dimensions, View } from 'react-native';
 
 import { Card, Box } from '../../components';
@@ -11,7 +11,7 @@ export const categoryNames = [
     {name: 'Cinema'}
 ]
 
-export class SelectCategory extends Component {
+export class SelectCategory extends PureComponent {
     render() {
         const { styles, onPress } = this.props;
         return (
@@ -21,11 +21,10 @@ export class SelectCategory extends Component {
                     title="Select a category for your market place"
                     style={[styles.margin, { marginTop: 18, flex: 0 }]}
                 >
-
                     <View style={{
                         flexDirection: 'row',
                         justifyContent: 'space-between',
-                        flexWrap: 1
+                        flexWrap: 'wrap'
                     }}>
                         {categoryNames.map(name => (
                             <Box 
