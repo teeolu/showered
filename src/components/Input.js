@@ -55,6 +55,8 @@ export default class Input extends Component {
       }
     }
 
+    return setError({ error: false, errorMessage: ''})
+
   }
 
   render() {
@@ -95,7 +97,7 @@ export default class Input extends Component {
           </Text>
           {rightLabel}
         </View>
-        {inputInfo && inputInfo[type] && inputInfo[type].error && (
+        {inputInfo[type] && inputInfo[type].error && inputInfo[type].errorMessage.length > 0 && (
           <Text paragraph color="black3">
             {inputInfo[type].errorMessage}
           </Text>

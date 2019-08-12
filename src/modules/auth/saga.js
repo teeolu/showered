@@ -21,8 +21,7 @@ function* signupActionWatcher({ payload }) {
                 navigation.navigate(navigateTo)
             }
         } else {
-            const error = result instanceof Error ? result : new Error(result.message ? result.message : `HTTP Error: status = ${result.status}`);
-            yield put(receiveSignupAction(error));
+            yield put(receiveSignupAction(result));
         }
     } catch (error) {
         yield put(receiveSignupAction(error));
@@ -46,8 +45,7 @@ function* loginActionWatcher({ payload }) {
             yield put(requestUserinfoAction({ navigation, navigateTo }));
             yield put(receiveLoginAction(result));
         } else {
-            const error = result instanceof Error ? result : new Error(result.message ? result.message : `HTTP Error: status = ${result.status}`);
-            yield put(receiveLoginAction(error));
+            yield put(receiveLoginAction(result));
         }
     } catch (error) {
         yield put(receiveLoginAction(error));

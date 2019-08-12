@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, SafeAreaView, ScrollView, Dimensions, View, StyleSheet, Animated } from 'react-native';
+import {
+	TouchableOpacity,
+	SafeAreaView,
+	ScrollView,
+	Dimensions,
+	View,
+	StyleSheet,
+} from 'react-native';
 
 import { Block, Text, Icon, Card, Button } from '../../components';
 import * as theme from '../../constants/theme';
@@ -7,15 +14,9 @@ import SelectCategory from './SelectCategory';
 import AddMarketplaceInfo from './MarketPlaceInfo';
 import MarketPlaceContactInfo from './MarketPlaceContactInfo';
 import UploadMarketPlaceImage from './UploadMarketPlaceImage';
+import { validateInput } from '../../utils/inputFunctions';
+import { marketplaceStatus } from '../../modules/marketPlace/reducers';
 const { width } = Dimensions.get('window');
-
-const styles = StyleSheet.create({
-	overview: {
-		flex: 1,
-		flexDirection: 'column',
-		backgroundColor: theme.colors.white,
-	}
-});
 
 class MarketPlace extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -46,12 +47,13 @@ class MarketPlace extends Component {
 			fields: {
 				category: {
 					value: '',
+					error: true,
 					errorMessage: 'You didn\'t choose a category',
 					rules: {}
 				},
 				marketPlaceName: {
 					value: "",
-					error: false,
+					error: true,
 					errorMessage: "",
 					rules: {
 						maxLength: 40,
@@ -60,7 +62,7 @@ class MarketPlace extends Component {
 				},
 				description: {
 					value: "",
-					error: false,
+					error: true,
 					errorMessage: "",
 					rules: {
 						maxLength: 40,
@@ -69,7 +71,7 @@ class MarketPlace extends Component {
 				},
 				email: {
 					value: "",
-					error: false,
+					error: true,
 					errorMessage: "",
 					rules: {
 						email: true
@@ -77,7 +79,7 @@ class MarketPlace extends Component {
 				},
 				number: {
 					value: "",
-					error: false,
+					error: true,
 					errorMessage: "",
 					rules: {
 						length: 14,
@@ -86,7 +88,7 @@ class MarketPlace extends Component {
 				},
 				stateName: {
 					value: "",
-					error: false,
+					error: true,
 					errorMessage: "",
 					rules: {
 						maxLength: 20,
@@ -95,7 +97,7 @@ class MarketPlace extends Component {
 				},
 				cityName: {
 					value: "",
-					error: false,
+					error: true,
 					errorMessage: "",
 					rules: {
 						maxLength: 20,
@@ -104,7 +106,7 @@ class MarketPlace extends Component {
 				},
 				street: {
 					value: "",
-					error: false,
+					error: true,
 					errorMessage: "",
 					rules: {
 						maxLength: 20,
@@ -112,9 +114,13 @@ class MarketPlace extends Component {
 					}
 				},
 				uploadedImageArray: {
-					error: false,
+					error: true,
 					errorMessage: "",
 					value: [],
+					rules: {
+						maxLength: 5,
+						minLength: 1
+					}
 				}
 			}
 		}
@@ -122,9 +128,7 @@ class MarketPlace extends Component {
 
 	onScroll = event => {
 		const { contentOffset } = event.nativeEvent;
-
 		const currentIndex = Math.round(contentOffset.x / width);
-
 		if (this.state.currentIndex !== currentIndex) {
 			this.setState({ currentIndex })
 		}
@@ -132,13 +136,17 @@ class MarketPlace extends Component {
 
 	setCategory = category => {
 		let newState = { ...this.state };
-		newState.fields.category = { ...newState.fields.category, value: category, error: false, errorMessage: "" }
+		newState.fields.category = {
+			...newState.fields.category,
+			value: category,
+			error: false,
+			errorMessage: ""
+		}
 
 		this.setState((prevState) => ({
 			...prevState,
 			...newState,
-			formError: false,
-			errorMessage: ""
+			formError: false
 		}));
 	}
 
@@ -164,8 +172,32 @@ class MarketPlace extends Component {
 		}));
 	}
 
+	handleSubmit = event => {
+		const { requestAddMarketplaceAction, navigation } = this.props;
+
+		var { error, errorMessage } = validateInput(this.state.fields);
+		if (error) {
+			return this.setState({
+				formError: true,
+				errorMessage: 'Some of your input is empty or invalid'
+			})
+		};
+
+		let dataToSubmit = {};
+		Object.keys(this.state.fields).map(el => {
+			dataToSubmit[el] = this.state.fields[el].value
+		});
+
+		requestAddMarketplaceAction({
+			dataToSubmit,
+			navigation,
+			navigateTo: 'CategoryDetails'
+		});
+	}
+
 	nextForm = () => {
 		const { currentIndex } = this.state;
+		if (currentIndex === 3) this.handleSubmit();
 		const newIndex = currentIndex <= 2 ? currentIndex + 1 : currentIndex;
 
 		this.scrollView.scrollTo({
@@ -190,11 +222,16 @@ class MarketPlace extends Component {
 	render() {
 		const {
 			requestImageUploadAction,
+			requestRemoveImageUploadAction,
 			imageUploadLoading,
+			deletedPublicId,
 			imageUploadUrl,
+			addMarketplaceLoading,
+			addMarketplaceRequest,
 			imageUploadError,
 			imageUploadRequest } = this.props;
-			
+			console.log("submit ", this.state.formError, this.state.errorMessage)
+
 		return (
 			<SafeAreaView style={styles.overview}>
 				<ScrollView>
@@ -203,7 +240,7 @@ class MarketPlace extends Component {
 							<Text light height={43} size={36} spacing={-0.45}>86</Text>
 							<Text ligth caption center style={{ paddingHorizontal: 16, marginTop: 3 }}>
 								OPERATING SCORE
-              </Text>
+              				</Text>
 						</Block>
 						<Block>
 							<Text paragraph color="black3">
@@ -226,6 +263,7 @@ class MarketPlace extends Component {
 						<SelectCategory
 							styles={styles}
 							handleChange={this.handleChange}
+							selected={this.state.fields.category.value}
 							onPress={category => this.setCategory(category)} />
 						<AddMarketplaceInfo
 							styles={styles}
@@ -239,35 +277,96 @@ class MarketPlace extends Component {
 							blur={arg => this.blurReact(arg)} />
 						<UploadMarketPlaceImage
 							requestImageUploadAction={requestImageUploadAction}
+							requestRemoveImageUploadAction={requestRemoveImageUploadAction}
 							handleChange={this.handleChange}
 							imageUploadRequest={imageUploadRequest}
 							imageUploadLoading={imageUploadLoading}
 							imageUploadUrl={imageUploadUrl}
+							deletedPublicId={deletedPublicId}
+							formError={this.state.formError}
 							imageUploadError={imageUploadError}
 							inputInfo={this.state.fields}
 							blur={arg => this.blurReact(arg)} />
 					</ScrollView>
 				</ScrollView>
 				<View
-					style={{
-						display: 'flex',
-						flexDirection: 'row',
-						justifyContent: 'center',
-						backgroundColor: theme.colors.white,
-						padding: theme.sizes.base
-					}}
-				>
-					<Button onPress={this.prevForm} style={{ backgroundColor: theme.colors.shadow, width: '40%', marginRight: theme.sizes.base }}>
-						<Text>Prev</Text>
-					</Button>
-					<Button style={{ width: '40%' }} onPress={this.nextForm}>
-						<Text>{this.state.currentIndex == 3 ? 'Submit' : 'Next'}</Text>
-					</Button>
+					style={{ backgroundColor: theme.colors.white }}>
+					{this.state.formError && (
+						<View>
+							<Text
+								style={{ textAlign: 'center', color: 'red' }}>
+								{this.state.errorMessage}</Text>
+						</View>
+					)}
+					<View
+						style={{
+							display: 'flex',
+							flexDirection: 'row',
+							justifyContent: 'center',
+							padding: theme.sizes.base
+						}}>
+						<Button
+							onPress={this.prevForm}
+							style={{
+								backgroundColor: theme.colors.shadow,
+								width: '40%',
+								marginRight: theme.sizes.base
+							}}>
+							<Text>Prev</Text>
+						</Button>
+						<Button
+							style={{ width: '40%' }}
+							onPress={this.nextForm}
+							isLoading={addMarketplaceRequest === marketplaceStatus.addMarketPlace && addMarketplaceLoading}>
+							<Text>{this.state.currentIndex == 3 ? 'Submit' : 'Next'}</Text>
+						</Button>
+					</View>
 				</View>
-
 			</SafeAreaView>
 		)
 	}
 }
+
+const styles = StyleSheet.create({
+	overview: {
+		flex: 1,
+		flexDirection: 'column',
+		backgroundColor: theme.colors.white
+	},
+	card: {
+		padding: 20,
+		borderRadius: theme.sizes.radius,
+		backgroundColor: theme.colors.white,
+		shadowColor: theme.colors.shadow,
+		shadowOpacity: 1,
+		shadowRadius: 10,
+		shadowOffset: { width: 0, height: 0 },
+		elevation: 2,
+		marginBottom: theme.sizes.base,
+		minWidth: (width - (theme.sizes.padding * 2.4) - theme.sizes.base) / 2,
+		maxWidth: (width - (theme.sizes.padding * 2.4) - theme.sizes.base) / 2,
+		maxHeight: (width - (theme.sizes.padding * 2.4) - theme.sizes.base) / 2,
+	},
+	active: {
+		borderColor: theme.colors.blue,
+		shadowOffset: { width: 0, height: 0 },
+		shadowColor: theme.colors.lightblue,
+		shadowRadius: 3,
+		shadowOpacity: 1
+	},
+	icon: {
+		flex: 0,
+		height: 48,
+		width: 48,
+		borderRadius: 48,
+		marginBottom: 15,
+		backgroundColor: theme.colors.lightblue
+	},
+	check: {
+		position: 'absolute',
+		right: 9,
+		top: 9
+	}
+});
 
 export default MarketPlace;

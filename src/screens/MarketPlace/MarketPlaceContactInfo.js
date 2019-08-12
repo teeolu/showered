@@ -13,35 +13,6 @@ class MarketPlaceContactInfo extends PureComponent {
 	componentWillUnmount() {
 		this.setState({ isStateModalVisible: false, isCityModalVisible: false })
 	}
-	validateInput = arg => {
-		let valid = true;
-		Object.keys(arg).map(el => {
-			valid = valid && arg[el].error;
-		});
-		return valid;
-	}
-
-	handleSubmit = event => {
-		// const { firstName, lastName, email, password } = inputInfo;
-		// const { requestSignupAction, navigation } = this.props;
-
-		// var inValid = this.validateInput(this.state.fields);
-		// if (inValid) {
-		//     return this.setState({
-		//         formError: true,
-		//         errorMessage: "Ensure your inputs are valid"
-		//     })
-		// };
-
-		// requestSignupAction({
-		//     email: email.value,
-		//     firstName: firstName.value,
-		//     lastName: lastName.value,
-		//     password: password.value,
-		//     navigation,
-		//     navigateTo: 'Login'
-		// });
-	}
 
 	toggleModal = type => () => this.setState((prevState) => ({ [type]: !prevState[type] }));
 
@@ -53,8 +24,7 @@ class MarketPlaceContactInfo extends PureComponent {
 				title="Select state"
 				handleChange={this.props.handleChange}
 				type={"stateName"}
-				toggleModal={this.toggleModal('isStateModalVisible')}
-			/>
+				toggleModal={this.toggleModal('isStateModalVisible')}/>
 		);
 	}
 

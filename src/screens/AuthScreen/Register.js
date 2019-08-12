@@ -8,6 +8,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Button, Block, Text, Input } from '../../components';
 import * as theme from '../../constants/theme';
 import { authStatus } from '../../modules/auth/reducers';
+import { validateInput } from '../../utils/inputFunctions';
 
 const { height } = Dimensions.get('window');
 
@@ -18,7 +19,7 @@ class Register extends Component {
     fields: {
       firstName: {
         value: "",
-        error: false,
+        error: true,
         errorMessage: "",
         rules: {
           maxLength: 40,
@@ -27,7 +28,7 @@ class Register extends Component {
       },
       lastName: {
         value: "",
-        error: false,
+        error: true,
         errorMessage: "",
         rules: {
           maxLength: 40,
@@ -36,7 +37,7 @@ class Register extends Component {
       },
       email: {
         value: "",
-        error: false,
+        error: true,
         errorMessage: "",
         rules: {
           email: true
@@ -44,7 +45,7 @@ class Register extends Component {
       },
       password: {
         value: "",
-        error: false,
+        error: true,
         errorMessage: "",
         rules: {
           maxLength: 100,
@@ -54,7 +55,7 @@ class Register extends Component {
       },
       confirmPassword: {
         value: "",
-        error: false,
+        error: true,
         errorMessage: "",
         rules: {
           confirmPassword: true
@@ -85,20 +86,13 @@ class Register extends Component {
     }));
   }
 
-  validateInput = arg => {
-    let valid = true;
-    Object.keys(arg).map(el => {      
-      valid = valid && arg[el].error;
-    });
-    return valid;
-  }
-
   handleSubmit = event => {
     const { firstName, lastName, email, password } = this.state.fields;
     const { requestSignupAction, navigation } = this.props;
 
-    var inValid = this.validateInput(this.state.fields);
-    if(inValid){
+    var error = validateInput(this.state.fields);
+
+    if(error){
       return this.setState({
         formError: true,
         errorMessage: "Ensure your inputs are valid"
@@ -117,6 +111,8 @@ class Register extends Component {
 
   render() {
     const { navigation, request, isLoading } = this.props;
+
+		// console.log("datatosubmit register state ", this.state.fields)
 
     return (
       <KeyboardAwareScrollView style={{ marginVertical: 40 }} showsVerticalScrollIndicator={false}>

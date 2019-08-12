@@ -3,6 +3,7 @@ import { Image, KeyboardAvoidingView, Dimensions } from 'react-native';
 
 import { Button, Block, Text, Input } from '../../components';
 import { authStatus } from '../../modules/auth/reducers';
+import { validateInput } from '../../utils/inputFunctions';
 
 const { height } = Dimensions.get('window');
 
@@ -13,7 +14,7 @@ class Login extends Component {
     fields: {
       email: {
         value: "lol@gmail.com",
-        error: false,
+        error: true,
         errorMessage: "",
         rules: {
           email: true
@@ -21,7 +22,7 @@ class Login extends Component {
       },
       password: {
         value: "Mymy1998",
-        error: false,
+        error: true,
         errorMessage: "",
         rules: {
           maxLength: 100,
@@ -54,23 +55,17 @@ class Login extends Component {
     }));
   }
 
-  validateInput = arg => {
-    let valid = true;
-    Object.keys(arg).map(el => {
-      valid = valid && arg[el].error;
-    });
-    return valid;
-  }
-
   handleSubmit = event => {
     const { requestLoginAction, navigation } = this.props;
-    var inValid = this.validateInput(this.state.fields);
-    if (inValid) {
-      return this.setState({
-        formError: true,
-        errorMessage: "Ensure your inputs are valid"
-      })
-    }
+
+    var error = validateInput(this.state.fields);
+    console.log("login error ", error)
+		if(error){
+		  return this.setState({
+			formError: true,
+			errorMessage: "Ensure your inputs are valid"
+		  })
+		};
 
     requestLoginAction({
       email: this.state.fields.email.value.toLowerCase(),
@@ -81,7 +76,9 @@ class Login extends Component {
   }
 
   render() {
-    const { navigation, isLoading, request } = this.props;
+    const { navigation, isLoading, request, loginError } = this.props;
+
+    console.log("login error ", loginError)
 
     return (
       <KeyboardAvoidingView
@@ -92,10 +89,9 @@ class Login extends Component {
       >
         <Block center middle>
           <Block middle>
-          <Image
-source={require('../../assets/images/Base/Logo.png')}
-style={{ height: 28, width: 102 }}
-/>
+            <Image
+              source={require('../../assets/images/Base/Logo.png')}
+              style={{ height: 28, width: 102 }}/>
           </Block>
           <Block flex={2.5} center>
             <Text h3 style={{ marginBottom: 6 }}>
@@ -137,9 +133,9 @@ style={{ height: 28, width: 102 }}
                 }
               />
 
-              {this.state.formError && (
+              {this.state.formError || loginError  && (
                 <Text paragraph color="gray">
-                  {this.state.errorMessage}
+                  {this.state.errorMessage || 'An error occured trying to log you in'}
                 </Text>
               )}
 

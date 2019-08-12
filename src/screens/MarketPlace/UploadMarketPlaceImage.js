@@ -9,12 +9,12 @@ import {
 	Alert,
 	Linking
 } from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo';
+import { Entypo, MaterialIcons } from 'react-native-vector-icons';
 import Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 
-import { Card, Block } from '../../components';
+import { Card, Block, Text } from '../../components';
 import { theme } from '../../constants';
 import { imageUploadStatus } from '../../modules/imageUpload/reducers';
 const { width } = Dimensions.get('window');
@@ -23,20 +23,31 @@ export class UploadMarketPlaceImage extends PureComponent {
 	state = {
 		image: null,
 		errorAlert: false,
-		errorMessage: ""
+		errorMessage: "",
+		dataToDelete: {},
+		deletePulicId: ''
 	};
 
 	componentDidUpdate(prevProps, prevState) {
-		const { imageUploadUrl } = this.props;
+		const { imageUploadUrl, deletedPublicId, inputInfo } = this.props;
 
 		const setNewArray = () => {
-			const newUploadedImageArray = [...this.props.inputInfo.uploadedImageArray.value];
+			const newUploadedImageArray = [...inputInfo.uploadedImageArray.value];
 
 			const index = newUploadedImageArray.findIndex(el => el.secureUrl === imageUploadUrl.secureUrl);
 			if (index === -1) {
 				newUploadedImageArray.push(this.props.imageUploadUrl);
 			};
 			this.props.handleChange('uploadedImageArray')(newUploadedImageArray);
+		}
+
+		if (prevProps.deletedPublicId !== deletedPublicId && deletedPublicId !== (null || undefined)) {
+			inputInfo.uploadedImageArray.value.map((el, i) => {
+				if (el.publicId === deletedPublicId) {
+					inputInfo.uploadedImageArray.value.splice(i, 1);
+					this.props.handleChange('uploadedImageArray')(inputInfo.uploadedImageArray.value);
+				}
+			})
 		}
 
 		if (
@@ -50,18 +61,36 @@ export class UploadMarketPlaceImage extends PureComponent {
 		}
 	}
 
-
 	showAlert() {
 		Alert.alert(
 			'Please Allow Access',
 			[
 				'This applicaton needs access to your photo library to upload images.',
 				'\n\n',
-				'Please go to Settings of your device and grant permissions to Photos.',
 			].join(''),
 			[
 				{ text: 'Not Now', style: 'cancel' },
 				{ text: 'Settings', onPress: () => Linking.openURL('app-settings:') },
+			],
+		);
+	}
+
+	showConfirmDeleteAlert = (item) => {
+		const { imageUploadRequest, imageUploadLoading } = this.props;
+		if (imageUploadLoading
+			&& imageUploadRequest === imageUploadStatus.removeUploadImage) return null;
+		this.setState({ deletePulicId: item.publicId });
+		Alert.alert(
+			'You want to remove this image?',
+			[
+				'This image will not be uploaded when you remove it'
+			].join(''),
+			[
+				{ text: 'Cancel', style: 'cancel' },
+				{
+					text: 'Remove',
+					onPress: () => this.props.requestRemoveImageUploadAction({ public_id: item.publicId })
+				},
 			],
 		);
 	}
@@ -90,6 +119,20 @@ export class UploadMarketPlaceImage extends PureComponent {
 	}
 
 	_pickImage = async () => {
+		const { imageUploadRequest, imageUploadLoading, inputInfo } = this.props;
+		if (imageUploadLoading
+			&& imageUploadRequest === imageUploadStatus.imageUpload) return null;
+		if (inputInfo.uploadedImageArray.value.length >= 5) {
+			return Alert.alert(
+				'You can\'t add more than 5 images',
+				[
+					'Be sure to add the images that best represent your market place'
+				].join(''),
+				[
+					{ text: 'Cancel', style: 'cancel' }
+				]
+			)
+		}
 		await this.getPermissionAsync();
 		let result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -108,13 +151,17 @@ export class UploadMarketPlaceImage extends PureComponent {
 		const {
 			imageUploadRequest,
 			inputInfo,
+			formError,
 			imageUploadLoading } = this.props;
 		return (
 			<View style={{ width }}>
 				<Card
 					title="UPLOAD IMAGES FOR YOUR MARKET PLACE"
-					style={{ marginTop: 18, flex: 0 }}
-				>
+					style={{ marginTop: 18, flex: 0 }}>
+					{formError && inputInfo.uploadedImageArray.value.length === 0 && (
+						<Text>{inputInfo.uploadedImageArray.errorMessage}</Text>
+					)}
+
 					<View style={{
 						flexDirection: 'row',
 						justifyContent: 'space-between',
@@ -148,10 +195,14 @@ export class UploadMarketPlaceImage extends PureComponent {
 											<Block middle>
 												<ActivityIndicator size='large' color='blue' />
 											</Block>
-										) : (< Entypo
-											name="images"
-											color={theme.colors.shadow}
-											size={theme.sizes.font * 3} />
+										) : (
+											<View>
+												< Entypo
+													name="plus"
+													color={theme.colors.shadow}
+													size={theme.sizes.font * 5} />
+												<Text caption>ADD IMAGE</Text>
+											</View>
 										)}
 								</View>
 							</View>
@@ -169,36 +220,39 @@ export class UploadMarketPlaceImage extends PureComponent {
 									maxHeight: (width - (theme.sizes.padding * 2.4) - theme.sizes.base) / 2,
 								}}>
 								<View style={{
-									alignItems: 'center',
-									justifyContent: 'center',
 									height: '100%',
 									borderRadius: theme.sizes.radius,
-									shadowColor: theme.colors.shadow,
-									shadowOpacity: 1,
-									shadowRadius: 10,
-									shadowOffset: { width: 0, height: 0 },
-									elevation: 2,
 								}}>
 									<ImageBackground
 										source={{ uri: image.secureUrl }}
 										style={{
 											width: '100%',
 											height: '100%',
-											borderRadius: theme.sizes.radius,
-											shadowColor: theme.colors.shadow,
-											shadowOpacity: 1,
-											shadowRadius: 10,
-											shadowOffset: { width: 0, height: 0 },
-											elevation: 2
+											alignItems: 'center',
+											justifyContent: 'center',
+											borderRadius: theme.sizes.radius
 										}}>
-										{/* <Text>Inside</Text> */}
+										<View>
+											<TouchableOpacity onPress={() => this.showConfirmDeleteAlert(image)}>
+												{imageUploadLoading
+													&& imageUploadRequest === imageUploadStatus.removeUploadImage
+													&& image.publicId === this.state.deletePulicId
+													? (
+														<Block middle>
+															<ActivityIndicator size='large' color='white' />
+														</Block>
+													) : (
+														< MaterialIcons
+															name="delete"
+															color={theme.colors.gray3}
+															size={theme.sizes.font * 4} />
+													)}
+											</TouchableOpacity>
+										</View>
 									</ImageBackground>
 								</View>
 							</View>
 						))}
-
-
-
 					</View>
 				</Card>
 

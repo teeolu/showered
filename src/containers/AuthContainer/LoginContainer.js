@@ -6,22 +6,24 @@ import { requestLoginAction } from '../../modules/auth/action';
 
 class LoginContainer extends PureComponent {
     render() {
-        const { requestLoginAction, isLoading, request } = this.props;
+        const { requestLoginAction, isLoading, request, error } = this.props;
         return (
             <Login
                 requestLoginAction={requestLoginAction}
                 isLoading={isLoading}
                 request={request}
+                loginError={error}
                 {...this.props} />
         )
     }
 }
 
 const mapStateToProps = ({ authReducer }) => {
-    const { isLoading, request } = authReducer;
+    const { isLoading, request, error } = authReducer;
     return {
         isLoading,
-        request
+        request,
+        error
     }
 }
 
