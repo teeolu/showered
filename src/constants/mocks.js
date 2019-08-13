@@ -87,7 +87,7 @@ const categories = [
 
   const articlesInfo = [
     {
-      id: 1,
+      _id: 1,
       user: {
         name: 'Lelia Chavez',
         avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
@@ -108,7 +108,7 @@ const categories = [
       ]
     },
     {
-      id: 2,
+      _id: 2,
       user: {
         name: 'Lelia Chavez',
         avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
@@ -127,7 +127,7 @@ const categories = [
       ]
     },
     {
-      id: 3,
+      _id: 3,
       user: {
         name: 'Lelia Chavez',
         avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
@@ -148,7 +148,7 @@ const categories = [
       ]
     },
     {
-      id: 4,
+      _id: 4,
       user: {
         name: 'Lelia Chavez',
         avatar: 'https://randomuser.me/api/portraits/women/44.jpg',

@@ -1,10 +1,13 @@
 import { takeLeading, call, put } from 'redux-saga/effects';
 
-import { addMarketplaceApi } from './api';
+import { 
+    addMarketplaceApi,
+    getUserMarketplaceApi } from './api';
 import {
     requestAddMarketplaceAction,
-    receiveAddMarketplaceAction
-} from './actions';
+    receiveAddMarketplaceAction,
+    requestGetUserMarketplaceAction,
+    receiveGetUserMarketplaceAction } from './actions';
 
 function* addMarketplaceActionWatcher({ payload }) {
     try {
@@ -25,4 +28,21 @@ function* addMarketplaceActionWatcher({ payload }) {
 
 export function* requestAddMarketplaceActionSaga() {
     yield takeLeading(requestAddMarketplaceAction, addMarketplaceActionWatcher)
+}
+
+function* getUserMarketplaceActionWatcher() {
+    try {
+        const result = yield call(getUserMarketplaceApi);
+        if (result.success) {
+            yield put(receiveGetUserMarketplaceAction(result));
+        } else {
+            yield put(receiveGetUserMarketplaceAction(result));
+        }
+    } catch (error) {
+        yield put(receiveGetUserMarketplaceAction(error));
+    }
+}
+
+export function* requestGetUserMarketplaceActionSaga() {
+    yield takeLeading(requestGetUserMarketplaceAction, getUserMarketplaceActionWatcher)
 }

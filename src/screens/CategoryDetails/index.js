@@ -111,14 +111,20 @@ class CategoryDetails extends Component {
         }
     }
 
+    componentDidMount() {
+        const item = this.props.navigation.getParam('item');
+        console.log(item)
+    }
+
+
     renderDots = () => {
         const { navigation } = this.props;
-        const article = articlesInfo[0] // navigation.getParam('article');
+        const { uploadedImageArray } = navigation.getParam('item');
         const dotPosition = Animated.divide(this.scrollX, width);
 
         return (
             <View style={[styles.flex, styles.row, styles.dotsContainer]}>
-                {article.images.map((item, index) => {
+                {uploadedImageArray.map((item, index) => {
                     const opacity = dotPosition.interpolate({
                         inputRange: [index - 1, index, index + 1],
                         outputRange: [0.5, 1, 0.5],
@@ -155,6 +161,10 @@ class CategoryDetails extends Component {
 
     render() {
         const { navigation } = this.props;
+        const {
+            uploadedImageArray,
+            marketPlaceName,
+            description } = navigation.getParam('item');
         const article = articlesInfo[0] // navigation.getParam('article');
 
         return (
@@ -169,16 +179,14 @@ class CategoryDetails extends Component {
                             decelerationRate={0}
                             scrollEventThrottle={16}
                             snapToAlignment="center"
-                            onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: this.scrollX } } }])}
-                        >
+                            onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: this.scrollX } } }])}>
                             {
-                                article.images.map((img, index) =>
+                                uploadedImageArray.map((img, index) =>
                                     <Image
-                                        key={`${index}-${img}`}
-                                        source={{ uri: img }}
+                                        key={`${index}-${img.publicId}`}
+                                        source={{ uri: img.secureUrl }}
                                         resizeMode='cover'
-                                        style={{ width, height: width }}
-                                    />
+                                        style={{ width, height: width }} />
                                 )
                             }
                         </ScrollView>
@@ -186,8 +194,7 @@ class CategoryDetails extends Component {
                     </View>
                     <View style={[styles.flex, styles.content]}>
                         <View style={[styles.flex, styles.contentHeader]}>
-                            <Image style={[styles.avatar, styles.shadow]} source={{ uri: article.user.avatar }} />
-                            <Text style={styles.title}>{article.title}</Text>
+                            <Text style={styles.title}>{marketPlaceName}</Text>
                             <View style={[
                                 styles.row,
                                 { alignItems: 'center', marginVertical: theme.sizes.margin / 2 }
@@ -202,8 +209,9 @@ class CategoryDetails extends Component {
                             </View>
                             <TouchableOpacity>
                                 <Text style={styles.description}>
+                                    {description}
                                     {article.description.split('').slice(0, 180)}...
-                <Text style={{ color: theme.colors.active }}> Read more</Text>
+                                    <Text style={{ color: theme.colors.active }}> Read more</Text>
                                 </Text>
                             </TouchableOpacity>
                         </View>

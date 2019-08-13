@@ -36,13 +36,13 @@ class MarketPlaceContainer extends PureComponent {
     }
 }
 
-const mapStateToProps = ({ imageUploadReducer, addMarketplaceReducer }) => {
+const mapStateToProps = ({ imageUploadReducer, marketplaceReducer }) => {
     const { imageUrl, error, deletedPublicId } = imageUploadReducer;
     return {
         imageUploadLoading: imageUploadReducer.isLoading,
         imageUploadRequest: imageUploadReducer.request,
-        addMarketplaceLoading: addMarketplaceReducer.isLoading,
-        addMarketplaceRequest: addMarketplaceReducer.request,
+        addMarketplaceLoading: marketplaceReducer.isLoading,
+        addMarketplaceRequest: marketplaceReducer.request,
         imageUploadUrl: imageUrl,
         deletedPublicId,
         imageUploadError: error || false

@@ -7,8 +7,7 @@ import { theme } from '../../constants';
 export default CategoryItem = ({ navigation, category, styles, active }) => (
   <TouchableOpacity
     key={category.name}
-    onPress={() => navigation.navigate('CategoryDetails')}
-  >
+    onPress={() => navigation.navigate('CategoryDetails')}>
     <View
       style={{
         borderRadius: theme.sizes.radius,

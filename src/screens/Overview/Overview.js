@@ -118,6 +118,10 @@ class Overview extends Component {
     this.navigateToBrowse = this.navigateToBrowse.bind(this);
   }
 
+  componentDidMount() {
+    this.props.navigation.navigate('UserProfileStack')
+  }
+
   scrollX = new Animated.Value(0);
 
   renderDots() {
@@ -135,7 +139,7 @@ class Overview extends Component {
           });
           return (
             <Animated.View
-              key={`step-${item.id}`}
+              key={`step-${index}`}
               style={[styles.dots, styles.activeDot, { borderWidth: borderWidth }]}
             />
           )
@@ -205,7 +209,7 @@ class Overview extends Component {
           snapToAlignment="center"
           style={{ overflow: 'visible' }}
           data={articlesInfo}
-          keyExtractor={(item, index) => `${item.id}`}
+          keyExtractor={(item, index) => `${index}`}
           onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: this.scrollX } } }])}
           renderItem={({ item }) => this.renderDestination(item)}
         />

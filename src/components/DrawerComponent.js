@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { NavigationActions } from 'react-navigation';
-import { Text, View, StyleSheet, ImageBackground } from 'react-native';
+import { Text, View, StyleSheet, ImageBackground, Image } from 'react-native';
 
 import { theme } from '../constants';
 import { Button } from '.';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 const routes = [
     { navigateTo: "OverviewStack", screen: "Home" },
@@ -22,15 +23,35 @@ export default class DrawerComponent extends Component {
         })
 
     render() {
-
         return (
             <View style={styles.container}>
                 <View style={styles.headerContainer}>
-                    <ImageBackground 
-                        source={{ 
-                            uri: 'https://source.unsplash.com/1600x900/?joy,love,happiness' }} 
-                        style={{ 
-                            flex: 1, width: 280, justifyContent: 'center' }} >
+                    <ImageBackground
+                        source={{
+                            uri: 'https://source.unsplash.com/1600x900/?joy,love,happiness'
+                        }}
+                        style={{
+                            flex: 1, width: 280, justifyContent: 'flex-end'
+                        }} >
+                        <TouchableWithoutFeedback
+                            onPress={this.navigateToScreen("UserProfileStack")}
+                            style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                            <Image
+                                source={{
+                                    uri: 'https://source.unsplash.com/1600x900/?female'
+                                }}
+                                style={{
+                                    width: 60,
+                                    height: 60,
+                                    borderRadius: 30,
+                                    backgroundColor: 'red',
+                                    margin: 10
+                                }} />
+                            <View>
+                                <Text h3 style={{ color: '#fff', fontSize: 18 }}>Olusola Oyinloye</Text>
+                                <Text h3 style={{ color: '#fff', fontSize: 12 }}>View profile</Text>
+                            </View>
+                        </TouchableWithoutFeedback>
                     </ImageBackground>
                 </View>
                 <View style={styles.screenContainer}>
@@ -49,8 +70,7 @@ export default class DrawerComponent extends Component {
                         full
                         style={{ marginBottom: 12, width: '100%' }}
                         onPress={this.navigateToScreen("MarketPlaceContainer")}
-                        isLoading={false}
-                    >
+                        isLoading={false}>
                         <Text style={{ color: 'white' }} button>Add a market place</Text>
                     </Button>
                 </View>

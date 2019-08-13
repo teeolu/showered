@@ -3,7 +3,7 @@ import { fork, all } from 'redux-saga/effects';
 
 import { authReducer } from './auth/reducers';
 import { imageUploadReducer } from './imageUpload/reducers';
-import { addMarketplaceReducer } from './marketPlace/reducers';
+import { marketplaceReducer } from './marketPlace/reducers';
 
 import * as authSaga from './auth/saga'
 import * as uploadImageActionSaga from './imageUpload/saga';
@@ -12,7 +12,7 @@ import * as addMarketplaceSaga from './marketPlace/saga';
 export const rootReducer = combineReducers({
     authReducer,
     imageUploadReducer,
-    addMarketplaceReducer
+    marketplaceReducer
 });
 
 export function* rootSaga() {
