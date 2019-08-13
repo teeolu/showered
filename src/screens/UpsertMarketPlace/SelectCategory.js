@@ -9,10 +9,10 @@ import { Card, Box, Block, Text } from '../../components';
 const { width } = Dimensions.get('window');
 
 export const categoryNames = [
-	{ _id: 1, name: 'Boutique' },
-	{ _id: 2, name: 'Store' },
-	{ _id: 3, name: 'Spa' },
-	{ _id: 4, name: 'Cinema' }
+	{ _id: "1", name: 'Boutique' },
+	{ _id: "2", name: 'Store' },
+	{ _id: "3", name: 'Spa' },
+	{ _id: "4", name: 'Cinema' }
 ]
 
 export class SelectCategory extends PureComponent {

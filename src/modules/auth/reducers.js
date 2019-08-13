@@ -79,7 +79,8 @@ export const authReducer = handleActions(
 					userdata: {
 						firstName: payload.firstName,
 						lastName: payload.lastName,
-						email: payload.email
+						email: payload.email,
+						_id: payload._id
 					}
 				};
 			},

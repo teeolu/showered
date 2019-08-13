@@ -4,15 +4,19 @@ import CategoryDetails from '../../screens/CategoryDetails';
 
 class CategoryDetailsContainer extends PureComponent {
     render() {
-        const {} = this.props;
+        const { userdata } = this.props;
         return (
-            <CategoryDetails {...this.props}/>
+            <CategoryDetails 
+                userdata={userdata}
+                {...this.props}/>
         )
     }
 }
 
 const mapStateToProps = ({ authReducer }) => {
-    return {}
+    return {
+        userdata: authReducer.userdata
+    }
 }
 
 const mapDispatchToProps = {

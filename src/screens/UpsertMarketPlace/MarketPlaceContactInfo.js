@@ -65,21 +65,21 @@ class MarketPlaceContactInfo extends PureComponent {
 						inputInfo={inputInfo}
 						email
 						type="email"
+						value={inputInfo.email.value}
 						placeholder="e.g official-email@email.com"
 						label="Email address"
 						onChangeText={handleChange("email")}
-						style={{ marginBottom: 25 }}
-					/>
+						style={{ marginBottom: 25 }}/>
 					<Input
 						full
 						blur={blur}
 						inputInfo={inputInfo}
 						type="number"
 						label="Phone number"
+						value={inputInfo.number.value}
 						placeholder="e.g +2348012345678"
 						onChangeText={handleChange("number")}
-						style={{ marginBottom: 25 }}
-					/>
+						style={{ marginBottom: 25 }}/>
 					<Input
 						full
 						inputInfo={inputInfo}
@@ -111,6 +111,7 @@ class MarketPlaceContactInfo extends PureComponent {
 						full
 						inputInfo={inputInfo}
 						blur={blur}
+						value={inputInfo.street.value}
 						type="street"
 						label="Street"
 						onChangeText={handleChange("street")}

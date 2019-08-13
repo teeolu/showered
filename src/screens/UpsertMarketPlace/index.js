@@ -40,20 +40,24 @@ class MarketPlace extends Component {
 	constructor(props, context) {
 		super(props);
 		this.scrollView;
+		const item = this.props.navigation.getParam('item', {});
+		const edit = Object.keys(item).length > 0;
+		const { category, cityName, description, email, marketPlaceName, number, stateName, street, uploadedImageArray } = item;
 		this.state = {
 			currentIndex: 0,
 			formError: false,
+			edit,
 			errorMessage: "",
 			fields: {
 				category: {
-					value: '',
-					error: true,
+					value: edit ? category : '',
+					error: edit ? false : true,
 					errorMessage: 'You didn\'t choose a category',
 					rules: {}
 				},
 				marketPlaceName: {
-					value: "",
-					error: true,
+					value: edit ? marketPlaceName : "",
+					error: edit ? false : true,
 					errorMessage: "",
 					rules: {
 						maxLength: 40,
@@ -61,8 +65,8 @@ class MarketPlace extends Component {
 					}
 				},
 				description: {
-					value: "",
-					error: true,
+					value: edit ? description : "",
+					error: edit ? false : true,
 					errorMessage: "",
 					rules: {
 						maxLength: 40,
@@ -70,16 +74,16 @@ class MarketPlace extends Component {
 					}
 				},
 				email: {
-					value: "",
-					error: true,
+					value: edit ? email : "",
+					error: edit ? false : true,
 					errorMessage: "",
 					rules: {
 						email: true
 					}
 				},
 				number: {
-					value: "",
-					error: true,
+					value: edit ? number : "",
+					error: edit ? false : true,
 					errorMessage: "",
 					rules: {
 						length: 14,
@@ -87,8 +91,8 @@ class MarketPlace extends Component {
 					}
 				},
 				stateName: {
-					value: "",
-					error: true,
+					value: edit ? stateName : "",
+					error: edit ? false : true,
 					errorMessage: "",
 					rules: {
 						maxLength: 20,
@@ -96,8 +100,8 @@ class MarketPlace extends Component {
 					}
 				},
 				cityName: {
-					value: "",
-					error: true,
+					value: edit ? cityName : "",
+					error: edit ? false : true,
 					errorMessage: "",
 					rules: {
 						maxLength: 20,
@@ -105,8 +109,8 @@ class MarketPlace extends Component {
 					}
 				},
 				street: {
-					value: "",
-					error: true,
+					value: edit ? street : "",
+					error: edit ? false : true,
 					errorMessage: "",
 					rules: {
 						maxLength: 20,
@@ -114,9 +118,9 @@ class MarketPlace extends Component {
 					}
 				},
 				uploadedImageArray: {
-					error: true,
+					error: edit ? false : true,
 					errorMessage: "",
-					value: [],
+					value: edit ? uploadedImageArray : [],
 					rules: {
 						maxLength: 5,
 						minLength: 1
@@ -173,7 +177,11 @@ class MarketPlace extends Component {
 	}
 
 	handleSubmit = event => {
-		const { requestAddMarketplaceAction, navigation } = this.props;
+		const {
+			requestAddMarketplaceAction,
+			requestEditMarketplaceAction,
+			navigation } = this.props;
+			let item = navigation.getParam('item', {})
 
 		var { error, errorMessage } = validateInput(this.state.fields);
 		if (error) {
@@ -187,6 +195,17 @@ class MarketPlace extends Component {
 		Object.keys(this.state.fields).map(el => {
 			dataToSubmit[el] = this.state.fields[el].value
 		});
+
+		if (this.state.edit) {
+			return requestEditMarketplaceAction({
+				dataToSubmit: {
+					...item, 
+					...dataToSubmit},
+				_id: item._id,
+				navigation,
+				navigateTo: 'CategoryDetails'
+			})
+		}
 
 		requestAddMarketplaceAction({
 			dataToSubmit,
@@ -230,7 +249,6 @@ class MarketPlace extends Component {
 			addMarketplaceRequest,
 			imageUploadError,
 			imageUploadRequest } = this.props;
-			console.log("submit ", this.state.formError, this.state.errorMessage)
 
 		return (
 			<SafeAreaView style={styles.overview}>

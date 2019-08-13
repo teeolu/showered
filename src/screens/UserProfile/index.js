@@ -18,7 +18,7 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import { Block, Card, Text, Icon, Label, Box } from '../../components';
 import * as theme from '../../constants/theme';
 import { articlesInfo } from '../../constants/mocks';
-import { categoryNames } from '../MarketPlace/SelectCategory';
+import { categoryNames } from '../UpsertMarketPlace/SelectCategory';
 import { marketplaceStatus } from '../../modules/marketPlace/reducers';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 const { width } = Dimensions.get('window');

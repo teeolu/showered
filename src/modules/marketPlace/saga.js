@@ -2,10 +2,13 @@ import { takeLeading, call, put } from 'redux-saga/effects';
 
 import { 
     addMarketplaceApi,
+    editMarketplaceApi,
     getUserMarketplaceApi } from './api';
 import {
     requestAddMarketplaceAction,
     receiveAddMarketplaceAction,
+    requestEditMarketplaceAction,
+    receiveEditMarketplaceAction,
     requestGetUserMarketplaceAction,
     receiveGetUserMarketplaceAction } from './actions';
 
@@ -16,7 +19,7 @@ function* addMarketplaceActionWatcher({ payload }) {
         if (result.success) {
             yield put(receiveAddMarketplaceAction(payload));
             if (navigation) {
-                navigation.navigate(navigateTo)
+                navigation.navigate(navigateTo, { item: result.docs })
             }
         } else {
             yield put(receiveAddMarketplaceAction(result));
@@ -28,6 +31,28 @@ function* addMarketplaceActionWatcher({ payload }) {
 
 export function* requestAddMarketplaceActionSaga() {
     yield takeLeading(requestAddMarketplaceAction, addMarketplaceActionWatcher)
+}
+
+function* editMarketplaceActionWatcher({ payload }) {
+    try {
+        const { dataToSubmit, _id, navigation, navigateTo } = payload;
+        const result = yield call(editMarketplaceApi, dataToSubmit, _id);
+        if (result.success) {
+            yield put(receiveEditMarketplaceAction(result));
+            if (navigation) {
+                navigation.navigate(navigateTo,  { item: result.payload.docs[0] })
+            }
+            yield put(requestGetUserMarketplaceAction());
+        } else {
+            yield put(receiveEditMarketplaceAction(result));
+        }
+    } catch (error) {
+        yield put(receiveEditMarketplaceAction(error));
+    }
+}
+
+export function* requestEditMarketplaceActionSaga() {
+    yield takeLeading(requestEditMarketplaceAction, editMarketplaceActionWatcher)
 }
 
 function* getUserMarketplaceActionWatcher() {

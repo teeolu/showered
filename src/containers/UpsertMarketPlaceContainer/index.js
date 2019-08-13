@@ -6,9 +6,10 @@ import {
     requestRemoveImageUploadAction
 } from '../../modules/imageUpload/actions';
 import {
-    requestAddMarketplaceAction
+    requestAddMarketplaceAction,
+    requestEditMarketplaceAction
 } from '../../modules/marketPlace/actions';
-import MarketPlace from '../../screens/MarketPlace';
+import MarketPlace from '../../screens/UpsertMarketPlace';
 
 class MarketPlaceContainer extends PureComponent {
     render() {
@@ -20,6 +21,7 @@ class MarketPlaceContainer extends PureComponent {
             deletedPublicId,
             requestAddMarketplaceAction,
             requestRemoveImageUploadAction,
+            requestEditMarketplaceAction,
             imageUploadRequest } = this.props;
         return (
             <MarketPlace
@@ -29,6 +31,7 @@ class MarketPlaceContainer extends PureComponent {
                 imageUploadRequest={imageUploadRequest}
                 requestAddMarketplaceAction={requestAddMarketplaceAction}
                 imageUploadUrl={imageUploadUrl}
+                requestEditMarketplaceAction={requestEditMarketplaceAction}
                 imageUploadError={imageUploadError}
                 deletedPublicId={deletedPublicId}
                 {...this.props} />
@@ -52,7 +55,8 @@ const mapStateToProps = ({ imageUploadReducer, marketplaceReducer }) => {
 const mapDispatchToProps = {
     requestImageUploadAction,
     requestRemoveImageUploadAction,
-    requestAddMarketplaceAction
+    requestAddMarketplaceAction,
+    requestEditMarketplaceAction
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MarketPlaceContainer);

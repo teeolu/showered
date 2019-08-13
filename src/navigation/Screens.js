@@ -8,7 +8,7 @@ import Chat from '../screens/Chat';
 import Settings from '../screens/Settings';
 import Map from '../screens/Map';
 import Vehicles from '../screens/Vehicles';
-import MarketPlaceContainer from '../containers/MarketPlaceContainer';
+import MarketPlaceContainer from '../containers/UpsertMarketPlaceContainer';
 import BrowseContainer from '../containers/BrowseContainer';
 import CategoryDetailsContainer from '../containers/CategoryDetailsContainer';
 import DrawerComponent from '../components/DrawerComponent';

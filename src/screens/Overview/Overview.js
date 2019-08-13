@@ -6,7 +6,7 @@ import Octicons from 'react-native-vector-icons/Octicons';
 import { Block, Card, Text, Icon, Label, Box } from '../../components';
 import * as theme from '../../constants/theme';
 import { articlesInfo } from '../../constants/mocks';
-import { categoryNames } from '../MarketPlace/SelectCategory';
+import { categoryNames } from '../UpsertMarketPlace/SelectCategory';
 const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
