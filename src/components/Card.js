@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 import Block from './Block';
 import Text from './Text';
@@ -13,12 +13,15 @@ export default class Card extends Component {
   }
 
   renderHeader = () => {
-    const { title } = this.props;
+    const { title, headingRight } = this.props;
     if (!title) return null;
 
     return (
       <Block row space="between" style={styles.header}>
         <Text h4>{title}</Text>
+        {headingRight && (
+          <View>{headingRight}</View>
+        )}
       </Block>
     )
   }
@@ -49,6 +52,10 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingBottom: 24,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   border: {
     borderColor: theme.colors.card,

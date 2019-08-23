@@ -58,8 +58,7 @@ class Login extends Component {
   handleSubmit = event => {
     const { requestLoginAction, navigation } = this.props;
 
-    var error = validateInput(this.state.fields);
-    console.log("login error ", error)
+    var {error} = validateInput(this.state.fields);
 		if(error){
 		  return this.setState({
 			formError: true,
@@ -77,8 +76,6 @@ class Login extends Component {
 
   render() {
     const { navigation, isLoading, request, loginError } = this.props;
-
-    console.log("login error ", loginError)
 
     return (
       <KeyboardAvoidingView

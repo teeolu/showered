@@ -172,7 +172,8 @@ class UserProfile extends Component {
                 <ActivityIndicator size="large" color="blue" />
               ) : (
                 <>
-                  {(userMarketplaceData.map(item => (
+                  {userMarketplaceData.length > 0 ?
+                    userMarketplaceData.map(item => (
                     <Block
                       key={item._id} 
                       style={styles.driver}>
@@ -195,7 +196,7 @@ class UserProfile extends Component {
                         </Block>
                       </TouchableOpacity>
                     </Block>
-                  )))}
+                  )): <Text>You are not offering any service yet</Text>}
                 </>
               )}
           </Card>
