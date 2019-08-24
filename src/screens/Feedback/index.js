@@ -14,7 +14,7 @@ import { theme } from "../../constants";
 export default class Feedback extends Component {
 	render() {
 		const { navigation } = this.props;
-		let { navigateTo, type, title, text, btnText } = navigation.getParam(
+		let { navigateTo, type, title, text, btnText, data } = navigation.getParam(
 			"item",
 			{}
 		);
@@ -35,7 +35,7 @@ export default class Feedback extends Component {
 				</Text>
 				<TouchableHighlight
 					style={[styles.buttonContainer, styles.loginButton]}
-					onPress={() => navigation.navigate(navigateTo)}>
+					onPress={() => navigation.navigate(navigateTo, { item: data })}>
 					<Text style={styles.buttonText}>
 						{btnText || "Email has been verified"}
 					</Text>

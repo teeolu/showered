@@ -54,8 +54,7 @@ const MarketPlaceDetailsStack = createStackNavigator(
 
 const BrowseStack = createStackNavigator(
 	{
-		Browse: BrowseContainer,
-		MarketPlaceDetailsStack
+		Browse: BrowseContainer
 	},
 	{
 		headerMode: "none"
@@ -70,6 +69,7 @@ const OverviewStack = createStackNavigator({
 const UserProfileStack = createStackNavigator(
 	{
 		UserProfile: UserProfileContainer,
+		MarketPlaceDetailsStack,
 		BrowseStack
 	},
 	{

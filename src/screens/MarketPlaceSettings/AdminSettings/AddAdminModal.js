@@ -47,8 +47,22 @@ export default class AddAdminModal extends Component {
 					onChangeText={this.props.handleChange("email")}
 					style={{ marginBottom: 25 }}
 				/>
+				{this.props.isError && (
+					<Text
+						style={{
+							marginTop: 30,
+							textAlign: "center",
+							marginBottom: 10,
+							color: "red"
+						}}>
+						{this.props.requestError
+							? `${this.props.requestError}`
+							: "An error occured"}
+					</Text>
+				)}
 				<Button
 					full
+					isLoading={this.props.isLoading}
 					style={{ width: "50%", alignSelf: "flex-end" }}
 					onPress={this.props.handleSubmit}>
 					<Text button>Submit</Text>

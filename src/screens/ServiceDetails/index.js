@@ -73,7 +73,7 @@ class ServiceDetails extends Component {
 									<Ionicons
 										name="ios-arrow-round-back"
 										color={theme.colors.white}
-										size={theme.sizes.font * 4}
+										size={theme.sizes.font * 3}
 									/>
 								</TouchableOpacity>
 								<View

@@ -8,10 +8,14 @@ import {
 	ScrollView,
 	ActivityIndicator,
 	TouchableWithoutFeedback,
-	TouchableOpacity
+	TouchableOpacity,
+	ImageBackground
 } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import {
+	FontAwesome,
+	MaterialIcons,
+	Ionicons
+} from "react-native-vector-icons";
 
 import { theme } from "../../constants";
 import { articlesInfo } from "../../constants/mocks";
@@ -23,35 +27,10 @@ const { width, height } = Dimensions.get("window");
 class MarketPlaceDetails extends Component {
 	scrollX = new Animated.Value(0);
 
-	static navigationOptions = ({ navigation }) => {
-		return {
-			header: (
-				<View style={[styles.flex, styles.row, styles.header]}>
-					<TouchableOpacity
-						style={styles.back}
-						onPress={() => navigation.goBack()}>
-						<FontAwesome
-							name="chevron-left"
-							color={theme.colors.white}
-							size={theme.sizes.font * 3}
-						/>
-					</TouchableOpacity>
-					<TouchableOpacity>
-						<MaterialIcons
-							name="more-horiz"
-							color={theme.colors.white}
-							size={theme.sizes.font * 1.5}
-						/>
-					</TouchableOpacity>
-				</View>
-			),
-			headerTransparent: true
-		};
-	};
-
 	componentDidMount() {
 		const { navigation, requestGetServiceDetailsAction } = this.props;
 		const item = navigation.getParam("item");
+		console.log(item);
 		requestGetServiceDetailsAction({ marketPlaceId: item._id });
 	}
 
@@ -171,12 +150,26 @@ class MarketPlaceDetails extends Component {
 								{ nativeEvent: { contentOffset: { x: this.scrollX } } }
 							])}>
 							{uploadedImageArray.map((img, index) => (
-								<Image
+								<ImageBackground
 									key={`${img.publicId}`}
 									source={{ uri: img.secureUrl }}
 									resizeMode="cover"
-									style={{ width, height: width * 0.65 }}
-								/>
+									style={{
+										width,
+										height: width * 0.65,
+										display: "flex",
+										alignContent: "center"
+									}}>
+									<TouchableOpacity
+										style={{ margin: theme.sizes.margin }}
+										onPress={() => navigation.pop()}>
+										<Ionicons
+											name="ios-arrow-round-back"
+											color={theme.colors.blue}
+											size={theme.sizes.font * 4}
+										/>
+									</TouchableOpacity>
+								</ImageBackground>
 							))}
 						</ScrollView>
 						{this.renderDots()}

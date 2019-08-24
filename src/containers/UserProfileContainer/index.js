@@ -1,40 +1,71 @@
-import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
+import React, { PureComponent } from "react";
+import { connect } from "react-redux";
+import { TouchableOpacity } from "react-native";
 
-import { requestGetUserMarketplaceAction } from '../../modules/marketPlace/actions'
-import UserProfile from '../../screens/UserProfile';
+import { requestGetUserMarketplaceAction } from "../../modules/marketPlace/actions";
+import UserProfile from "../../screens/UserProfile";
+import { Block, Text, Icon } from "../../components";
 
 class UserProfileContainer extends PureComponent {
-    render() {
-        const { 
-            userdata,
-            marketPlaceLoading,
-            marketPlaceRequest,
-            userMarketplaceData,
-            requestGetUserMarketplaceAction } = this.props;
-        return (
-            <UserProfile
-                userdata={userdata}
-                marketPlaceRequest={marketPlaceRequest}
-                marketPlaceLoading={marketPlaceLoading}
-                userMarketplaceData={userMarketplaceData}
-                requestGetUserMarketplaceAction={requestGetUserMarketplaceAction}
-                {...this.props} />
-        )
-    }
+	static navigationOptions = ({ navigation }) => ({
+		headerLeftContainerStyle: {
+			paddingLeft: 24
+		},
+		headerRightContainerStyle: {
+			paddingRight: 24
+		},
+		headerLeft: (
+			<TouchableOpacity onPress={navigation.openDrawer}>
+				<Icon menu />
+			</TouchableOpacity>
+		),
+		headerRight: (
+			<TouchableOpacity>
+				<Icon notification />
+			</TouchableOpacity>
+		),
+		headerTitle: (
+			<Block row middle>
+				<Text h4>Your profile</Text>
+			</Block>
+		)
+	});
+
+	render() {
+		const {
+			userdata,
+			marketPlaceLoading,
+			marketPlaceRequest,
+			userMarketplaceData,
+			requestGetUserMarketplaceAction
+		} = this.props;
+		return (
+			<UserProfile
+				userdata={userdata}
+				marketPlaceRequest={marketPlaceRequest}
+				marketPlaceLoading={marketPlaceLoading}
+				userMarketplaceData={userMarketplaceData}
+				requestGetUserMarketplaceAction={requestGetUserMarketplaceAction}
+				{...this.props}
+			/>
+		);
+	}
 }
 
 const mapStateToProps = ({ authReducer, marketplaceReducer }) => {
-    return {
-        userdata: authReducer.userdata,
-        marketPlaceLoading: marketplaceReducer.isLoading,
-        marketPlaceRequest: marketplaceReducer.getMarketPlace,
-        userMarketplaceData: marketplaceReducer.userMarketplaceData
-    }
-}
-
-const mapDispatchToProps = {
-    requestGetUserMarketplaceAction
+	return {
+		userdata: authReducer.userdata,
+		marketPlaceLoading: marketplaceReducer.isLoading,
+		marketPlaceRequest: marketplaceReducer.getMarketPlace,
+		userMarketplaceData: marketplaceReducer.userMarketplaceData
+	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserProfileContainer);
+const mapDispatchToProps = {
+	requestGetUserMarketplaceAction
+};
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(UserProfileContainer);

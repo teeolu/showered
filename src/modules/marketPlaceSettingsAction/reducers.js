@@ -28,19 +28,25 @@ export const marketPlaceSettingsReducer = handleActions(
 		},
 		[receiveAddMarketplaceAdminAction]: {
 			next(state, action) {
-				const { payload } = action;
+				const {
+					payload: { payload }
+				} = action;
 				return {
 					...state,
 					isLoading: false,
-					error: false,
+					error: true,
+					errorMessage: payload.message,
 					request: marketPlaceSettingsStatus.addMarketplaceAdmin
 				};
 			},
 			throw(state, action) {
-				const { payload } = action;
+				const {
+					payload: { payload }
+				} = action;
 				return {
 					...state,
 					isLoading: false,
+					errorMessage: payload.message,
 					request: marketPlaceSettingsStatus.addMarketplaceAdmin,
 					error: true
 				};

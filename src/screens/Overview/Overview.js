@@ -9,90 +9,6 @@ import { articlesInfo } from '../../constants/mocks';
 import { categoryNames } from '../UpsertMarketPlace/SelectCategory';
 const { width } = Dimensions.get('window');
 
-const styles = StyleSheet.create({
-  overview: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: theme.colors.white,
-  },
-  flex: {
-    flex: 1,
-  },
-  rating: {
-    fontSize: theme.sizes.font * 2,
-    color: theme.colors.white,
-    fontWeight: 'bold'
-  },
-  dots: {
-    width: 10,
-    height: 10,
-    borderWidth: 2.5,
-    borderRadius: 5,
-    marginHorizontal: 6,
-    backgroundColor: theme.colors.gray,
-    borderColor: 'transparent',
-  },
-  activeDot: {
-    width: 12.5,
-    height: 12.5,
-    borderRadius: 6.25,
-    borderColor: theme.colors.active,
-  },
-  destinationInfo: {
-    position: 'absolute',
-    borderRadius: theme.sizes.radius,
-    paddingHorizontal: theme.sizes.padding,
-    paddingVertical: theme.sizes.padding / 2,
-    bottom: -theme.sizes.padding,
-    right: theme.sizes.padding,
-    left: theme.sizes.padding,
-    backgroundColor: theme.colors.white,
-  },
-  destinations: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  avatar: {
-    width: theme.sizes.padding,
-    height: theme.sizes.padding,
-    borderRadius: theme.sizes.padding / 2,
-  },
-  margin: {
-    marginHorizontal: 25,
-  },
-  driver: {
-    marginBottom: 11,
-  },
-  avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-  },
-  column: {
-    flexDirection: 'column'
-  },
-  shadow: {
-    shadowColor: theme.colors.black,
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-  },
-  row: {
-    flexDirection: 'row'
-  },
-  destination: {
-    width: width - (theme.sizes.padding * 2),
-    height: width * 0.6,
-    marginHorizontal: theme.sizes.margin,
-    paddingHorizontal: theme.sizes.padding,
-    paddingVertical: theme.sizes.padding * 0.66,
-    borderRadius: theme.sizes.radius
-  },
-});
-
 class Overview extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerLeftContainerStyle: {
@@ -119,7 +35,7 @@ class Overview extends Component {
   }
 
   componentDidMount() {
-    this.props.navigation.navigate('UserProfileStack')
+    // this.props.navigation.navigate('UserProfileStack')
   }
 
   scrollX = new Animated.Value(0);
@@ -360,5 +276,88 @@ class Overview extends Component {
     )
   }
 }
+const styles = StyleSheet.create({
+  overview: {
+    flex: 1,
+    flexDirection: 'column',
+    backgroundColor: theme.colors.white,
+  },
+  flex: {
+    flex: 1,
+  },
+  rating: {
+    fontSize: theme.sizes.font * 2,
+    color: theme.colors.white,
+    fontWeight: 'bold'
+  },
+  dots: {
+    width: 10,
+    height: 10,
+    borderWidth: 2.5,
+    borderRadius: 5,
+    marginHorizontal: 6,
+    backgroundColor: theme.colors.gray,
+    borderColor: 'transparent',
+  },
+  activeDot: {
+    width: 12.5,
+    height: 12.5,
+    borderRadius: 6.25,
+    borderColor: theme.colors.active,
+  },
+  destinationInfo: {
+    position: 'absolute',
+    borderRadius: theme.sizes.radius,
+    paddingHorizontal: theme.sizes.padding,
+    paddingVertical: theme.sizes.padding / 2,
+    bottom: -theme.sizes.padding,
+    right: theme.sizes.padding,
+    left: theme.sizes.padding,
+    backgroundColor: theme.colors.white,
+  },
+  destinations: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  avatar: {
+    width: theme.sizes.padding,
+    height: theme.sizes.padding,
+    borderRadius: theme.sizes.padding / 2,
+  },
+  margin: {
+    marginHorizontal: 25,
+  },
+  driver: {
+    marginBottom: 11,
+  },
+  avatar: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+  },
+  column: {
+    flexDirection: 'column'
+  },
+  shadow: {
+    shadowColor: theme.colors.black,
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+  },
+  row: {
+    flexDirection: 'row'
+  },
+  destination: {
+    width: width - (theme.sizes.padding * 2),
+    height: width * 0.6,
+    marginHorizontal: theme.sizes.margin,
+    paddingHorizontal: theme.sizes.padding,
+    paddingVertical: theme.sizes.padding * 0.66,
+    borderRadius: theme.sizes.radius
+  },
+});
 
 export default Overview;

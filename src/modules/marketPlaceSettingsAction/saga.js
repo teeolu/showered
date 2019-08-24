@@ -8,8 +8,9 @@ import {
 
 function* addMarketplaceAdminActionWatcher({ payload }) {
 	try {
-		const { dataToSubmit, navigation, navigateTo } = payload;
+		const { dataToSubmit, navigation, navigateTo, data } = payload;
 		const result = yield call(addMarketplaceAdminApi, dataToSubmit);
+		console.log("report ", result);
 		if (result.success) {
 			yield put(receiveAddMarketplaceAdminAction(payload));
 			if (navigation) {
@@ -17,11 +18,10 @@ function* addMarketplaceAdminActionWatcher({ payload }) {
 					item: {
 						type: "success",
 						title: "Invitation sent",
-						text: `Your invitation has been sent succesfully to ${
-							result.payload.docs.firstName
-						} ${result.payload.docs.lastName}`,
+						text: `Your invitation has been sent succesfully to ${result.payload.docs.firstName} ${result.payload.docs.lastName}`,
 						btnText: "go back",
-						navigateTo: "AdminSetting"
+						navigateTo: "AdminSetting",
+						data
 					}
 				});
 			}

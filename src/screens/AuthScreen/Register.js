@@ -107,7 +107,7 @@ class Register extends Component {
 		}
 
 		requestSignupAction({
-			email: email.value,
+			email: email.value.toLowerCase(),
 			firstName: firstName.value,
 			lastName: lastName.value,
 			password: password.value,

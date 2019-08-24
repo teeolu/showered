@@ -65,6 +65,18 @@ function* loginActionWatcher({ payload }) {
 			yield put(requestUserinfoAction({ navigation, navigateTo }));
 			yield put(receiveLoginAction(result));
 		} else {
+			if (!result.emailConfirmed)
+				navigation.navigate("Feedback", {
+					item: {
+						navigateTo: "Login",
+						type: "error",
+						title: "Confirm email address",
+						text:
+							"A mail has been sent to your mail box. Click on confirm email to verify your email",
+						btnText: "Email confirmed? Login",
+						data: {}
+					}
+				});
 			yield put(receiveLoginAction(result));
 		}
 	} catch (error) {

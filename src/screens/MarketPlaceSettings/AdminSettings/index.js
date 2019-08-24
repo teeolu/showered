@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 import {
 	StyleSheet,
 	Text,
@@ -16,7 +16,7 @@ import AddAdminModal from "./AddAdminModal";
 import { validateInput } from "../../../utils/inputFunctions";
 import { marketPlaceSettingsStatus } from "../../../modules/marketPlaceSettingsAction/reducers";
 
-export default class AdminSettings extends PureComponent {
+export default class AdminSettings extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -75,12 +75,11 @@ export default class AdminSettings extends PureComponent {
 			errorMessage: ""
 		};
 
-		this.setState(prevState => ({
-			...prevState,
+		this.setState({
 			...newState,
 			formError: false,
 			errorMessage: ""
-		}));
+		});
 	};
 
 	blurReact = ({ error, errorMessage, type }) => {
@@ -97,21 +96,22 @@ export default class AdminSettings extends PureComponent {
 		const { requestAddMarketplaceAdminAction, navigation } = this.props;
 		const { marketPlaceInfo } = navigation.getParam("item", {});
 
-		// var { error } = validateInput(this.state.fields);
-		// if (error) {
-		// 	return this.setState({
-		// 		formError: true,
-		// 		errorMessage: "Ensure your inputs are valid"
-		// 	});
-		// }
+		var { error } = validateInput(this.state.fields);
+		if (error) {
+			return this.setState({
+				formError: true,
+				errorMessage: "Ensure your inputs are valid"
+			});
+		}
 
 		requestAddMarketplaceAdminAction({
 			dataToSubmit: {
-				userEmail: "oyinloye.olusola.taiwo@gmail.com", //this.state.fields.email.value.toLowerCase(),
+				userEmail: this.state.fields.email.value.toLowerCase(),
 				marketPlaceId: marketPlaceInfo._id
 			},
 			navigation,
-			navigateTo: "Feedback"
+			navigateTo: "Feedback",
+			data: marketPlaceInfo
 		});
 	};
 
@@ -137,10 +137,10 @@ export default class AdminSettings extends PureComponent {
 	};
 
 	render() {
-		let { isLoading, request, addAdminError } = this.props;
-		console.log("value state ", this.state.fields.email.value);
+		let { isLoading, request, isError, requestError } = this.props;
 		isLoading =
 			isLoading && request === marketPlaceSettingsStatus.addMarketplaceAdmin;
+		console.log("isLoading ", isLoading);
 		return (
 			<View style={{ flex: 1 }}>
 				<TouchableOpacity onPress={this.toggleModal}>
@@ -188,6 +188,8 @@ export default class AdminSettings extends PureComponent {
 					inputInfo={this.state.fields}
 					handleSubmit={this.handleSubmit}
 					isLoading={isLoading}
+					isError={isError}
+					requestError={requestError}
 				/>
 			</View>
 		);
