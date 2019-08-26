@@ -30,7 +30,6 @@ class MarketPlaceDetails extends Component {
 	componentDidMount() {
 		const { navigation, requestGetServiceDetailsAction } = this.props;
 		const item = navigation.getParam("item");
-		console.log(item);
 		requestGetServiceDetailsAction({ marketPlaceId: item._id });
 	}
 
@@ -264,68 +263,72 @@ class MarketPlaceDetails extends Component {
 								<ActivityIndicator size="large" color="blue" />
 							) : (
 								<>
-									{marketplaceServiceDetailsData.length > 0 ? (
-										marketplaceServiceDetailsData.map(data => (
-											<TouchableWithoutFeedback
-												key={data._id}
-												onPress={() =>
-													this.navigateToBrowse("ServiceDetailsInfo", {
-														item: data,
-														authorized: authorized || isStaff
-													})
-												}>
-												<Card row middle style={styles.margin}>
-													<Block style={{}}>
-														<Image
-															key={`${data.uploadedImageArray[0].publicId}`}
-															source={{
-																uri: data.uploadedImageArray[0].secureUrl
-															}}
-															resizeMode="cover"
-															style={{ width: 100, height: "100%" }}
-														/>
-													</Block>
-													<Block
-														style={{
-															flex: 1.5
-														}}>
-														<Text h4>{data.serviceName}</Text>
-														<View
-															style={[
-																styles.row,
-																{
-																	alignItems: "center",
-																	marginVertical: theme.sizes.margin / 2
-																}
-															]}>
-															{this.renderRatings(article.rating)}
-															<Text style={{ color: theme.colors.active }}>
-																{article.rating}
-															</Text>
-														</View>
-														<View
+									{marketplaceServiceDetailsData ? (
+										marketplaceServiceDetailsData.length > 0 ? (
+											marketplaceServiceDetailsData.map(data => (
+												<TouchableWithoutFeedback
+													key={data._id}
+													onPress={() =>
+														this.navigateToBrowse("ServiceDetailsInfo", {
+															item: data,
+															authorized: authorized || isStaff
+														})
+													}>
+													<Card row middle style={styles.margin}>
+														<Block style={{}}>
+															<Image
+																key={`${data.uploadedImageArray[0].publicId}`}
+																source={{
+																	uri: data.uploadedImageArray[0].secureUrl
+																}}
+																resizeMode="cover"
+																style={{ width: 100, height: "100%" }}
+															/>
+														</Block>
+														<Block
 															style={{
-																display: "flex",
-																flexDirection: "row"
+																flex: 1.5
 															}}>
-															<Text
+															<Text h4>{data.serviceName}</Text>
+															<View
+																style={[
+																	styles.row,
+																	{
+																		alignItems: "center",
+																		marginVertical: theme.sizes.margin / 2
+																	}
+																]}>
+																{this.renderRatings(article.rating)}
+																<Text style={{ color: theme.colors.active }}>
+																	{article.rating}
+																</Text>
+															</View>
+															<View
 																style={{
-																	color: theme.colors.caption,
-																	marginRight: 5
+																	display: "flex",
+																	flexDirection: "row"
 																}}>
-																{article.reviews} reviews
-															</Text>
-															<Text
-																style={{
-																	color: theme.colors.caption
-																}}>
-																{article.reviews} sales
-															</Text>
-														</View>
-													</Block>
-												</Card>
-											</TouchableWithoutFeedback>
-										))
+																<Text
+																	style={{
+																		color: theme.colors.caption,
+																		marginRight: 5
+																	}}>
+																	{article.reviews} reviews
+																</Text>
+																<Text
+																	style={{
+																		color: theme.colors.caption
+																	}}>
+																	{article.reviews} sales
+																</Text>
+															</View>
+														</Block>
+													</Card>
+												</TouchableWithoutFeedback>
+											))
+										) : (
+											<Text caption>You are yet to add a service</Text>
+										)
 									) : (
 										<Text caption>You are yet to add a service</Text>
 									)}

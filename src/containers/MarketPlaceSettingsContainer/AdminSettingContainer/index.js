@@ -3,7 +3,11 @@ import { connect } from "react-redux";
 import { TouchableOpacity } from "react-native";
 
 import AdminSettings from "../../../screens/MarketPlaceSettings/AdminSettings";
-import { requestAddMarketplaceAdminAction } from "../../../modules/marketPlaceSettingsAction/actions";
+import {
+	requestAddMarketplaceAdminAction,
+	requestRemoveMarketplaceAdminAction,
+	requestDisableMarketplaceAdminAction
+} from "../../../modules/marketPlaceSettingsAction/actions";
 import { Block, Text, Icon } from "../../../components";
 
 class AdminSettingContainer extends PureComponent {
@@ -34,6 +38,8 @@ class AdminSettingContainer extends PureComponent {
 	render() {
 		const {
 			requestAddMarketplaceAdminAction,
+			requestRemoveMarketplaceAdminAction,
+			requestDisableMarketplaceAdminAction,
 			isLoading,
 			request,
 			errorMessage,
@@ -42,6 +48,12 @@ class AdminSettingContainer extends PureComponent {
 		return (
 			<AdminSettings
 				requestAddMarketplaceAdminAction={requestAddMarketplaceAdminAction}
+				requestRemoveMarketplaceAdminAction={
+					requestRemoveMarketplaceAdminAction
+				}
+				requestDisableMarketplaceAdminAction={
+					requestDisableMarketplaceAdminAction
+				}
 				isLoading={isLoading}
 				request={request}
 				requestError={errorMessage}
@@ -53,7 +65,9 @@ class AdminSettingContainer extends PureComponent {
 }
 
 const mapDispatchToProps = {
-	requestAddMarketplaceAdminAction
+	requestAddMarketplaceAdminAction,
+	requestRemoveMarketplaceAdminAction,
+	requestDisableMarketplaceAdminAction
 };
 
 const mapStateToProps = ({ marketPlaceSettingsReducer }) => {

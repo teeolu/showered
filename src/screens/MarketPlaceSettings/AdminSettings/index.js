@@ -4,46 +4,23 @@ import {
 	Text,
 	View,
 	TouchableOpacity,
+	Dimensions,
+	Alert,
 	FlatList
 } from "react-native";
-import {
-	AntDesign,
-	MaterialCommunityIcons,
-	MaterialIcons
-} from "react-native-vector-icons";
+import { MaterialIcons, Entypo } from "react-native-vector-icons";
 import { theme } from "../../../constants";
 import AddAdminModal from "./AddAdminModal";
 import { validateInput } from "../../../utils/inputFunctions";
 import { marketPlaceSettingsStatus } from "../../../modules/marketPlaceSettingsAction/reducers";
+import ModalDropdown from "./ModalDropdown";
+const width = Dimensions.get("window").width;
 
 export default class AdminSettings extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			calls: [
-				{
-					id: 1,
-					name: "Add an admin",
-					icon: (
-						<MaterialCommunityIcons
-							name="account-star"
-							color={theme.colors.teal}
-							size={theme.sizes.font * 2}
-						/>
-					)
-				},
-				{
-					id: 2,
-					name: "Staff settings",
-					icon: (
-						<AntDesign
-							name="team"
-							color={theme.colors.lightblue}
-							size={theme.sizes.font * 2}
-						/>
-					)
-				}
-			],
+			showAsyncActionLoading: false,
 			formError: false,
 			errorMessage: "",
 			addAdminVisible: false,
@@ -115,48 +92,124 @@ export default class AdminSettings extends Component {
 		});
 	};
 
-	renderItem = ({ item }) => {
+	removeAdmin = admin => {
+		const { requestRemoveMarketplaceAdminAction, navigation } = this.props;
+		const {
+			marketPlaceInfo: { _id }
+		} = navigation.getParam("item", {});
+		this.setState({ showAsyncActionLoading: true });
+		requestRemoveMarketplaceAdminAction({
+			adminId: admin._id,
+			marketPlaceId: _id
+		});
+	};
+
+	disableAdmin = admin => {
+		const { requestDisableMarketplaceAdminAction, navigation } = this.props;
+		const {
+			marketPlaceInfo: { _id }
+		} = navigation.getParam("item", {});
+		this.setState({ showAsyncActionLoading: true });
+		requestDisableMarketplaceAdminAction({
+			adminId: admin._id,
+			marketPlaceId: _id
+		});
+	};
+
+	showRemoveAdminModal = admin => {
+		Alert.alert(
+			"Are you sure you want to remove this admin",
+			[
+				"This admin will not belong to this market place any more. You can choose to disable the admin instead",
+				"\n\n"
+			].join(""),
+			[
+				{ text: "cancel", style: "cancel" },
+				{ text: "remove", onPress: () => this.removeAdmin(admin) }
+			]
+		);
+	};
+
+	showDisableAdminModal = admin => {
+		Alert.alert(
+			"Are you sure you want to disable this admin",
+			[
+				"This admin will not be able to perform his administrative activities when disabled",
+				"\n\n"
+			].join(""),
+			[
+				{ text: "cancel", style: "cancel" },
+				{ text: "disale", onPress: () => this.disableAdmin(admin) }
+			]
+		);
+	};
+
+	renderAdminList = ({ item }) => {
 		return (
-			<TouchableOpacity>
-				<View style={styles.row}>
-					{item.icon}
-					<View>
-						<View style={styles.nameContainer}>
-							<Text
-								style={styles.nameTxt}
-								numberOfLines={1}
-								ellipsizeMode="tail">
-								{item.name}
-							</Text>
-							<Text style={styles.mblTxt}>Mobile</Text>
-						</View>
+			<View style={{ ...styles.nameContainer, ...styles.row }}>
+				<View
+					style={{
+						flexDirection: "row",
+						alignItems: "center"
+					}}>
+					<Entypo
+						name="dot-single"
+						color={item.isActive ? theme.colors.green : theme.colors.red}
+						size={theme.sizes.font * 3}
+					/>
+					<Text style={styles.nameTxt} numberOfLines={1} ellipsizeMode="tail">
+						{`${item.person.firstName} ${item.person.lastName}`}
+					</Text>
+				</View>
+				<View style={styles.row2}>
+					<Text style={styles.mblTxt}>owner</Text>
+					<ModalDropdown
+						type="admins"
+						removeAdmin={id => this.showRemoveAdminModal(id)}
+						disableAdmin={id => this.showDisableAdminModal(id)}
+						adminDetails={item}
+					/>
+				</View>
+			</View>
+		);
+	};
+
+	renderPendingAdminList = ({ item }) => {
+		return (
+			<View style={styles.row}>
+				<View style={styles.nameContainer}>
+					<View
+						style={{
+							flexDirection: "row",
+							alignItems: "center"
+						}}>
+						<Entypo
+							name="dot-single"
+							color={theme.colors.gray}
+							size={theme.sizes.font * 3}
+						/>
+						<Text style={styles.nameTxt} numberOfLines={1} ellipsizeMode="tail">
+							{`${item.firstName} ${item.lastName}`}
+						</Text>
+					</View>
+					<View style={styles.row2}>
+						<Text style={styles.mblTxt}>owner</Text>
+						<ModalDropdown />
 					</View>
 				</View>
-			</TouchableOpacity>
+			</View>
 		);
 	};
 
 	render() {
-		let { isLoading, request, isError, requestError } = this.props;
+		let { isLoading, request, isError, requestError, navigation } = this.props;
+		const { marketPlaceInfo } = navigation.getParam("item", {});
 		isLoading =
 			isLoading && request === marketPlaceSettingsStatus.addMarketplaceAdmin;
-		console.log("isLoading ", isLoading);
 		return (
 			<View style={{ flex: 1 }}>
 				<TouchableOpacity onPress={this.toggleModal}>
-					<View
-						style={{
-							display: "flex",
-							flexDirection: "row",
-							paddingHorizontal: 10,
-							paddingVertical: 5,
-							borderWidth: 1,
-							borderColor: theme.colors.black2,
-							borderRadius: 3,
-							margin: 20,
-							width: 150,
-							alignItems: "center"
-						}}>
+					<View style={styles.addAdmin}>
 						<MaterialIcons
 							name="add"
 							style={{ marginRight: 5 }}
@@ -172,14 +225,51 @@ export default class AdminSettings extends Component {
 						</Text>
 					</View>
 				</TouchableOpacity>
-				<FlatList
-					extraData={this.state}
-					data={this.state.calls}
-					keyExtractor={item => {
-						return item.id.toString();
-					}}
-					renderItem={this.renderItem}
-				/>
+				<View>
+					<TouchableOpacity>
+						<View style={styles.row}>
+							<View>
+								<Text
+									style={styles.nameTxt}
+									numberOfLines={1}
+									ellipsizeMode="tail">
+									Admins
+								</Text>
+								{/* <Text style={styles.mblTxt}>Mobile</Text> */}
+							</View>
+						</View>
+					</TouchableOpacity>
+					<FlatList
+						extraData={this.state}
+						data={marketPlaceInfo.admins}
+						keyExtractor={item => {
+							return item._id.toString();
+						}}
+						renderItem={this.renderAdminList}
+					/>
+				</View>
+				<View>
+					<TouchableOpacity>
+						<View style={styles.row}>
+							<View>
+								<Text
+									style={styles.nameTxt}
+									numberOfLines={1}
+									ellipsizeMode="tail">
+									Pending admins
+								</Text>
+							</View>
+						</View>
+					</TouchableOpacity>
+					<FlatList
+						extraData={this.state}
+						data={marketPlaceInfo.pendingAdmins}
+						keyExtractor={item => {
+							return item._id.toString();
+						}}
+						renderItem={this.renderPendingAdminList}
+					/>
+				</View>
 				<AddAdminModal
 					toggleModal={this.toggleModal}
 					isVisible={this.state.addAdminVisible}
@@ -203,8 +293,12 @@ const styles = StyleSheet.create({
 		borderColor: theme.colors.gray3,
 		backgroundColor: "#fff",
 		borderBottomWidth: 1,
-		padding: 10,
-		marginLeft: 20
+		padding: 5
+	},
+	row2: {
+		flexDirection: "row",
+		alignItems: "center",
+		marginRight: 15
 	},
 	pic: {
 		borderRadius: 30,
@@ -214,10 +308,9 @@ const styles = StyleSheet.create({
 	nameContainer: {
 		flexDirection: "row",
 		justifyContent: "space-between",
-		width: 280
+		width
 	},
 	nameTxt: {
-		marginLeft: 15,
 		fontWeight: "600",
 		color: theme.colors.black2,
 		fontSize: 18,
@@ -237,5 +330,17 @@ const styles = StyleSheet.create({
 		color: "#008B8B",
 		fontSize: 12,
 		marginLeft: 15
+	},
+	addAdmin: {
+		display: "flex",
+		flexDirection: "row",
+		paddingHorizontal: 10,
+		paddingVertical: 5,
+		borderWidth: 1,
+		borderColor: theme.colors.black2,
+		borderRadius: 3,
+		margin: 20,
+		width: 150,
+		alignItems: "center"
 	}
 });

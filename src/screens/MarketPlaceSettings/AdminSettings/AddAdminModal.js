@@ -50,9 +50,8 @@ export default class AddAdminModal extends Component {
 				{this.props.isError && (
 					<Text
 						style={{
-							marginTop: 30,
+							margin: 10,
 							textAlign: "center",
-							marginBottom: 10,
 							color: "red"
 						}}>
 						{this.props.requestError
