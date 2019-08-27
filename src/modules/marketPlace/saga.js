@@ -39,6 +39,7 @@ function* editMarketplaceActionWatcher({ payload }) {
 	try {
 		const { dataToSubmit, _id, navigation, navigateTo } = payload;
 		const result = yield call(editMarketplaceApi, dataToSubmit, _id);
+
 		if (result.success) {
 			yield put(receiveEditMarketplaceAction(result));
 			if (navigation) {

@@ -40,6 +40,7 @@ class AdminSettingContainer extends PureComponent {
 			requestAddMarketplaceAdminAction,
 			requestRemoveMarketplaceAdminAction,
 			requestDisableMarketplaceAdminAction,
+			marketPlaceAdmins,
 			isLoading,
 			request,
 			errorMessage,
@@ -54,6 +55,7 @@ class AdminSettingContainer extends PureComponent {
 				requestDisableMarketplaceAdminAction={
 					requestDisableMarketplaceAdminAction
 				}
+				marketPlaceAdmins={marketPlaceAdmins}
 				isLoading={isLoading}
 				request={request}
 				requestError={errorMessage}
@@ -70,7 +72,10 @@ const mapDispatchToProps = {
 	requestDisableMarketplaceAdminAction
 };
 
-const mapStateToProps = ({ marketPlaceSettingsReducer }) => {
+const mapStateToProps = ({
+	marketPlaceSettingsReducer,
+	serviceDetailsReducer
+}) => {
 	const {
 		isLoading,
 		request,
@@ -81,6 +86,7 @@ const mapStateToProps = ({ marketPlaceSettingsReducer }) => {
 		isLoading,
 		request,
 		errorMessage,
+		marketPlaceAdmins: serviceDetailsReducer.marketPlaceAdmins,
 		error
 	};
 };

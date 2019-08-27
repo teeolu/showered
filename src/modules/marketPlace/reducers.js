@@ -88,6 +88,7 @@ export const marketplaceReducer = handleActions(
 		[receiveGetUserMarketplaceAction]: {
 			next(state, action) {
 				const { payload } = action;
+
 				return {
 					...state,
 					isLoading: false,
@@ -97,6 +98,7 @@ export const marketplaceReducer = handleActions(
 			},
 			throw(state, action) {
 				const { payload } = action;
+
 				return {
 					...state,
 					isLoading: false,

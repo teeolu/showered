@@ -13,6 +13,7 @@ import {
 	receiveDisableMarketplaceAdminAction,
 	requestDisableMarketplaceAdminAction
 } from "./actions";
+import { requestGetAdminsMarketplaceAction } from "../serviceDetails/actions";
 
 function* disableMarketplaceAdminActionWatcher({ payload }) {
 	try {
@@ -22,8 +23,8 @@ function* disableMarketplaceAdminActionWatcher({ payload }) {
 			adminId,
 			marketPlaceId
 		);
-		console.log("report ", result);
 		if (result.success) {
+			yield put(requestGetAdminsMarketplaceAction({ marketPlaceId }));
 			yield put(receiveDisableMarketplaceAdminAction(payload));
 		} else {
 			yield put(receiveDisableMarketplaceAdminAction(result));
@@ -48,8 +49,8 @@ function* removeMarketplaceAdminActionWatcher({ payload }) {
 			adminId,
 			marketPlaceId
 		);
-		console.log("report ", result);
 		if (result.success) {
+			yield put(requestGetAdminsMarketplaceAction({ marketPlaceId }));
 			yield put(receiveRemoveMarketplaceAdminAction(payload));
 		} else {
 			yield put(receiveRemoveMarketplaceAdminAction(result));

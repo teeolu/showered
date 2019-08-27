@@ -7,18 +7,11 @@ import {
 	ScrollView,
 	Dimensions,
 	StyleSheet,
-	Animated,
-	View,
-	FlatList
+	View
 } from "react-native";
-import {
-	Octicons,
-	MaterialIcons,
-	Ionicons,
-	FontAwesome
-} from "react-native-vector-icons";
+import { MaterialIcons, Ionicons } from "react-native-vector-icons";
 
-import { Block, Card, Text, Icon, Label, Box } from "../../components";
+import { Text } from "../../components";
 import * as theme from "../../constants/theme";
 const { width } = Dimensions.get("window");
 

@@ -5,6 +5,7 @@ import {
 	View,
 	TouchableOpacity,
 	Dimensions,
+	ActivityIndicator,
 	Alert,
 	FlatList
 } from "react-native";
@@ -132,14 +133,23 @@ export default class AdminSettings extends Component {
 
 	showDisableAdminModal = admin => {
 		Alert.alert(
-			"Are you sure you want to disable this admin",
+			`Are you sure you want to ${
+				admin.isActive ? "deactivate" : "activate"
+			} this admin`,
 			[
-				"This admin will not be able to perform his administrative activities when disabled",
+				`This admin will ${
+					admin.isActive
+						? "not be able to perform his administrative activities when disabled"
+						: "be able to continue his administrative activities when activated"
+				}`,
 				"\n\n"
 			].join(""),
 			[
 				{ text: "cancel", style: "cancel" },
-				{ text: "disale", onPress: () => this.disableAdmin(admin) }
+				{
+					text: admin.isActive ? "deactivate" : "activate",
+					onPress: () => this.disableAdmin(admin)
+				}
 			]
 		);
 	};
@@ -194,20 +204,40 @@ export default class AdminSettings extends Component {
 					</View>
 					<View style={styles.row2}>
 						<Text style={styles.mblTxt}>owner</Text>
-						<ModalDropdown />
+						<ModalDropdown
+							type="admins"
+							removeAdmin={id => this.showRemoveAdminModal(id)}
+							disableAdmin={id => this.showDisableAdminModal(id)}
+							adminDetails={item}
+						/>
 					</View>
 				</View>
 			</View>
 		);
 	};
 
+	isLoading = status => {
+		const { isLoading, request } = this.props;
+		const loading = isLoading && request === status;
+		return loading;
+	};
+
 	render() {
-		let { isLoading, request, isError, requestError, navigation } = this.props;
-		const { marketPlaceInfo } = navigation.getParam("item", {});
-		isLoading =
-			isLoading && request === marketPlaceSettingsStatus.addMarketplaceAdmin;
+		let { isError, requestError, navigation, marketPlaceAdmins } = this.props,
+			{ marketPlaceInfo } = navigation.getParam("item", {}),
+			{
+				addMarketplaceAdmin,
+				disableMarketplaceAdmin,
+				removeMarketplaceAdmin
+			} = marketPlaceSettingsStatus;
 		return (
 			<View style={{ flex: 1 }}>
+				{(this.isLoading(disableMarketplaceAdmin) ||
+					this.isLoading(removeMarketplaceAdmin)) && (
+					<View style={styles.overlay}>
+						<ActivityIndicator size="large" color="#fff" />
+					</View>
+				)}
 				<TouchableOpacity onPress={this.toggleModal}>
 					<View style={styles.addAdmin}>
 						<MaterialIcons
@@ -241,7 +271,7 @@ export default class AdminSettings extends Component {
 					</TouchableOpacity>
 					<FlatList
 						extraData={this.state}
-						data={marketPlaceInfo.admins}
+						data={marketPlaceAdmins}
 						keyExtractor={item => {
 							return item._id.toString();
 						}}
@@ -277,7 +307,7 @@ export default class AdminSettings extends Component {
 					blur={arg => this.blurReact(arg)}
 					inputInfo={this.state.fields}
 					handleSubmit={this.handleSubmit}
-					isLoading={isLoading}
+					isLoading={this.isLoading(addMarketplaceAdmin)}
 					isError={isError}
 					requestError={requestError}
 				/>
@@ -342,5 +372,13 @@ const styles = StyleSheet.create({
 		margin: 20,
 		width: 150,
 		alignItems: "center"
+	},
+	overlay: {
+		...StyleSheet.absoluteFillObject,
+		backgroundColor: "rgba(0,0,0,0.7)",
+		zIndex: 100000,
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center"
 	}
 });

@@ -28,9 +28,14 @@ class MarketPlaceDetails extends Component {
 	scrollX = new Animated.Value(0);
 
 	componentDidMount() {
-		const { navigation, requestGetServiceDetailsAction } = this.props;
+		const {
+			navigation,
+			requestGetServiceDetailsAction,
+			requestGetAdminsMarketplaceAction
+		} = this.props;
 		const item = navigation.getParam("item");
 		requestGetServiceDetailsAction({ marketPlaceId: item._id });
+		requestGetAdminsMarketplaceAction({ marketPlaceId: item._id });
 	}
 
 	renderDots = () => {
@@ -79,7 +84,7 @@ class MarketPlaceDetails extends Component {
 		return (
 			<TouchableOpacity
 				onPress={() =>
-					this.navigateToBrowse("ServiceDetails", { marketPlaceId: _id })
+					this.navigateTo("ServiceDetails", { marketPlaceId: _id })
 				}>
 				<View
 					style={{
@@ -105,7 +110,7 @@ class MarketPlaceDetails extends Component {
 		);
 	};
 
-	navigateToBrowse = (to, params) => {
+	navigateTo = (to, params) => {
 		this.props.navigation.navigate(to, params);
 	};
 
@@ -114,25 +119,22 @@ class MarketPlaceDetails extends Component {
 			navigation,
 			userdata,
 			serviceDetailsRequest,
+			marketPlaceAdmins,
 			serviceDetailsLoading,
 			marketplaceServiceDetailsData
 		} = this.props;
 		const {
 			uploadedImageArray,
 			marketPlaceName,
-			admins,
-			staffs,
-			owner,
 			description
 		} = navigation.getParam("item", {});
-		const isAdmin = admins.some(id => {
-			return id === userdata._id;
+		const isAdmin = marketPlaceAdmins.some(el => {
+			return el.person._id === userdata._id;
 		});
-		const isStaff = staffs.some(id => {
-			return id === userdata._id;
+		const isStaff = marketPlaceAdmins.some(el => {
+			return el.person === userdata._id;
 		});
 		const article = articlesInfo[0];
-		const authorized = owner._id === userdata._id || isAdmin;
 		return (
 			<ScrollView>
 				<View style={styles.flex}>
@@ -177,7 +179,7 @@ class MarketPlaceDetails extends Component {
 						<View style={[styles.flex, styles.contentHeader]}>
 							<View style={styles.titleBox}>
 								<Text style={styles.title}>{marketPlaceName}</Text>
-								{(owner._id === userdata._id || isAdmin) && (
+								{isAdmin && (
 									<View
 										style={{
 											display: "flex",
@@ -193,14 +195,12 @@ class MarketPlaceDetails extends Component {
 											<MaterialIcons
 												name="settings"
 												onPress={() =>
-													this.navigateToBrowse(
-														"MarketPlaceSettingsContainer",
-														{
-															item: {
-																marketPlaceInfo: navigation.getParam("item")
-															}
+													this.navigateTo("MarketPlaceSettingsContainer", {
+														item: {
+															marketPlaceInfo: navigation.getParam("item"),
+															admins: marketPlaceAdmins
 														}
-													)
+													})
 												}
 												style={{ margin: 10 }}
 												color={theme.colors.red}
@@ -216,7 +216,7 @@ class MarketPlaceDetails extends Component {
 											<MaterialIcons
 												name="edit"
 												onPress={() =>
-													this.navigateToBrowse("MarketPlaceContainer", {
+													this.navigateTo("MarketPlaceContainer", {
 														item: navigation.getParam("item")
 													})
 												}
@@ -256,7 +256,7 @@ class MarketPlaceDetails extends Component {
 						<Card
 							title="Our menus"
 							style={[styles.margin, { marginTop: 18 }]}
-							headingRight={this.addServiceDetails(authorized || isStaff)}>
+							headingRight={this.addServiceDetails(isAdmin || isStaff)}>
 							{serviceDetailsLoading &&
 							serviceDetailsRequest ===
 								serviceDetailsStatus.getServiceDetails ? (
@@ -269,9 +269,9 @@ class MarketPlaceDetails extends Component {
 												<TouchableWithoutFeedback
 													key={data._id}
 													onPress={() =>
-														this.navigateToBrowse("ServiceDetailsInfo", {
+														this.navigateTo("ServiceDetailsInfo", {
 															item: data,
-															authorized: authorized || isStaff
+															authorized: isStaff
 														})
 													}>
 													<Card row middle style={styles.margin}>

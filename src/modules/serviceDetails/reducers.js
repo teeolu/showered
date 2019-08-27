@@ -6,19 +6,23 @@ import {
 	requestEditServiceDetailsAction,
 	receiveEditServiceDetailsAction,
 	requestGetServiceDetailsAction,
-	receiveGetServiceDetailsAction
+	receiveGetServiceDetailsAction,
+	requestGetAdminsMarketplaceAction,
+	receiveGetAdminsMarketplaceAction
 } from "./actions";
 
 const defaultState = {
 	isLoading: false,
 	request: "",
 	error: false,
-	marketplaceServiceDetailsData: []
+	marketplaceServiceDetailsData: [],
+	marketPlaceAdmins: []
 };
 
 export const serviceDetailsStatus = {
 	addServiceDetails: "addServiceDetails",
-	getServiceDetails: "getServiceDetails"
+	getServiceDetails: "getServiceDetails",
+	getAdminsMarketPlace: "getAdminsMarketPlace"
 };
 
 export const serviceDetailsReducer = handleActions(
@@ -110,6 +114,35 @@ export const serviceDetailsReducer = handleActions(
 					isLoading: false,
 					marketplaceServiceDetailsData: [],
 					request: serviceDetailsStatus.getServiceDetails,
+					error: true
+				};
+			}
+		},
+		[requestGetAdminsMarketplaceAction]: (state, action) => {
+			return {
+				...state,
+				isLoading: true,
+				error: false,
+				request: serviceDetailsStatus.getAdminsMarketPlace
+			};
+		},
+		[receiveGetAdminsMarketplaceAction]: {
+			next(state, action) {
+				const { payload } = action;
+				return {
+					...state,
+					isLoading: false,
+					marketPlaceAdmins: payload.docs,
+					request: serviceDetailsStatus.getAdminsMarketPlace
+				};
+			},
+			throw(state, action) {
+				const { payload } = action;
+				return {
+					...state,
+					isLoading: false,
+					marketPlaceAdmins: [],
+					request: serviceDetailsStatus.getAdminsMarketPlace,
 					error: true
 				};
 			}

@@ -1,7 +1,10 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import MarketPlaceDetails from "../../screens/MarketPlaceDetails";
-import { requestGetServiceDetailsAction } from "../../modules/serviceDetails/actions";
+import {
+	requestGetServiceDetailsAction,
+	requestGetAdminsMarketplaceAction
+} from "../../modules/serviceDetails/actions";
 
 class MarketPlaceDetailsContainer extends PureComponent {
 	render() {
@@ -11,6 +14,7 @@ class MarketPlaceDetailsContainer extends PureComponent {
 			serviceDetailsLoading,
 			serviceDetailsRequest,
 			marketplaceServiceDetailsData,
+			requestGetAdminsMarketplaceAction,
 			serviceDetailsError
 		} = this.props;
 		return (
@@ -18,6 +22,7 @@ class MarketPlaceDetailsContainer extends PureComponent {
 				userdata={userdata}
 				serviceDetailsLoading={serviceDetailsLoading}
 				serviceDetailsRequest={serviceDetailsRequest}
+				requestGetAdminsMarketplaceAction={requestGetAdminsMarketplaceAction}
 				marketplaceServiceDetailsData={marketplaceServiceDetailsData}
 				serviceDetailsError={serviceDetailsError}
 				requestGetServiceDetailsAction={requestGetServiceDetailsAction}
@@ -34,12 +39,14 @@ const mapStateToProps = ({ authReducer, serviceDetailsReducer }) => {
 		serviceDetailsRequest: serviceDetailsReducer.request,
 		marketplaceServiceDetailsData:
 			serviceDetailsReducer.marketplaceServiceDetailsData,
-		serviceDetailsError: serviceDetailsReducer.error
+		serviceDetailsError: serviceDetailsReducer.error,
+		marketPlaceAdmins: serviceDetailsReducer.marketPlaceAdmins
 	};
 };
 
 const mapDispatchToProps = {
-	requestGetServiceDetailsAction
+	requestGetServiceDetailsAction,
+	requestGetAdminsMarketplaceAction
 };
 
 export default connect(
