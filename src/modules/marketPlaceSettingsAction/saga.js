@@ -13,7 +13,7 @@ import {
 	receiveDisableMarketplaceAdminAction,
 	requestDisableMarketplaceAdminAction
 } from "./actions";
-import { requestGetAdminsMarketplaceAction } from "../serviceDetails/actions";
+import { requestGetAdminsMarketplaceAction } from "../MarketplaceDetails/actions";
 
 function* disableMarketplaceAdminActionWatcher({ payload }) {
 	try {
@@ -93,7 +93,7 @@ function* addMarketplaceAdminActionWatcher({ payload }) {
 	}
 }
 
-export function* requestAddServiceDetailsActionSaga() {
+export function* requestAddMarketplaceServiceDetailsActionSaga() {
 	yield takeLeading(
 		requestAddMarketplaceAdminAction,
 		addMarketplaceAdminActionWatcher

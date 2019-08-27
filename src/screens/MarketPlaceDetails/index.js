@@ -20,7 +20,7 @@ import {
 import { theme } from "../../constants";
 import { articlesInfo } from "../../constants/mocks";
 import { Card, Block, Text } from "../../components";
-import { serviceDetailsStatus } from "../../modules/serviceDetails/reducers";
+import { serviceDetailsStatus } from "../../modules/MarketplaceDetails/reducers";
 
 const { width, height } = Dimensions.get("window");
 
@@ -30,11 +30,11 @@ class MarketPlaceDetails extends Component {
 	componentDidMount() {
 		const {
 			navigation,
-			requestGetServiceDetailsAction,
+			requestGetMarketplaceDetailsAction,
 			requestGetAdminsMarketplaceAction
 		} = this.props;
 		const item = navigation.getParam("item");
-		requestGetServiceDetailsAction({ marketPlaceId: item._id });
+		requestGetMarketplaceDetailsAction({ marketPlaceId: item._id });
 		requestGetAdminsMarketplaceAction({ marketPlaceId: item._id });
 	}
 

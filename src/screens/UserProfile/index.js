@@ -8,17 +8,13 @@ import {
 	Dimensions,
 	StyleSheet,
 	ActivityIndicator,
-	Animated,
-	View,
-	FlatList
+	View
 } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Octicons from "react-native-vector-icons/Octicons";
+import { MaterialIcons } from "react-native-vector-icons";
 
 import { Block, Card, Text, Icon, Label } from "../../components";
 import * as theme from "../../constants/theme";
 import { articlesInfo } from "../../constants/mocks";
-import { categoryNames } from "../UpsertMarketPlace/SelectCategory";
 import { marketplaceStatus } from "../../modules/marketPlace/reducers";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 const { width } = Dimensions.get("window");
@@ -50,7 +46,7 @@ class UserProfile extends Component {
 
 	constructor(props) {
 		super(props);
-		this.navigateToBrowse = this.navigateToBrowse.bind(this);
+		this.navigateTo = this.navigateTo.bind(this);
 	}
 
 	componentDidMount() {
@@ -96,7 +92,34 @@ class UserProfile extends Component {
 		);
 	};
 
-	navigateToBrowse = (to, params) => {
+	addMarketplace = () => {
+		return (
+			<TouchableOpacity onPress={() => this.navigateTo("MarketPlaceContainer")}>
+				<View
+					style={{
+						display: "flex",
+						flexDirection: "row",
+						paddingHorizontal: 10,
+						paddingVertical: 5,
+						justifyContent: "center",
+						borderWidth: 1,
+						borderColor: theme.colors.blue,
+						borderRadius: 3,
+						alignItems: "center"
+					}}>
+					<MaterialIcons
+						name="add"
+						style={{ marginRight: 5 }}
+						color={theme.colors.blue}
+						size={theme.sizes.font * 2}
+					/>
+					<Text style={{ color: theme.colors.blue }}>Market place</Text>
+				</View>
+			</TouchableOpacity>
+		);
+	};
+
+	navigateTo = (to, params) => {
 		this.props.navigation.navigate(to, params);
 	};
 
@@ -145,8 +168,9 @@ class UserProfile extends Component {
 					</Card>
 
 					<Card
-						title="YOUR MARKET PLACE"
-						style={[styles.margin, { marginTop: 18 }]}>
+						title="MARKET PLACE"
+						style={[styles.margin, { marginTop: 18 }]}
+						headingRight={this.addMarketplace()}>
 						{marketPlaceLoading &&
 						marketPlaceRequest === marketplaceStatus.getMarketPlace ? (
 							<ActivityIndicator size="large" color="blue" />
@@ -157,21 +181,27 @@ class UserProfile extends Component {
 										<Block key={item._id} style={styles.driver}>
 											<TouchableOpacity
 												onPress={() =>
-													this.navigateToBrowse("CategoryDetails", { item })
+													this.navigateTo("CategoryDetails", {
+														item: item.marketPlaceAsAdmin
+													})
 												}>
 												<Block row center>
 													<View style={{ marginRight: 15 }}>
 														<Image
 															style={styles.avatar}
 															source={{
-																uri: item.uploadedImageArray[0].secureUrl
+																uri:
+																	item.marketPlaceAsAdmin.uploadedImageArray[0]
+																		.secureUrl
 															}}
 														/>
 													</View>
 													<Block>
-														<Text h4>{item.marketPlaceName}</Text>
+														<Text h4>
+															{item.marketPlaceAsAdmin.marketPlaceName}
+														</Text>
 														<Text paragraph color="gray">
-															{item.email}
+															{item.marketPlaceAsAdmin.email}
 														</Text>
 													</Block>
 													<Block>

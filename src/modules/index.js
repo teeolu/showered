@@ -4,13 +4,13 @@ import { fork, all } from "redux-saga/effects";
 import { authReducer } from "./auth/reducers";
 import { imageUploadReducer } from "./imageUpload/reducers";
 import { marketplaceReducer } from "./marketPlace/reducers";
-import { serviceDetailsReducer } from "./serviceDetails/reducers";
+import { serviceDetailsReducer } from "./MarketplaceDetails/reducers";
 import { marketPlaceSettingsReducer } from "./marketPlaceSettingsAction/reducers";
 
 import * as authSaga from "./auth/saga";
 import * as uploadImageActionSaga from "./imageUpload/saga";
 import * as addMarketplaceSaga from "./marketPlace/saga";
-import * as serviceDetailsSaga from "./serviceDetails/saga";
+import * as serviceDetailsSaga from "./MarketplaceDetails/saga";
 import * as marketPlaceSettingsSaga from "./marketPlaceSettingsAction/saga";
 
 export const rootReducer = combineReducers({

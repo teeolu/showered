@@ -52,14 +52,9 @@ const MarketPlaceDetailsStack = createStackNavigator(
 	}
 );
 
-const BrowseStack = createStackNavigator(
-	{
-		Browse: BrowseContainer
-	},
-	{
-		headerMode: "none"
-	}
-);
+const BrowseStack = createStackNavigator({
+	Browse: BrowseContainer
+});
 
 const OverviewStack = createStackNavigator({
 	Overview,

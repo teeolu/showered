@@ -1,12 +1,12 @@
 import { handleActions } from "redux-actions";
 
 import {
-	requestAddServiceDetailsAction,
-	receiveAddServiceDetailsAction,
-	requestEditServiceDetailsAction,
-	receiveEditServiceDetailsAction,
-	requestGetServiceDetailsAction,
-	receiveGetServiceDetailsAction,
+	requestAddMarketplaceServiceDetailsAction,
+	receiveAddMarketplaceServiceDetailsAction,
+	requestEditMarketplaceServiceDetailsAction,
+	receieveEditMarketplaceServiceDetailsAction,
+	requestGetMarketplaceDetailsAction,
+	receiveGetMarketplaceDetailsAction,
 	requestGetAdminsMarketplaceAction,
 	receiveGetAdminsMarketplaceAction
 } from "./actions";
@@ -27,7 +27,7 @@ export const serviceDetailsStatus = {
 
 export const serviceDetailsReducer = handleActions(
 	{
-		[requestAddServiceDetailsAction]: (state, action) => {
+		[requestAddMarketplaceServiceDetailsAction]: (state, action) => {
 			return {
 				...state,
 				isLoading: true,
@@ -35,7 +35,7 @@ export const serviceDetailsReducer = handleActions(
 				request: serviceDetailsStatus.addServiceDetails
 			};
 		},
-		[receiveAddServiceDetailsAction]: {
+		[receiveAddMarketplaceServiceDetailsAction]: {
 			next(state, action) {
 				const { payload } = action;
 				return {
@@ -54,7 +54,7 @@ export const serviceDetailsReducer = handleActions(
 				};
 			}
 		},
-		[requestEditServiceDetailsAction]: (state, action) => {
+		[requestEditMarketplaceServiceDetailsAction]: (state, action) => {
 			return {
 				...state,
 				isLoading: true,
@@ -62,7 +62,7 @@ export const serviceDetailsReducer = handleActions(
 				request: serviceDetailsStatus.addServiceDetails
 			};
 		},
-		[receiveEditServiceDetailsAction]: {
+		[receieveEditMarketplaceServiceDetailsAction]: {
 			next(state, action) {
 				const { payload } = action;
 				return {
@@ -81,15 +81,7 @@ export const serviceDetailsReducer = handleActions(
 				};
 			}
 		},
-		[requestEditServiceDetailsAction]: (state, action) => {
-			return {
-				...state,
-				isLoading: true,
-				error: false,
-				request: serviceDetailsStatus.addServiceDetails
-			};
-		},
-		[requestGetServiceDetailsAction]: (state, action) => {
+		[requestGetMarketplaceDetailsAction]: (state, action) => {
 			return {
 				...state,
 				isLoading: true,
@@ -97,7 +89,7 @@ export const serviceDetailsReducer = handleActions(
 				request: serviceDetailsStatus.getServiceDetails
 			};
 		},
-		[receiveGetServiceDetailsAction]: {
+		[receiveGetMarketplaceDetailsAction]: {
 			next(state, action) {
 				const { payload } = action;
 				return {

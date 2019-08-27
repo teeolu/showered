@@ -2,15 +2,15 @@ import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import MarketPlaceDetails from "../../screens/MarketPlaceDetails";
 import {
-	requestGetServiceDetailsAction,
+	requestGetMarketplaceDetailsAction,
 	requestGetAdminsMarketplaceAction
-} from "../../modules/serviceDetails/actions";
+} from "../../modules/MarketplaceDetails/actions";
 
 class MarketPlaceDetailsContainer extends PureComponent {
 	render() {
 		const {
 			userdata,
-			requestGetServiceDetailsAction,
+			requestGetMarketplaceDetailsAction,
 			serviceDetailsLoading,
 			serviceDetailsRequest,
 			marketplaceServiceDetailsData,
@@ -25,7 +25,7 @@ class MarketPlaceDetailsContainer extends PureComponent {
 				requestGetAdminsMarketplaceAction={requestGetAdminsMarketplaceAction}
 				marketplaceServiceDetailsData={marketplaceServiceDetailsData}
 				serviceDetailsError={serviceDetailsError}
-				requestGetServiceDetailsAction={requestGetServiceDetailsAction}
+				requestGetMarketplaceDetailsAction={requestGetMarketplaceDetailsAction}
 				{...this.props}
 			/>
 		);
@@ -45,7 +45,7 @@ const mapStateToProps = ({ authReducer, serviceDetailsReducer }) => {
 };
 
 const mapDispatchToProps = {
-	requestGetServiceDetailsAction,
+	requestGetMarketplaceDetailsAction,
 	requestGetAdminsMarketplaceAction
 };
 

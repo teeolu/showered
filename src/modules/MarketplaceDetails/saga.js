@@ -7,12 +7,12 @@ import {
 	getAdminsMarketplaceApi
 } from "./api";
 import {
-	requestAddServiceDetailsAction,
-	receiveAddServiceDetailsAction,
-	requestEditServiceDetailsAction,
-	receiveEditServiceDetailsAction,
-	requestGetServiceDetailsAction,
-	receiveGetServiceDetailsAction,
+	requestAddMarketplaceServiceDetailsAction,
+	receiveAddMarketplaceServiceDetailsAction,
+	requestEditMarketplaceServiceDetailsAction,
+	receieveEditMarketplaceServiceDetailsAction,
+	requestGetMarketplaceDetailsAction,
+	receiveGetMarketplaceDetailsAction,
 	requestGetAdminsMarketplaceAction,
 	receiveGetAdminsMarketplaceAction
 } from "./actions";
@@ -22,21 +22,21 @@ function* addServiceDetailsActionWatcher({ payload }) {
 		const { dataToSubmit, navigation, navigateTo } = payload;
 		const result = yield call(addServiceDetailsApi, dataToSubmit);
 		if (result.success) {
-			yield put(receiveAddServiceDetailsAction(payload));
+			yield put(receiveAddMarketplaceServiceDetailsAction(payload));
 			if (navigation) {
 				navigation.navigate(navigateTo, { item: result.payload.docs });
 			}
 		} else {
-			yield put(receiveAddServiceDetailsAction(result));
+			yield put(receiveAddMarketplaceServiceDetailsAction(result));
 		}
 	} catch (error) {
-		yield put(receiveAddServiceDetailsAction(error));
+		yield put(receiveAddMarketplaceServiceDetailsAction(error));
 	}
 }
 
-export function* requestAddServiceDetailsActionSaga() {
+export function* requestAddMarketplaceServiceDetailsActionSaga() {
 	yield takeLeading(
-		requestAddServiceDetailsAction,
+		requestAddMarketplaceServiceDetailsAction,
 		addServiceDetailsActionWatcher
 	);
 }
@@ -46,22 +46,22 @@ function* editServiceDetailsActionWatcher({ payload }) {
 		const { dataToSubmit, _id, navigation, navigateTo } = payload;
 		const result = yield call(editServiceDetailsApi, dataToSubmit, _id);
 		if (result.success) {
-			yield put(receiveEditServiceDetailsAction(result));
+			yield put(receieveEditMarketplaceServiceDetailsAction(result));
 			if (navigation) {
 				navigation.navigate(navigateTo, { item: result.payload.docs[0] });
 			}
-			yield put(requestGetServiceDetailsAction({ marketPlaceId: _id }));
+			yield put(requestGetMarketplaceDetailsAction({ marketPlaceId: _id }));
 		} else {
-			yield put(receiveEditServiceDetailsAction(result));
+			yield put(receieveEditMarketplaceServiceDetailsAction(result));
 		}
 	} catch (error) {
-		yield put(receiveEditServiceDetailsAction(error));
+		yield put(receieveEditMarketplaceServiceDetailsAction(error));
 	}
 }
 
-export function* requestEditServiceDetailsActionSaga() {
+export function* requestEditMarketplaceServiceDetailsActionSaga() {
 	yield takeLeading(
-		requestEditServiceDetailsAction,
+		requestEditMarketplaceServiceDetailsAction,
 		editServiceDetailsActionWatcher
 	);
 }
@@ -71,18 +71,18 @@ function* getMarketplaceServiceDetailsActionWatcher({ payload }) {
 		const { marketPlaceId } = payload;
 		const result = yield call(getMarketplaceServiceDetailsApi, marketPlaceId);
 		if (result.success) {
-			yield put(receiveGetServiceDetailsAction(result));
+			yield put(receiveGetMarketplaceDetailsAction(result));
 		} else {
-			yield put(receiveGetServiceDetailsAction(result));
+			yield put(receiveGetMarketplaceDetailsAction(result));
 		}
 	} catch (error) {
-		yield put(receiveGetServiceDetailsAction(error));
+		yield put(receiveGetMarketplaceDetailsAction(error));
 	}
 }
 
 export function* getMarketplaceServiceDetailsActionSaga() {
 	yield takeLeading(
-		requestGetServiceDetailsAction,
+		requestGetMarketplaceDetailsAction,
 		getMarketplaceServiceDetailsActionWatcher
 	);
 }
