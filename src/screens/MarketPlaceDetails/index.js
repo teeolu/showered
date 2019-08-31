@@ -29,18 +29,23 @@ class MarketPlaceDetails extends Component {
 
 	componentDidMount() {
 		const {
-			navigation,
 			requestGetMarketplaceDetailsAction,
-			requestGetAdminsMarketplaceAction
+			requestGetAdminsMarketplaceAction,
+			requestGetStaffsMarketplaceAction,
+			requestGetUserMarketplacePendingStaffAction,
+			requestGetUserMarketplacePendingAdminAction,
+			currentMarketplace: { _id }
 		} = this.props;
-		const item = navigation.getParam("item");
-		requestGetMarketplaceDetailsAction({ marketPlaceId: item._id });
-		requestGetAdminsMarketplaceAction({ marketPlaceId: item._id });
+		requestGetMarketplaceDetailsAction({ marketPlaceId: _id });
+		requestGetAdminsMarketplaceAction({ marketPlaceId: _id });
+		requestGetStaffsMarketplaceAction({ marketPlaceId: _id });
+		requestGetUserMarketplacePendingStaffAction({ marketPlaceId: _id });
+		requestGetUserMarketplacePendingAdminAction({ marketPlaceId: _id });
 	}
 
 	renderDots = () => {
-		const { navigation } = this.props;
-		const { uploadedImageArray } = navigation.getParam("item", {});
+		const { currentMarketplace } = this.props;
+		const { uploadedImageArray } = currentMarketplace;
 		const dotPosition = Animated.divide(this.scrollX, width);
 
 		return (
@@ -79,7 +84,7 @@ class MarketPlaceDetails extends Component {
 	};
 
 	addServiceDetails = authorized => {
-		const { _id } = this.props.navigation.getParam("item", {});
+		const { _id } = this.props.currentMarketplace;
 		if (!authorized) return null;
 		return (
 			<TouchableOpacity
@@ -121,13 +126,14 @@ class MarketPlaceDetails extends Component {
 			serviceDetailsRequest,
 			marketPlaceAdmins,
 			serviceDetailsLoading,
+			currentMarketplace,
 			marketplaceServiceDetailsData
 		} = this.props;
 		const {
 			uploadedImageArray,
 			marketPlaceName,
 			description
-		} = navigation.getParam("item", {});
+		} = currentMarketplace;
 		const isAdmin = marketPlaceAdmins.some(el => {
 			return el.person._id === userdata._id;
 		});
@@ -195,12 +201,7 @@ class MarketPlaceDetails extends Component {
 											<MaterialIcons
 												name="settings"
 												onPress={() =>
-													this.navigateTo("MarketPlaceSettingsContainer", {
-														item: {
-															marketPlaceInfo: navigation.getParam("item"),
-															admins: marketPlaceAdmins
-														}
-													})
+													this.navigateTo("MarketPlaceSettingsContainer")
 												}
 												style={{ margin: 10 }}
 												color={theme.colors.red}
@@ -217,7 +218,7 @@ class MarketPlaceDetails extends Component {
 												name="edit"
 												onPress={() =>
 													this.navigateTo("MarketPlaceContainer", {
-														item: navigation.getParam("item")
+														item: currentMarketplace
 													})
 												}
 												style={{ margin: 10 }}

@@ -5,6 +5,7 @@ import { TouchableOpacity } from "react-native";
 import { requestGetUserMarketplaceAction } from "../../modules/marketPlace/actions";
 import UserProfile from "../../screens/UserProfile";
 import { Block, Text, Icon } from "../../components";
+import { requestSetCurrentMarketplace } from "../../modules/MarketplaceDetails/actions";
 
 class UserProfileContainer extends PureComponent {
 	static navigationOptions = ({ navigation }) => ({
@@ -37,7 +38,8 @@ class UserProfileContainer extends PureComponent {
 			marketPlaceLoading,
 			marketPlaceRequest,
 			userMarketplaceData,
-			requestGetUserMarketplaceAction
+			requestGetUserMarketplaceAction,
+			requestSetCurrentMarketplace
 		} = this.props;
 		return (
 			<UserProfile
@@ -45,6 +47,7 @@ class UserProfileContainer extends PureComponent {
 				marketPlaceRequest={marketPlaceRequest}
 				marketPlaceLoading={marketPlaceLoading}
 				userMarketplaceData={userMarketplaceData}
+				requestSetCurrentMarketplace={requestSetCurrentMarketplace}
 				requestGetUserMarketplaceAction={requestGetUserMarketplaceAction}
 				{...this.props}
 			/>
@@ -62,7 +65,8 @@ const mapStateToProps = ({ authReducer, marketplaceReducer }) => {
 };
 
 const mapDispatchToProps = {
-	requestGetUserMarketplaceAction
+	requestGetUserMarketplaceAction,
+	requestSetCurrentMarketplace
 };
 
 export default connect(

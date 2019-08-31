@@ -119,12 +119,19 @@ class UserProfile extends Component {
 		);
 	};
 
+	setCurrentMarketplace = marketPlace => {
+		this.props.requestSetCurrentMarketplace({
+			marketPlace: marketPlace.marketPlaceAsAdmin,
+			navigation: this.props.navigation,
+			navigateTo: "CategoryDetails"
+		});
+	};
+
 	navigateTo = (to, params) => {
 		this.props.navigation.navigate(to, params);
 	};
 
 	render() {
-		const item = articlesInfo[2];
 		const {
 			marketPlaceLoading,
 			userMarketplaceData,
@@ -180,11 +187,7 @@ class UserProfile extends Component {
 									userMarketplaceData.map(item => (
 										<Block key={item._id} style={styles.driver}>
 											<TouchableOpacity
-												onPress={() =>
-													this.navigateTo("CategoryDetails", {
-														item: item.marketPlaceAsAdmin
-													})
-												}>
+												onPress={() => this.setCurrentMarketplace(item)}>
 												<Block row center>
 													<View style={{ marginRight: 15 }}>
 														<Image

@@ -13,14 +13,48 @@ import {
 } from "react-native";
 import { Entypo } from "react-native-vector-icons";
 
-import { theme } from "../../../constants";
+import { theme } from "../constants";
 const options = item => ({
 	admins: [
-		{ name: "Remove admin", action: "removeAdmin", _id: "1" },
 		{
-			name: item.isActive ? "Deactivate admin" : "Activate admin",
+			name: `Remove ${item.person ? item.person.firstName : item.firstName}`,
+			action: "removeAdmin",
+			_id: "1"
+		},
+		{
+			name: item.isActive
+				? `Deactivate ${item.person ? item.person.firstName : item.firstName}`
+				: `Activate ${item.person ? item.person.firstName : item.firstName}`,
 			action: "disableAdmin",
 			_id: "2"
+		}
+	],
+	staffs: [
+		{
+			name: `Remove ${item.person ? item.person.firstName : item.firstName}`,
+			action: "removeStaff",
+			_id: "1"
+		},
+		{
+			name: item.isActive
+				? `Deactivate ${item.person ? item.person.firstName : item.firstName}`
+				: `Activate ${item.person ? item.person.firstName : item.firstName}`,
+			action: "disableStaff",
+			_id: "2"
+		}
+	],
+	pendingAdmins: [
+		{
+			name: `Remove ${item.firstName}`,
+			action: "removePendingAdmin",
+			_id: "1"
+		}
+	],
+	pendingStaffs: [
+		{
+			name: `Remove ${item.firstName}`,
+			action: "removePendingStaff",
+			_id: "1"
 		}
 	]
 });

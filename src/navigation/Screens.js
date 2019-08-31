@@ -16,6 +16,7 @@ import MarketPlaceServiceDetailsContainer from "../containers/UpsertServiceDetai
 import ServiceDetailsContainer from "../containers/ServiceDetailsContainer";
 import MarketPlaceSettingsContainer from "../containers/MarketPlaceSettingsContainer";
 import AdminSettingContainer from "../containers/MarketPlaceSettingsContainer/AdminSettingContainer";
+import StaffSettingContainer from "../containers/MarketPlaceSettingsContainer/StaffSettingContainer";
 
 const AdminSettingStack = createStackNavigator(
 	{
@@ -26,9 +27,19 @@ const AdminSettingStack = createStackNavigator(
 	}
 );
 
+const StaffSettingStack = createStackNavigator(
+	{
+		StaffSetting: StaffSettingContainer
+	},
+	{
+		headerMode: "none"
+	}
+);
+
 const MarketPlaceSettingsStack = createStackNavigator({
 	MarketPlaceSettingsContainer,
-	AdminSettingStack
+	AdminSettingStack,
+	StaffSettingStack
 });
 
 const CategoryDetailStack = createStackNavigator(

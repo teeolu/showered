@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import { TouchableOpacity } from "react-native";
+import { connect } from "react-redux";
 import { Ionicons } from "react-native-vector-icons";
 
 import MarketPlaceSetting from "../../screens/MarketPlaceSettings";
@@ -36,8 +37,27 @@ class MarketPlaceSettingsContainer extends PureComponent {
 	});
 
 	render() {
-		return <MarketPlaceSetting {...this.props} />;
+		const { currentMarketplace, userdata } = this.props;
+		return (
+			<MarketPlaceSetting
+				{...this.props}
+				currentMarketplace={currentMarketplace}
+				userdata={userdata}
+			/>
+		);
 	}
 }
 
-export default MarketPlaceSettingsContainer;
+const mapStateToProps = ({ authReducer, serviceDetailsReducer }) => {
+	return {
+		userdata: authReducer.userdata,
+		currentMarketplace: serviceDetailsReducer.currentMarketplace
+	};
+};
+
+const mapDispatchToProps = {};
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(MarketPlaceSettingsContainer);

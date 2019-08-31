@@ -3,7 +3,9 @@ import { takeLeading, call, put } from "redux-saga/effects";
 import {
 	addMarketplaceApi,
 	editMarketplaceApi,
-	getUserMarketplaceApi
+	getUserMarketplaceApi,
+	getUserMarketplacePendingAdminApi,
+	getUserMarketplacePendingStaffApi
 } from "./api";
 import {
 	requestAddMarketplaceAction,
@@ -11,7 +13,11 @@ import {
 	requestEditMarketplaceAction,
 	receiveEditMarketplaceAction,
 	requestGetUserMarketplaceAction,
-	receiveGetUserMarketplaceAction
+	receiveGetUserMarketplaceAction,
+	requestGetUserMarketplacePendingAdminAction,
+	receiveGetUserMarketplacePendingAdminAction,
+	requestGetUserMarketplacePendingStaffAction,
+	receiveGetUserMarketplacePendingStaffAction
 } from "./actions";
 
 function* addMarketplaceActionWatcher({ payload }) {
@@ -75,5 +81,47 @@ export function* requestGetUserMarketplaceActionSaga() {
 	yield takeLeading(
 		requestGetUserMarketplaceAction,
 		getUserMarketplaceActionWatcher
+	);
+}
+
+function* getUserMarketplacePendingAdminActionWatcher({ payload }) {
+	try {
+		const { marketPlaceId } = payload;
+		const result = yield call(getUserMarketplacePendingAdminApi, marketPlaceId);
+		if (result.success) {
+			yield put(receiveGetUserMarketplacePendingAdminAction(result));
+		} else {
+			yield put(receiveGetUserMarketplacePendingAdminAction(result));
+		}
+	} catch (error) {
+		yield put(receiveGetUserMarketplacePendingAdminAction(error));
+	}
+}
+
+export function* requestGetUserMarketplacePendingAdminActionSaga() {
+	yield takeLeading(
+		requestGetUserMarketplacePendingAdminAction,
+		getUserMarketplacePendingAdminActionWatcher
+	);
+}
+
+function* getUserMarketplacePendingStaffActionWatcher({ payload }) {
+	try {
+		const { marketPlaceId } = payload;
+		const result = yield call(getUserMarketplacePendingStaffApi, marketPlaceId);
+		if (result.success) {
+			yield put(receiveGetUserMarketplacePendingStaffAction(result));
+		} else {
+			yield put(receiveGetUserMarketplacePendingStaffAction(result));
+		}
+	} catch (error) {
+		yield put(receiveGetUserMarketplacePendingStaffAction(error));
+	}
+}
+
+export function* requestGetUserMarketplacePendingStaffActionSaga() {
+	yield takeLeading(
+		requestGetUserMarketplacePendingStaffAction,
+		getUserMarketplacePendingStaffActionWatcher
 	);
 }

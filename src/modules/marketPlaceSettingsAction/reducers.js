@@ -5,8 +5,18 @@ import {
 	receiveAddMarketplaceAdminAction,
 	requestRemoveMarketplaceAdminAction,
 	receiveRemoveMarketplaceAdminAction,
+	requestRemovePendingMarketplaceAdminAction,
+	receiveRemovePendingMarketplaceAdminAction,
+	requestRemovePendingMarketplaceStaffAction,
+	receiveRemovePendingMarketplaceStaffAction,
 	requestDisableMarketplaceAdminAction,
-	receiveDisableMarketplaceAdminAction
+	receiveDisableMarketplaceAdminAction,
+	requestRemoveMarketplaceStaffAction,
+	receiveRemoveMarketplaceStaffAction,
+	requestDisableMarketplaceStaffAction,
+	receiveDisableMarketplaceStaffAction,
+	receiveAddMarketplaceStaffAction,
+	requestAddMarketplaceStaffAction
 } from "./actions";
 
 const defaultState = {
@@ -19,7 +29,12 @@ const defaultState = {
 export const marketPlaceSettingsStatus = {
 	addMarketplaceAdmin: "addMarketplaceAdmin",
 	removeMarketplaceAdmin: "removeMarketplaceAdmin",
-	disableMarketplaceAdmin: "disableMarketplaceAdmin"
+	removePendingMarketplaceAdmin: "removePendingMarketplaceAdmin",
+	removePendingMarketplaceStaff: "removePendingMarketplaceStaff",
+	disableMarketplaceAdmin: "disableMarketplaceAdmin",
+	addMarketplaceStaff: "addMarketplaceStaff",
+	removeMarketplaceStaff: "removeMarketplaceStaff",
+	disableMarketplaceStaff: "disableMarketplaceStaff"
 };
 
 export const marketPlaceSettingsReducer = handleActions(
@@ -60,7 +75,7 @@ export const marketPlaceSettingsReducer = handleActions(
 				...state,
 				isLoading: true,
 				error: false,
-				request: marketPlaceSettingsStatus.addMarketplaceAdmin
+				request: marketPlaceSettingsStatus.removeMarketplaceAdmin
 			};
 		},
 		[receiveRemoveMarketplaceAdminAction]: {
@@ -82,6 +97,68 @@ export const marketPlaceSettingsReducer = handleActions(
 					isLoading: false,
 					errorMessage: payload ? payload.message : "",
 					request: marketPlaceSettingsStatus.removeMarketplaceAdmin,
+					error: true
+				};
+			}
+		},
+		[requestRemovePendingMarketplaceAdminAction]: (state, action) => {
+			return {
+				...state,
+				isLoading: true,
+				error: false,
+				request: marketPlaceSettingsStatus.removePendingMarketplaceAdmin
+			};
+		},
+		[receiveRemovePendingMarketplaceAdminAction]: {
+			next(state, action) {
+				const { payload } = action;
+				return {
+					...state,
+					isLoading: false,
+					error: false,
+					request: marketPlaceSettingsStatus.removePendingMarketplaceAdmin
+				};
+			},
+			throw(state, action) {
+				const {
+					payload: { payload }
+				} = action;
+				return {
+					...state,
+					isLoading: false,
+					errorMessage: payload ? payload.message : "",
+					request: marketPlaceSettingsStatus.removePendingMarketplaceAdmin,
+					error: true
+				};
+			}
+		},
+		[requestRemovePendingMarketplaceStaffAction]: (state, action) => {
+			return {
+				...state,
+				isLoading: true,
+				error: false,
+				request: marketPlaceSettingsStatus.removePendingMarketplaceStaff
+			};
+		},
+		[receiveRemovePendingMarketplaceStaffAction]: {
+			next(state, action) {
+				const { payload } = action;
+				return {
+					...state,
+					isLoading: false,
+					error: false,
+					request: marketPlaceSettingsStatus.removePendingMarketplaceStaff
+				};
+			},
+			throw(state, action) {
+				const {
+					payload: { payload }
+				} = action;
+				return {
+					...state,
+					isLoading: false,
+					errorMessage: payload ? payload.message : "",
+					request: marketPlaceSettingsStatus.removePendingMarketplaceStaff,
 					error: true
 				};
 			}
@@ -113,6 +190,99 @@ export const marketPlaceSettingsReducer = handleActions(
 					isLoading: false,
 					errorMessage: payload ? payload.message : "",
 					request: marketPlaceSettingsStatus.disableMarketplaceAdmin,
+					error: true
+				};
+			}
+		},
+		[requestAddMarketplaceStaffAction]: (state, action) => {
+			return {
+				...state,
+				isLoading: true,
+				error: false,
+				request: marketPlaceSettingsStatus.addMarketplaceStaff
+			};
+		},
+		[receiveAddMarketplaceStaffAction]: {
+			next(state, action) {
+				const { payload } = action;
+				return {
+					...state,
+					isLoading: false,
+					error: false,
+					request: marketPlaceSettingsStatus.addMarketplaceStaff
+				};
+			},
+			throw(state, action) {
+				const {
+					payload: { payload }
+				} = action;
+				return {
+					...state,
+					isLoading: false,
+					errorMessage: payload ? payload.message : "",
+					request: marketPlaceSettingsStatus.addMarketplaceStaff,
+					error: true
+				};
+			}
+		},
+		[requestRemoveMarketplaceStaffAction]: (state, action) => {
+			return {
+				...state,
+				isLoading: true,
+				error: false,
+				request: marketPlaceSettingsStatus.addMarketplaceStaff
+			};
+		},
+		[receiveRemoveMarketplaceStaffAction]: {
+			next(state, action) {
+				const { payload } = action;
+				return {
+					...state,
+					isLoading: false,
+					error: false,
+					request: marketPlaceSettingsStatus.removeMarketplaceStaff
+				};
+			},
+			throw(state, action) {
+				const {
+					payload: { payload }
+				} = action;
+				return {
+					...state,
+					isLoading: false,
+					errorMessage: payload ? payload.message : "",
+					request: marketPlaceSettingsStatus.removeMarketplaceStaff,
+					error: true
+				};
+			}
+		},
+		[requestDisableMarketplaceStaffAction]: (state, action) => {
+			return {
+				...state,
+				isLoading: true,
+				error: false,
+				request: marketPlaceSettingsStatus.disableMarketplaceStaff
+			};
+		},
+		[receiveDisableMarketplaceStaffAction]: {
+			next(state, action) {
+				const { payload } = action;
+				return {
+					...state,
+					isLoading: false,
+					error: false,
+					request: marketPlaceSettingsStatus.disableMarketplaceStaff
+				};
+			},
+			throw(state, action) {
+				const {
+					payload: { payload }
+				} = action;
+				return {
+					...state,
+					isLoading: false,
+					errorMessage: payload ? payload.message : "",
+					request: marketPlaceSettingsStatus.disableMarketplaceStaff,
 					error: true
 				};
 			}

@@ -15,102 +15,93 @@ import {
 } from "react-native-vector-icons";
 import { theme } from "../../constants";
 
-export default class MarketPlaceSetting extends PureComponent {
-	constructor(props) {
-		super(props);
-		this.state = {
-			calls: [
-				{
-					id: 1,
-					name: "Admin settings",
-					goto: "AdminSetting",
-					icon: (
-						<MaterialCommunityIcons
-							name="account-star"
-							color={theme.colors.teal}
-							size={theme.sizes.font * 2}
-						/>
-					)
-				},
-				{
-					id: 2,
-					name: "Staff settings",
-					icon: (
-						<AntDesign
-							name="team"
-							color={theme.colors.lightblue}
-							size={theme.sizes.font * 2}
-						/>
-					)
-				},
-				{
-					id: 3,
-					name: "Activities",
-					icon: (
-						<Feather
-							name="activity"
-							color={theme.colors.gray}
-							size={theme.sizes.font * 2}
-						/>
-					)
-				},
-				{
-					id: 4,
-					name: "Payment settings",
-					icon: (
-						<MaterialIcons
-							name="payment"
-							color={theme.colors.yellow}
-							size={theme.sizes.font * 2}
-						/>
-					)
-				},
-				{
-					id: 5,
-					name: "Setup 2fa",
-					icon: (
-						<MaterialIcons
-							name="security"
-							color={theme.colors.red}
-							size={theme.sizes.font * 2}
-						/>
-					)
-				},
-				{
-					id: 6,
-					name: "Notifications",
-					icon: (
-						<MaterialIcons
-							name="notifications-active"
-							color={theme.colors.blue}
-							size={theme.sizes.font * 2}
-						/>
-					)
-				},
-				{
-					id: 7,
-					name: "Income",
-					icon: (
-						<FontAwesome
-							name="money"
-							color={theme.colors.yellow}
-							size={theme.sizes.font * 2}
-						/>
-					)
-				}
-			]
-		};
+const settingsList = [
+	{
+		id: 1,
+		name: "Admin settings",
+		goto: "AdminSetting",
+		icon: (
+			<MaterialCommunityIcons
+				name="account-star"
+				color={theme.colors.teal}
+				size={theme.sizes.font * 2}
+			/>
+		)
+	},
+	{
+		id: 2,
+		name: "Staff settings",
+		goto: "StaffSetting",
+		icon: (
+			<AntDesign
+				name="team"
+				color={theme.colors.lightblue}
+				size={theme.sizes.font * 2}
+			/>
+		)
+	},
+	{
+		id: 3,
+		name: "Activities",
+		icon: (
+			<Feather
+				name="activity"
+				color={theme.colors.gray}
+				size={theme.sizes.font * 2}
+			/>
+		)
+	},
+	{
+		id: 4,
+		name: "Payment settings",
+		icon: (
+			<MaterialIcons
+				name="payment"
+				color={theme.colors.yellow}
+				size={theme.sizes.font * 2}
+			/>
+		)
+	},
+	{
+		id: 5,
+		name: "Setup 2fa",
+		icon: (
+			<MaterialIcons
+				name="security"
+				color={theme.colors.red}
+				size={theme.sizes.font * 2}
+			/>
+		)
+	},
+	{
+		id: 6,
+		name: "Notifications",
+		icon: (
+			<MaterialIcons
+				name="notifications-active"
+				color={theme.colors.blue}
+				size={theme.sizes.font * 2}
+			/>
+		)
+	},
+	{
+		id: 7,
+		name: "Income",
+		icon: (
+			<FontAwesome
+				name="money"
+				color={theme.colors.yellow}
+				size={theme.sizes.font * 2}
+			/>
+		)
 	}
+];
 
+export default class MarketPlaceSetting extends PureComponent {
 	renderItem = ({ item }) => {
-		const { marketPlaceInfo } = this.props.navigation.getParam("item", {});
 		return (
 			<TouchableOpacity
-				onPress={() =>
-					this.props.navigation.navigate(item.goto, {
-						item: { marketPlaceInfo }
-					})
-				}>
+				onPress={() => this.props.navigation.navigate(item.goto)}>
 				<View style={styles.row}>
 					{item.icon}
 					<View>
@@ -133,8 +124,8 @@ export default class MarketPlaceSetting extends PureComponent {
 		return (
 			<View style={{ flex: 1 }}>
 				<FlatList
-					extraData={this.state}
-					data={this.state.calls}
+					extraData={{}}
+					data={settingsList}
 					keyExtractor={item => {
 						return item.id.toString();
 					}}

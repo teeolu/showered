@@ -27,3 +27,18 @@ export const requestGetAdminsMarketplaceAction = createAction(
 export const receiveGetAdminsMarketplaceAction = createAction(
 	"RECEIVE_GET_ADMINS_MARKETPLACE_ACTION"
 );
+
+// Set current market place
+export const requestSetCurrentMarketplace = createAction(
+	"REQUEST_SET_CURRENT_MARKETPLACE"
+);
+export const receiveSetCurrentMarketplace = createAction(
+	"RECEIVE_SET_CURRENT_MARKETPLACE"
+);
+// get staff marketplace
+export const requestGetStaffsMarketplaceAction = createAction(
+	"REQUEST_GET_STAFFS_MARKETPLACE_ACTION"
+);
+export const receiveGetStaffsMarketplaceAction = createAction(
+	"RECEIVE_GET_STAFFS_MARKETPLACE_ACTION"
+);

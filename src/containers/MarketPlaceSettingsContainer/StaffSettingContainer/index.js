@@ -2,16 +2,16 @@ import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { TouchableOpacity } from "react-native";
 
-import AdminSettings from "../../../screens/MarketPlaceSettings/AdminSettings";
+import StaffSettings from "../../../screens/MarketPlaceSettings/StaffSettings";
 import {
-	requestAddMarketplaceAdminAction,
-	requestRemoveMarketplaceAdminAction,
-	requestRemovePendingMarketplaceAdminAction,
-	requestDisableMarketplaceAdminAction
+	requestAddMarketplaceStaffAction,
+	requestRemoveMarketplaceStaffAction,
+	requestDisableMarketplaceStaffAction,
+	requestRemovePendingMarketplaceStaffAction
 } from "../../../modules/marketPlaceSettingsAction/actions";
 import { Block, Text, Icon } from "../../../components";
 
-class AdminSettingContainer extends PureComponent {
+class StaffSettingContainer extends PureComponent {
 	static navigationOptions = ({ navigation }) => ({
 		headerLeftContainerStyle: {
 			paddingLeft: 24
@@ -38,33 +38,35 @@ class AdminSettingContainer extends PureComponent {
 
 	render() {
 		const {
-			requestAddMarketplaceAdminAction,
-			requestRemoveMarketplaceAdminAction,
-			requestDisableMarketplaceAdminAction,
-			requestRemovePendingMarketplaceAdminAction,
-			marketPlacePendingAdmins,
+			requestAddMarketplaceStaffAction,
+			requestRemoveMarketplaceStaffAction,
+			requestDisableMarketplaceStaffAction,
+			requestRemovePendingMarketplaceStaffAction,
+			marketPlacePendingStaffs,
 			currentMarketplace,
 			marketPlaceAdmins,
 			isLoading,
+			marketPlaceStaffs,
 			request,
 			errorMessage,
 			error
 		} = this.props;
 		return (
-			<AdminSettings
-				requestAddMarketplaceAdminAction={requestAddMarketplaceAdminAction}
-				requestRemoveMarketplaceAdminAction={
-					requestRemoveMarketplaceAdminAction
+			<StaffSettings
+				requestAddMarketplaceStaffAction={requestAddMarketplaceStaffAction}
+				requestRemoveMarketplaceStaffAction={
+					requestRemoveMarketplaceStaffAction
 				}
-				marketPlacePendingAdmins={marketPlacePendingAdmins}
+				marketPlacePendingStaffs={marketPlacePendingStaffs}
+				requestRemovePendingMarketplaceStaffAction={
+					requestRemovePendingMarketplaceStaffAction
+				}
+				requestDisableMarketplaceStaffAction={
+					requestDisableMarketplaceStaffAction
+				}
+				marketPlaceStaffs={marketPlaceStaffs}
 				currentMarketplace={currentMarketplace}
-				requestDisableMarketplaceAdminAction={
-					requestDisableMarketplaceAdminAction
-				}
 				marketPlaceAdmins={marketPlaceAdmins}
-				requestRemovePendingMarketplaceAdminAction={
-					requestRemovePendingMarketplaceAdminAction
-				}
 				isLoading={isLoading}
 				request={request}
 				requestError={errorMessage}
@@ -76,10 +78,10 @@ class AdminSettingContainer extends PureComponent {
 }
 
 const mapDispatchToProps = {
-	requestAddMarketplaceAdminAction,
-	requestRemoveMarketplaceAdminAction,
-	requestDisableMarketplaceAdminAction,
-	requestRemovePendingMarketplaceAdminAction
+	requestAddMarketplaceStaffAction,
+	requestRemoveMarketplaceStaffAction,
+	requestDisableMarketplaceStaffAction,
+	requestRemovePendingMarketplaceStaffAction
 };
 
 const mapStateToProps = ({
@@ -97,9 +99,10 @@ const mapStateToProps = ({
 		isLoading,
 		request,
 		errorMessage,
-		currentMarketplace: serviceDetailsReducer.currentMarketplace,
 		marketPlaceAdmins: serviceDetailsReducer.marketPlaceAdmins,
-		marketPlacePendingAdmins: marketplaceReducer.marketPlacePendingAdmins,
+		marketPlaceStaffs: serviceDetailsReducer.marketPlaceStaffs,
+		currentMarketplace: serviceDetailsReducer.currentMarketplace,
+		marketPlacePendingStaffs: marketplaceReducer.marketPlacePendingStaffs,
 		error
 	};
 };
@@ -107,4 +110,4 @@ const mapStateToProps = ({
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(AdminSettingContainer);
+)(StaffSettingContainer);

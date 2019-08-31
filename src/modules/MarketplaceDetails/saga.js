@@ -4,7 +4,8 @@ import {
 	addServiceDetailsApi,
 	editServiceDetailsApi,
 	getMarketplaceServiceDetailsApi,
-	getAdminsMarketplaceApi
+	getAdminsMarketplaceApi,
+	getStaffsMarketplaceApi
 } from "./api";
 import {
 	requestAddMarketplaceServiceDetailsAction,
@@ -14,7 +15,11 @@ import {
 	requestGetMarketplaceDetailsAction,
 	receiveGetMarketplaceDetailsAction,
 	requestGetAdminsMarketplaceAction,
-	receiveGetAdminsMarketplaceAction
+	receiveGetAdminsMarketplaceAction,
+	requestGetStaffsMarketplaceAction,
+	receiveGetStaffsMarketplaceAction,
+	requestSetCurrentMarketplace,
+	receiveSetCurrentMarketplace
 } from "./actions";
 
 function* addServiceDetailsActionWatcher({ payload }) {
@@ -106,4 +111,39 @@ export function* requestGetAdminsMarketplaceActionSaga() {
 		requestGetAdminsMarketplaceAction,
 		getAdminsMarketplaceActionWatcher
 	);
+}
+
+function* getStaffsMarketplaceActionWatcher({ payload }) {
+	try {
+		const { marketPlaceId } = payload;
+		const result = yield call(getStaffsMarketplaceApi, marketPlaceId);
+		if (result.success) {
+			yield put(receiveGetStaffsMarketplaceAction(result));
+		} else {
+			yield put(receiveGetStaffsMarketplaceAction(result));
+		}
+	} catch (error) {
+		yield put(receiveGetStaffsMarketplaceAction(error));
+	}
+}
+
+export function* requestGetStaffsMarketplaceActionSaga() {
+	yield takeLeading(
+		requestGetStaffsMarketplaceAction,
+		getStaffsMarketplaceActionWatcher
+	);
+}
+
+function* setCurrentMarketplaceWatcher({ payload }) {
+	try {
+		const { marketPlace, navigation, navigateTo } = payload;
+		yield put(receiveSetCurrentMarketplace(marketPlace));
+		if (navigation) return navigation.navigate(navigateTo);
+	} catch (error) {
+		yield put(receiveSetCurrentMarketplace(error));
+	}
+}
+
+export function* requestGetSetCurrentMarketplaceActionSaga() {
+	yield takeLeading(requestSetCurrentMarketplace, setCurrentMarketplaceWatcher);
 }

@@ -11,20 +11,20 @@ import {
 } from "react-native";
 import { MaterialIcons, Entypo } from "react-native-vector-icons";
 import { theme } from "../../../constants";
-import AddAdminModal from "./AddAdminModal";
+import AddAdminModal from "./AddStaffModal";
 import { validateInput } from "../../../utils/inputFunctions";
 import { marketPlaceSettingsStatus } from "../../../modules/marketPlaceSettingsAction/reducers";
 import ModalDropdown from "../../../components/ModalDropdown";
 const width = Dimensions.get("window").width;
 
-export default class AdminSettings extends Component {
+export default class StaffSettings extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			showAsyncActionLoading: false,
 			formError: false,
 			errorMessage: "",
-			addAdminVisible: false,
+			addStaffVisible: false,
 			fields: {
 				email: {
 					value: "",
@@ -40,7 +40,7 @@ export default class AdminSettings extends Component {
 
 	toggleModal = () => {
 		this.setState(state => ({
-			addAdminVisible: !state.addAdminVisible
+			addStaffVisible: !state.addStaffVisible
 		}));
 	};
 
@@ -72,11 +72,10 @@ export default class AdminSettings extends Component {
 
 	handleSubmit = event => {
 		const {
-			requestAddMarketplaceAdminAction,
+			requestAddMarketplaceStaffAction,
 			navigation,
 			currentMarketplace
 		} = this.props;
-		const { _id } = currentMarketplace;
 
 		var { error } = validateInput(this.state.fields);
 		if (error) {
@@ -86,10 +85,10 @@ export default class AdminSettings extends Component {
 			});
 		}
 
-		requestAddMarketplaceAdminAction({
+		requestAddMarketplaceStaffAction({
 			dataToSubmit: {
 				userEmail: this.state.fields.email.value.toLowerCase(),
-				marketPlaceId: _id
+				marketPlaceId: currentMarketplace._id
 			},
 			navigation,
 			navigateTo: "Feedback",
@@ -97,81 +96,53 @@ export default class AdminSettings extends Component {
 		});
 	};
 
-	removeAdmin = admin => {
+	removeStaff = staff => {
 		const {
-			requestRemoveMarketplaceAdminAction,
-			currentMarketplace
+			requestRemoveMarketplaceStaffAction,
+			currentMarketplace: { _id }
 		} = this.props;
-		const { _id } = currentMarketplace;
 		this.setState({ showAsyncActionLoading: true });
-		requestRemoveMarketplaceAdminAction({
-			adminId: admin._id,
+		requestRemoveMarketplaceStaffAction({
+			staffId: staff._id,
 			marketPlaceId: _id
 		});
 	};
 
-	removePendingAdmin = user => {
+	disableStaff = staff => {
 		const {
-			requestRemovePendingMarketplaceAdminAction,
-			currentMarketplace
+			requestDisableMarketplaceStaffAction,
+			currentMarketplace: { _id }
 		} = this.props;
-		const { _id } = currentMarketplace;
 		this.setState({ showAsyncActionLoading: true });
-		requestRemovePendingMarketplaceAdminAction({
-			userId: user._id,
+		requestDisableMarketplaceStaffAction({
+			staffId: staff._id,
 			marketPlaceId: _id
 		});
 	};
 
-	disableAdmin = admin => {
-		const {
-			requestDisableMarketplaceAdminAction,
-			currentMarketplace
-		} = this.props;
-		const { _id } = currentMarketplace;
-		this.setState({ showAsyncActionLoading: true });
-		requestDisableMarketplaceAdminAction({
-			adminId: admin._id,
-			marketPlaceId: _id
-		});
-	};
-
-	showRemoveAdminModal = admin => {
+	showRemoveStaffModal = staff => {
 		Alert.alert(
-			"Are you sure you want to remove this admin",
+			"Are you sure you want to remove this staff",
 			[
-				"This admin will not belong to this market place any more. You can choose to disable the admin instead",
+				"This staff will not belong to this market place any more. You can choose to disable the staff instead",
 				"\n\n"
 			].join(""),
 			[
 				{ text: "cancel", style: "cancel" },
-				{ text: "remove", onPress: () => this.removeAdmin(admin) }
+				{ text: "remove", onPress: () => this.removeStaff(staff) }
 			]
 		);
 	};
 
-	showRemovePendingAdminModal = admin => {
-		Alert.alert(
-			"Are you sure you want to remove this user from your invite list",
-			[
-				"This user will not be able to join this market place as an admin any more",
-				"\n\n"
-			].join(""),
-			[
-				{ text: "cancel", style: "cancel" },
-				{ text: "remove", onPress: () => this.removePendingAdmin(admin) }
-			]
-		);
-	};
-
-	showDisableAdminModal = admin => {
+	showDisableStaffModal = staff => {
+		console.log("staff id ", staff);
 		Alert.alert(
 			`Are you sure you want to ${
-				admin.isActive ? "deactivate" : "activate"
-			} this admin`,
+				staff.isActive ? "deactivate" : "activate"
+			} this staff`,
 			[
-				`This admin will ${
-					admin.isActive
+				`This staff will ${
+					staff.isActive
 						? "not be able to perform his administrative activities when disabled"
 						: "be able to continue his administrative activities when activated"
 				}`,
@@ -180,14 +151,14 @@ export default class AdminSettings extends Component {
 			[
 				{ text: "cancel", style: "cancel" },
 				{
-					text: admin.isActive ? "deactivate" : "activate",
-					onPress: () => this.disableAdmin(admin)
+					text: staff.isActive ? "deactivate" : "activate",
+					onPress: () => this.disableStaff(staff)
 				}
 			]
 		);
 	};
 
-	renderAdminList = ({ item }) => {
+	renderStaffsList = ({ item }) => {
 		return (
 			<View style={{ ...styles.nameContainer, ...styles.row }}>
 				<View
@@ -207,9 +178,9 @@ export default class AdminSettings extends Component {
 				<View style={styles.row2}>
 					<Text style={styles.mblTxt}>owner</Text>
 					<ModalDropdown
-						type="admins"
-						removeAdmin={id => this.showRemoveAdminModal(id)}
-						disableAdmin={id => this.showDisableAdminModal(id)}
+						type="staffs"
+						removeStaff={id => this.showRemoveStaffModal(id)}
+						disableStaff={id => this.showDisableStaffModal(id)}
 						adminDetails={item}
 					/>
 				</View>
@@ -217,7 +188,34 @@ export default class AdminSettings extends Component {
 		);
 	};
 
-	renderPendingAdminList = ({ item }) => {
+	showRemovePendingStaffModal = admin => {
+		Alert.alert(
+			"Are you sure you want to remove this user from your invite list",
+			[
+				"This user will not be able to join this market place as anstaff any more",
+				"\n\n"
+			].join(""),
+			[
+				{ text: "cancel", style: "cancel" },
+				{ text: "remove", onPress: () => this.removePendingStaff(admin) }
+			]
+		);
+	};
+
+	removePendingStaff = user => {
+		const {
+			requestRemovePendingMarketplaceStaffAction,
+			currentMarketplace
+		} = this.props;
+		const { _id } = currentMarketplace;
+		this.setState({ showAsyncActionLoading: true });
+		requestRemovePendingMarketplaceStaffAction({
+			userId: user._id,
+			marketPlaceId: _id
+		});
+	};
+
+	renderPendingStaffList = ({ item }) => {
 		return (
 			<View style={styles.row}>
 				<View style={styles.nameContainer}>
@@ -238,8 +236,8 @@ export default class AdminSettings extends Component {
 					<View style={styles.row2}>
 						<Text style={styles.mblTxt}>owner</Text>
 						<ModalDropdown
-							type="pendingAdmins"
-							removePendingAdmin={id => this.showRemovePendingAdminModal(id)}
+							type="pendingStaffs"
+							removePendingStaff={id => this.showRemovePendingStaffModal(id)}
 							adminDetails={item}
 						/>
 					</View>
@@ -258,21 +256,21 @@ export default class AdminSettings extends Component {
 		let {
 				isError,
 				requestError,
-				marketPlaceAdmins,
 				currentMarketplace,
-				marketPlacePendingAdmins
+				marketPlaceStaffs,
+				marketPlacePendingStaffs
 			} = this.props,
 			{
-				addMarketplaceAdmin,
-				disableMarketplaceAdmin,
-				removeMarketplaceAdmin,
-				removePendingMarketplaceAdmin
+				addMarketplaceStaff,
+				disableMarketplaceStaff,
+				removeMarketplaceStaff,
+				removePendingMarketplaceStaff
 			} = marketPlaceSettingsStatus;
 		return (
 			<View style={{ flex: 1 }}>
-				{(this.isLoading(disableMarketplaceAdmin) ||
-					this.isLoading(removeMarketplaceAdmin) ||
-					this.isLoading(removePendingMarketplaceAdmin)) && (
+				{(this.isLoading(disableMarketplaceStaff) ||
+					this.isLoading(removeMarketplaceStaff) ||
+					this.isLoading(removePendingMarketplaceStaff)) && (
 					<View style={styles.overlay}>
 						<ActivityIndicator size="large" color="#fff" />
 					</View>
@@ -290,7 +288,7 @@ export default class AdminSettings extends Component {
 								color: theme.colors.black2,
 								fontSize: theme.sizes.font * 1.5
 							}}>
-							Admin
+							Staff
 						</Text>
 					</View>
 				</TouchableOpacity>
@@ -302,7 +300,7 @@ export default class AdminSettings extends Component {
 									style={styles.nameTxt}
 									numberOfLines={1}
 									ellipsizeMode="tail">
-									Admins
+									Staffs
 								</Text>
 								{/* <Text style={styles.mblTxt}>Mobile</Text> */}
 							</View>
@@ -310,11 +308,11 @@ export default class AdminSettings extends Component {
 					</TouchableOpacity>
 					<FlatList
 						extraData={this.state}
-						data={marketPlaceAdmins}
+						data={marketPlaceStaffs}
 						keyExtractor={item => {
-							return item ? item._id : "";
+							return item._id;
 						}}
-						renderItem={this.renderAdminList}
+						renderItem={this.renderStaffsList}
 					/>
 				</View>
 				<View>
@@ -332,21 +330,21 @@ export default class AdminSettings extends Component {
 					</TouchableOpacity>
 					<FlatList
 						extraData={this.state}
-						data={marketPlacePendingAdmins}
+						data={marketPlacePendingStaffs}
 						keyExtractor={item => {
 							return item._id;
 						}}
-						renderItem={this.renderPendingAdminList}
+						renderItem={this.renderPendingStaffList}
 					/>
 				</View>
 				<AddAdminModal
 					toggleModal={this.toggleModal}
-					isVisible={this.state.addAdminVisible}
+					isVisible={this.state.addStaffVisible}
 					handleChange={this.handleChange}
 					blur={arg => this.blurReact(arg)}
 					inputInfo={this.state.fields}
 					handleSubmit={this.handleSubmit}
-					isLoading={this.isLoading(addMarketplaceAdmin)}
+					isLoading={this.isLoading(addMarketplaceStaff)}
 					isError={isError}
 					requestError={requestError}
 				/>

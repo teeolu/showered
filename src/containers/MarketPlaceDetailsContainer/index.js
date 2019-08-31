@@ -3,8 +3,13 @@ import { connect } from "react-redux";
 import MarketPlaceDetails from "../../screens/MarketPlaceDetails";
 import {
 	requestGetMarketplaceDetailsAction,
-	requestGetAdminsMarketplaceAction
+	requestGetAdminsMarketplaceAction,
+	requestGetStaffsMarketplaceAction
 } from "../../modules/MarketplaceDetails/actions";
+import {
+	requestGetUserMarketplacePendingAdminAction,
+	requestGetUserMarketplacePendingStaffAction
+} from "../../modules/marketPlace/actions";
 
 class MarketPlaceDetailsContainer extends PureComponent {
 	render() {
@@ -15,16 +20,27 @@ class MarketPlaceDetailsContainer extends PureComponent {
 			serviceDetailsRequest,
 			marketplaceServiceDetailsData,
 			requestGetAdminsMarketplaceAction,
-			serviceDetailsError
+			currentMarketplace,
+			requestGetStaffsMarketplaceAction,
+			serviceDetailsError,
+			requestGetUserMarketplacePendingAdminAction
 		} = this.props;
 		return (
 			<MarketPlaceDetails
 				userdata={userdata}
 				serviceDetailsLoading={serviceDetailsLoading}
+				requestGetUserMarketplacePendingStaffAction={
+					requestGetUserMarketplacePendingStaffAction
+				}
+				requestGetUserMarketplacePendingAdminAction={
+					requestGetUserMarketplacePendingAdminAction
+				}
 				serviceDetailsRequest={serviceDetailsRequest}
+				requestGetStaffsMarketplaceAction={requestGetStaffsMarketplaceAction}
 				requestGetAdminsMarketplaceAction={requestGetAdminsMarketplaceAction}
 				marketplaceServiceDetailsData={marketplaceServiceDetailsData}
 				serviceDetailsError={serviceDetailsError}
+				currentMarketplace={currentMarketplace}
 				requestGetMarketplaceDetailsAction={requestGetMarketplaceDetailsAction}
 				{...this.props}
 			/>
@@ -40,13 +56,17 @@ const mapStateToProps = ({ authReducer, serviceDetailsReducer }) => {
 		marketplaceServiceDetailsData:
 			serviceDetailsReducer.marketplaceServiceDetailsData,
 		serviceDetailsError: serviceDetailsReducer.error,
-		marketPlaceAdmins: serviceDetailsReducer.marketPlaceAdmins
+		marketPlaceAdmins: serviceDetailsReducer.marketPlaceAdmins,
+		currentMarketplace: serviceDetailsReducer.currentMarketplace
 	};
 };
 
 const mapDispatchToProps = {
 	requestGetMarketplaceDetailsAction,
-	requestGetAdminsMarketplaceAction
+	requestGetAdminsMarketplaceAction,
+	requestGetStaffsMarketplaceAction,
+	requestGetUserMarketplacePendingAdminAction,
+	requestGetUserMarketplacePendingStaffAction
 };
 
 export default connect(
