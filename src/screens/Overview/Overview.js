@@ -3,31 +3,13 @@ import { TouchableOpacity, Image, SafeAreaView, ImageBackground, ScrollView, Dim
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Octicons from 'react-native-vector-icons/Octicons';
 
-import { Block, Card, Text, Icon, Label, Box } from '../../components';
+import { Block, Card, Text, Label, Box } from '../../components';
 import * as theme from '../../constants/theme';
 import { articlesInfo } from '../../constants/mocks';
 import { categoryNames } from '../UpsertMarketPlace/SelectCategory';
 const { width } = Dimensions.get('window');
 
 class Overview extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerLeftContainerStyle: {
-      paddingLeft: 24
-    },
-    headerRightContainerStyle: {
-      paddingRight: 24
-    },
-    headerLeft: (
-      <TouchableOpacity onPress={navigation.openDrawer}><Icon menu /></TouchableOpacity>
-    ),
-    headerRight: (
-      <TouchableOpacity><Icon notification /></TouchableOpacity>
-    ),
-    headerTitle: (
-      <Block row middle><Text h4>Overview</Text></Block>
-    )
-  })
-
   constructor(props){
     super(props);
 

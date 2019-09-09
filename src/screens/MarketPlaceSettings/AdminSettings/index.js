@@ -259,7 +259,6 @@ export default class AdminSettings extends Component {
 				isError,
 				requestError,
 				marketPlaceAdmins,
-				currentMarketplace,
 				marketPlacePendingAdmins
 			} = this.props,
 			{

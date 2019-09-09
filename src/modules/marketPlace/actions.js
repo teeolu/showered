@@ -34,3 +34,11 @@ export const requestGetUserMarketplacePendingStaffAction = createAction(
 export const receiveGetUserMarketplacePendingStaffAction = createAction(
 	"RECEIVE_GET_USER_MARKETPLACE_PENDING_STAFF_ACTION"
 );
+
+// disable marketplace action
+export const requestDisableMarketplaceAction = createAction(
+	"REQUEST_DISABLE_MARKETPLACE_ACTION"
+);
+export const receiveDisableMarketplaceAction = createAction(
+	"RECEIVE_DISABLE_MARKETPLACE_ACTION"
+);

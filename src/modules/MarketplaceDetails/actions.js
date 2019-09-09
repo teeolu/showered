@@ -35,6 +35,7 @@ export const requestSetCurrentMarketplace = createAction(
 export const receiveSetCurrentMarketplace = createAction(
 	"RECEIVE_SET_CURRENT_MARKETPLACE"
 );
+
 // get staff marketplace
 export const requestGetStaffsMarketplaceAction = createAction(
 	"REQUEST_GET_STAFFS_MARKETPLACE_ACTION"

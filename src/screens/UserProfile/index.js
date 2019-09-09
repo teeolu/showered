@@ -184,41 +184,43 @@ class UserProfile extends Component {
 						) : (
 							<>
 								{userMarketplaceData.length > 0 ? (
-									userMarketplaceData.map(item => (
-										<Block key={item._id} style={styles.driver}>
-											<TouchableOpacity
-												onPress={() => this.setCurrentMarketplace(item)}>
-												<Block row center>
-													<View style={{ marginRight: 15 }}>
-														<Image
-															style={styles.avatar}
-															source={{
-																uri:
-																	item.marketPlaceAsAdmin.uploadedImageArray[0]
-																		.secureUrl
-															}}
-														/>
-													</View>
-													<Block>
-														<Text h4>
-															{item.marketPlaceAsAdmin.marketPlaceName}
-														</Text>
-														<Text paragraph color="gray">
-															{item.marketPlaceAsAdmin.email}
-														</Text>
+									userMarketplaceData.map(item => {
+										return (
+											<Block key={item._id} style={styles.driver}>
+												<TouchableOpacity
+													onPress={() => this.setCurrentMarketplace(item)}>
+													<Block row center>
+														<View style={{ marginRight: 15 }}>
+															<Image
+																style={styles.avatar}
+																source={{
+																	uri:
+																		item.marketPlaceAsAdmin
+																			.uploadedImageArray[0].secureUrl
+																}}
+															/>
+														</View>
+														<Block>
+															<Text h4>
+																{item.marketPlaceAsAdmin.marketPlaceName}
+															</Text>
+															<Text paragraph color="gray">
+																{item.marketPlaceAsAdmin.email}
+															</Text>
+														</Block>
+														<Block>
+															<Text paragraph right color="black">
+																$6,432
+															</Text>
+															<Text paragraph right color="gray">
+																1,232 miles
+															</Text>
+														</Block>
 													</Block>
-													<Block>
-														<Text paragraph right color="black">
-															$6,432
-														</Text>
-														<Text paragraph right color="gray">
-															1,232 miles
-														</Text>
-													</Block>
-												</Block>
-											</TouchableOpacity>
-										</Block>
-									))
+												</TouchableOpacity>
+											</Block>
+										);
+									})
 								) : (
 									<Text>You are not offering any service yet</Text>
 								)}

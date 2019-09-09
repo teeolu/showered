@@ -10,7 +10,9 @@ import {
 	requestGetUserMarketplacePendingAdminAction,
 	receiveGetUserMarketplacePendingAdminAction,
 	requestGetUserMarketplacePendingStaffAction,
-	receiveGetUserMarketplacePendingStaffAction
+	receiveGetUserMarketplacePendingStaffAction,
+	receiveDisableMarketplaceAction,
+	requestDisableMarketplaceAction
 } from "./actions";
 
 const defaultState = {
@@ -25,7 +27,8 @@ const defaultState = {
 export const marketplaceStatus = {
 	addMarketPlace: "addMarketPlace",
 	getMarketPlace: "getMarketPlace",
-	marketPlacePendingAdmins: "marketPlacePendingAdmins"
+	marketPlacePendingAdmins: "marketPlacePendingAdmins",
+	disableMarketplace: "disableMarketplace"
 };
 
 export const marketplaceReducer = handleActions(
@@ -44,7 +47,8 @@ export const marketplaceReducer = handleActions(
 				return {
 					...state,
 					isLoading: false,
-					request: marketplaceStatus.addMarketPlace
+					error: payload.success,
+					request: ""
 				};
 			},
 			throw(state, action) {
@@ -52,7 +56,7 @@ export const marketplaceReducer = handleActions(
 				return {
 					...state,
 					isLoading: false,
-					request: marketplaceStatus.addMarketPlace,
+					request: "",
 					error: true
 				};
 			}
@@ -71,7 +75,7 @@ export const marketplaceReducer = handleActions(
 				return {
 					...state,
 					isLoading: false,
-					request: marketplaceStatus.addMarketPlace
+					request: ""
 				};
 			},
 			throw(state, action) {
@@ -79,7 +83,7 @@ export const marketplaceReducer = handleActions(
 				return {
 					...state,
 					isLoading: false,
-					request: marketplaceStatus.addMarketPlace,
+					request: "",
 					error: true
 				};
 			}
@@ -100,7 +104,7 @@ export const marketplaceReducer = handleActions(
 					...state,
 					isLoading: false,
 					userMarketplaceData: payload.docs,
-					request: marketplaceStatus.getMarketPlace
+					request: ""
 				};
 			},
 			throw(state, action) {
@@ -110,7 +114,7 @@ export const marketplaceReducer = handleActions(
 					...state,
 					isLoading: false,
 					userMarketplaceData: [],
-					request: marketplaceStatus.getMarketPlace,
+					request: "",
 					error: true
 				};
 			}
@@ -131,7 +135,7 @@ export const marketplaceReducer = handleActions(
 					...state,
 					isLoading: false,
 					marketPlacePendingStaffs: payload.docs,
-					request: marketplaceStatus.getMarketPlacePendingStaff
+					request: ""
 				};
 			},
 			throw(state, action) {
@@ -141,7 +145,7 @@ export const marketplaceReducer = handleActions(
 					...state,
 					isLoading: false,
 					marketPlacePendingStaffs: [],
-					request: marketplaceStatus.getMarketPlacePendingStaff,
+					request: "",
 					error: true
 				};
 			}
@@ -162,7 +166,7 @@ export const marketplaceReducer = handleActions(
 					...state,
 					isLoading: false,
 					marketPlacePendingAdmins: payload.docs,
-					request: marketplaceStatus.getMarketPlacePendingAdmin
+					request: ""
 				};
 			},
 			throw(state, action) {
@@ -171,8 +175,37 @@ export const marketplaceReducer = handleActions(
 					...state,
 					isLoading: false,
 					marketPlacePendingAdmins: [],
-					request: marketplaceStatus.getMarketPlacePendingAdmin,
+					request: "",
 					error: true
+				};
+			}
+		},
+		[requestDisableMarketplaceAction]: (state, action) => {
+			return {
+				...state,
+				isLoading: true,
+				error: false,
+				request: marketplaceStatus.disableMarketplace
+			};
+		},
+		[receiveDisableMarketplaceAction]: {
+			next(state, action) {
+				const { payload } = action;
+
+				return {
+					...state,
+					isLoading: false,
+					request: "",
+					error: payload.success
+				};
+			},
+			throw(state, action) {
+				const { payload } = action;
+				return {
+					...state,
+					isLoading: payload.success,
+					request: "",
+					error: payload.success
 				};
 			}
 		}

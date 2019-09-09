@@ -5,7 +5,8 @@ import {
 	editMarketplaceApi,
 	getUserMarketplaceApi,
 	getUserMarketplacePendingAdminApi,
-	getUserMarketplacePendingStaffApi
+	getUserMarketplacePendingStaffApi,
+	disableMarketplaceApi
 } from "./api";
 import {
 	requestAddMarketplaceAction,
@@ -17,18 +18,25 @@ import {
 	requestGetUserMarketplacePendingAdminAction,
 	receiveGetUserMarketplacePendingAdminAction,
 	requestGetUserMarketplacePendingStaffAction,
-	receiveGetUserMarketplacePendingStaffAction
+	receiveGetUserMarketplacePendingStaffAction,
+	requestDisableMarketplaceAction,
+	receiveDisableMarketplaceAction
 } from "./actions";
+import { requestSetCurrentMarketplace } from "../MarketplaceDetails/actions";
 
 function* addMarketplaceActionWatcher({ payload }) {
 	try {
 		const { dataToSubmit, navigation, navigateTo } = payload;
 		const result = yield call(addMarketplaceApi, dataToSubmit);
 		if (result.success) {
-			yield put(receiveAddMarketplaceAction(payload));
-			if (navigation) {
-				navigation.navigate(navigateTo, { item: result.payload.docs });
-			}
+			yield put(receiveAddMarketplaceAction(result));
+			yield put(
+				requestSetCurrentMarketplace({
+					marketPlace: result.payload.docs,
+					navigation,
+					navigateTo
+				})
+			);
 		} else {
 			yield put(receiveAddMarketplaceAction(result));
 		}
@@ -48,9 +56,13 @@ function* editMarketplaceActionWatcher({ payload }) {
 
 		if (result.success) {
 			yield put(receiveEditMarketplaceAction(result));
-			if (navigation) {
-				navigation.navigate(navigateTo, { item: result.payload.docs[0] });
-			}
+			yield put(
+				requestSetCurrentMarketplace({
+					marketPlace: result.payload.docs[0],
+					navigation,
+					navigateTo
+				})
+			);
 			yield put(requestGetUserMarketplaceAction());
 		} else {
 			yield put(receiveEditMarketplaceAction(result));
@@ -123,5 +135,30 @@ export function* requestGetUserMarketplacePendingStaffActionSaga() {
 	yield takeLeading(
 		requestGetUserMarketplacePendingStaffAction,
 		getUserMarketplacePendingStaffActionWatcher
+	);
+}
+
+function* requestDisableMarketplaceWatcher({ payload }) {
+	try {
+		const { adminId, marketPlaceId } = payload;
+		const result = yield call(disableMarketplaceApi, adminId, marketPlaceId);
+		if (result.success) {
+			yield put(receiveDisableMarketplaceAction(result));
+			yield put(
+				requestSetCurrentMarketplace({ marketPlace: result.payload.docs })
+			);
+			yield put(requestGetUserMarketplaceAction());
+		} else {
+			yield put(receiveDisableMarketplaceAction(result));
+		}
+	} catch (error) {
+		yield put(receiveDisableMarketplaceAction(error));
+	}
+}
+
+export function* requestDisableMarketplaceActionSaga() {
+	yield takeLeading(
+		requestDisableMarketplaceAction,
+		requestDisableMarketplaceWatcher
 	);
 }

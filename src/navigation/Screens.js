@@ -2,7 +2,6 @@ import React from "react";
 import { createDrawerNavigator, createStackNavigator } from "react-navigation";
 
 import Analytics from "../screens/Analytics";
-import Overview from "../screens/Overview/Overview";
 import Chat from "../screens/Chat";
 import Settings from "../screens/Settings";
 import Map from "../screens/Map";
@@ -17,6 +16,8 @@ import ServiceDetailsContainer from "../containers/ServiceDetailsContainer";
 import MarketPlaceSettingsContainer from "../containers/MarketPlaceSettingsContainer";
 import AdminSettingContainer from "../containers/MarketPlaceSettingsContainer/AdminSettingContainer";
 import StaffSettingContainer from "../containers/MarketPlaceSettingsContainer/StaffSettingContainer";
+import MoreMarketPlaceSettingsContainer from "../containers/MarketPlaceSettingsContainer/MoreMarketPlaceSettings";
+import OverviewContainer from "../containers/OverviewContainer";
 
 const AdminSettingStack = createStackNavigator(
 	{
@@ -36,10 +37,20 @@ const StaffSettingStack = createStackNavigator(
 	}
 );
 
+const MoreMarketplaceSettingStack = createStackNavigator(
+	{
+		MoreMarketplaceSetting: MoreMarketPlaceSettingsContainer
+	},
+	{
+		headerMode: "none"
+	}
+);
+
 const MarketPlaceSettingsStack = createStackNavigator({
 	MarketPlaceSettingsContainer,
 	AdminSettingStack,
-	StaffSettingStack
+	StaffSettingStack,
+	MoreMarketplaceSettingStack
 });
 
 const CategoryDetailStack = createStackNavigator(
@@ -68,7 +79,7 @@ const BrowseStack = createStackNavigator({
 });
 
 const OverviewStack = createStackNavigator({
-	Overview,
+	Overview: OverviewContainer,
 	BrowseStack
 });
 

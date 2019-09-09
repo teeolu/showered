@@ -32,6 +32,10 @@ class UserProfileContainer extends PureComponent {
 		)
 	});
 
+	componentDidMount() {
+		this.props.requestSetCurrentMarketplace({ marketPlace: {} });
+	}
+
 	render() {
 		const {
 			userdata,
@@ -66,6 +70,7 @@ const mapStateToProps = ({ authReducer, marketplaceReducer }) => {
 
 const mapDispatchToProps = {
 	requestGetUserMarketplaceAction,
+	requestSetCurrentMarketplace,
 	requestSetCurrentMarketplace
 };
 

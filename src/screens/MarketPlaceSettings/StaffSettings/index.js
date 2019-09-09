@@ -135,7 +135,6 @@ export default class StaffSettings extends Component {
 	};
 
 	showDisableStaffModal = staff => {
-		console.log("staff id ", staff);
 		Alert.alert(
 			`Are you sure you want to ${
 				staff.isActive ? "deactivate" : "activate"

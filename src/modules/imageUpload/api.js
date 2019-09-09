@@ -12,7 +12,7 @@ export const imageUploadApi = async formData => {
 	};
 
 	return new Promise((resolve, reject) => {
-		fetch(`${URL}/api/imageUpload`, config)
+		fetch(`${URL}/api/imageUpload/add`, config)
 			.then(async response => {
 				const result = {
 					success: response.ok,
@@ -65,7 +65,7 @@ export const removeImageUploadApi = public_id => {
 	};
 
 	return new Promise((resolve, reject) => {
-		fetch(`${URL}/api/removeImage?public_id=${public_id}`, config)
+		fetch(`${URL}/api/imageUpload/removeImage?public_id=${public_id}`, config)
 			.then(async response => {
 				const result = {
 					success: response.ok,

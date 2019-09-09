@@ -11,6 +11,7 @@ import {
 	Feather,
 	AntDesign,
 	MaterialIcons,
+	Foundation,
 	MaterialCommunityIcons
 } from "react-native-vector-icons";
 import { theme } from "../../constants";
@@ -94,11 +95,28 @@ const settingsList = [
 				size={theme.sizes.font * 2}
 			/>
 		)
+	},
+	{
+		id: 8,
+		name: "More settings",
+		isOwner: true,
+		goto: "MoreMarketplaceSetting",
+		icon: (
+			<Foundation
+				name="alert"
+				color={theme.colors.red}
+				size={theme.sizes.font * 2}
+			/>
+		)
 	}
 ];
 
 export default class MarketPlaceSetting extends PureComponent {
 	renderItem = ({ item }) => {
+		const { userdata, currentMarketplace } = this.props;
+		if (item.isOwner && !(userdata._id === currentMarketplace.owner))
+			return null;
+
 		return (
 			<TouchableOpacity
 				onPress={() => this.props.navigation.navigate(item.goto)}>
