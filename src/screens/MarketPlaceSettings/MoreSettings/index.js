@@ -128,16 +128,37 @@ export default class MoreMarketPlaceSetting extends PureComponent {
 		});
 	};
 
+	deleteMarketplace = () => {
+		const {
+			requestDeleteMarketplaceAction,
+			currentMarketplace,
+			marketPlaceAdmins,
+			navigation,
+			userdata
+		} = this.props;
+		const admin = marketPlaceAdmins.filter(
+			el => el.person._id === userdata._id
+		);
+		const { _id } = currentMarketplace;
+		this.setState({ showAsyncActionLoading: true });
+		requestDeleteMarketplaceAction({
+			adminId: admin._id,
+			marketPlaceId: _id,
+			navigation,
+			navigateTo: "UserProfile"
+		});
+	};
+
 	alertDeleteMarketplace = published => {
 		Alert.alert(
-			"Are you sure you want to remove this admin",
+			"Delete Marketplace",
 			[
-				"This admin will not belong to this market place any more. You can choose to disable the admin instead",
+				"Deleting this marketplace will remove all the informations and the services that belongs to this Marketplace",
 				"\n\n"
 			].join(""),
 			[
 				{ text: "cancel", style: "cancel" },
-				{ text: "remove", onPress: () => this.removeAdmin(published) }
+				{ text: "Delete", onPress: () => this.deleteMarketplace(published) }
 			]
 		);
 	};
@@ -170,6 +191,7 @@ export default class MoreMarketPlaceSetting extends PureComponent {
 			this.alertDeleteMarketplace(published);
 		}
 	};
+
 	renderItem = ({ item }) => {
 		const { currentMarketplace } = this.props;
 		return (
@@ -200,10 +222,11 @@ export default class MoreMarketPlaceSetting extends PureComponent {
 	};
 
 	render() {
-		const { disableMarketplace } = marketplaceStatus;
+		const { disableMarketplace, deleteMarketplace } = marketplaceStatus;
 		return (
 			<View style={{ flex: 1 }}>
-				{this.isLoading(disableMarketplace) && (
+				{(this.isLoading(disableMarketplace) ||
+					this.isLoading(deleteMarketplace)) && (
 					<View style={styles.overlay}>
 						<ActivityIndicator size="large" color="#fff" />
 					</View>

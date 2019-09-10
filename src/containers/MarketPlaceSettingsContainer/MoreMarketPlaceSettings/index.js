@@ -6,7 +6,10 @@ import { Ionicons } from "react-native-vector-icons";
 import { Block, Text, Icon } from "../../../components";
 import { theme } from "../../../constants";
 import MoreMarketPlaceSetting from "../../../screens/MarketPlaceSettings/MoreSettings";
-import { requestDisableMarketplaceAction } from "../../../modules/marketPlace/actions";
+import {
+	requestDisableMarketplaceAction,
+	requestDeleteMarketplaceAction
+} from "../../../modules/marketPlace/actions";
 
 class MoreMarketPlaceSettingsContainer extends PureComponent {
 	static navigationOptions = ({ navigation }) => ({
@@ -50,6 +53,7 @@ class MoreMarketPlaceSettingsContainer extends PureComponent {
 			marketPlaceAdmins,
 			requestDisableMarketplaceAction,
 			requestGetStaffsMarketplaceAction,
+			requestDeleteMarketplaceAction,
 			serviceDetailsError
 		} = this.props;
 		return (
@@ -62,6 +66,7 @@ class MoreMarketPlaceSettingsContainer extends PureComponent {
 				currentMarketplace={currentMarketplace}
 				userdata={userdata}
 				requestDisableMarketplaceAction={requestDisableMarketplaceAction}
+				requestDeleteMarketplaceAction={requestDeleteMarketplaceAction}
 				marketPlaceAdmins={marketPlaceAdmins}
 				serviceDetailsLoading={serviceDetailsLoading}
 				serviceDetailsRequest={serviceDetailsRequest}
@@ -93,7 +98,8 @@ const mapStateToProps = ({
 };
 
 const mapDispatchToProps = {
-	requestDisableMarketplaceAction
+	requestDisableMarketplaceAction,
+	requestDeleteMarketplaceAction
 };
 
 export default connect(

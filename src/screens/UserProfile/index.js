@@ -20,30 +20,6 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 const { width } = Dimensions.get("window");
 
 class UserProfile extends Component {
-	static navigationOptions = ({ navigation }) => ({
-		headerLeftContainerStyle: {
-			paddingLeft: 24
-		},
-		headerRightContainerStyle: {
-			paddingRight: 24
-		},
-		headerLeft: (
-			<TouchableOpacity onPress={navigation.openDrawer}>
-				<Icon menu />
-			</TouchableOpacity>
-		),
-		headerRight: (
-			<TouchableOpacity>
-				<Icon notification />
-			</TouchableOpacity>
-		),
-		headerTitle: (
-			<Block row middle>
-				<Text h4>Overview</Text>
-			</Block>
-		)
-	});
-
 	constructor(props) {
 		super(props);
 		this.navigateTo = this.navigateTo.bind(this);

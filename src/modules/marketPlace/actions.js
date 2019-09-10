@@ -42,3 +42,11 @@ export const requestDisableMarketplaceAction = createAction(
 export const receiveDisableMarketplaceAction = createAction(
 	"RECEIVE_DISABLE_MARKETPLACE_ACTION"
 );
+
+// delete marketplace action
+export const requestDeleteMarketplaceAction = createAction(
+	"REQUEST_DELETE_MARKETPLACE_ACTION"
+);
+export const receiveDeleteMarketplaceAction = createAction(
+	"RECEIVE_DELETE_MARKETPLACE_ACTION"
+);

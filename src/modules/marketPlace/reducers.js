@@ -12,7 +12,9 @@ import {
 	requestGetUserMarketplacePendingStaffAction,
 	receiveGetUserMarketplacePendingStaffAction,
 	receiveDisableMarketplaceAction,
-	requestDisableMarketplaceAction
+	requestDisableMarketplaceAction,
+	requestDeleteMarketplaceAction,
+	receiveDeleteMarketplaceAction
 } from "./actions";
 
 const defaultState = {
@@ -28,7 +30,8 @@ export const marketplaceStatus = {
 	addMarketPlace: "addMarketPlace",
 	getMarketPlace: "getMarketPlace",
 	marketPlacePendingAdmins: "marketPlacePendingAdmins",
-	disableMarketplace: "disableMarketplace"
+	disableMarketplace: "disableMarketplace",
+	deleteMarketplace: "deleteMarketplace"
 };
 
 export const marketplaceReducer = handleActions(
@@ -191,6 +194,36 @@ export const marketplaceReducer = handleActions(
 		[receiveDisableMarketplaceAction]: {
 			next(state, action) {
 				const { payload } = action;
+
+				return {
+					...state,
+					isLoading: false,
+					request: "",
+					error: payload.success
+				};
+			},
+			throw(state, action) {
+				const { payload } = action;
+				return {
+					...state,
+					isLoading: payload.success,
+					request: "",
+					error: payload.success
+				};
+			}
+		},
+		[requestDeleteMarketplaceAction]: (state, action) => {
+			return {
+				...state,
+				isLoading: true,
+				error: false,
+				request: marketplaceStatus.deleteMarketplace
+			};
+		},
+		[receiveDeleteMarketplaceAction]: {
+			next(state, action) {
+				const { payload } = action;
+				console.log("receiveDeleteMarketplaceAction payload ", payload);
 
 				return {
 					...state,

@@ -134,6 +134,7 @@ class MarketPlaceDetails extends Component {
 			marketPlaceName,
 			description
 		} = currentMarketplace;
+		if (Object.keys(currentMarketplace).length <= 0) return null;
 		const isAdmin = marketPlaceAdmins.some(el => {
 			return el.person._id === userdata._id;
 		});

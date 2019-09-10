@@ -6,7 +6,8 @@ import {
 	getUserMarketplaceApi,
 	getUserMarketplacePendingAdminApi,
 	getUserMarketplacePendingStaffApi,
-	disableMarketplaceApi
+	disableMarketplaceApi,
+	deleteMarketplaceApi
 } from "./api";
 import {
 	requestAddMarketplaceAction,
@@ -20,7 +21,9 @@ import {
 	requestGetUserMarketplacePendingStaffAction,
 	receiveGetUserMarketplacePendingStaffAction,
 	requestDisableMarketplaceAction,
-	receiveDisableMarketplaceAction
+	receiveDisableMarketplaceAction,
+	requestDeleteMarketplaceAction,
+	receiveDeleteMarketplaceAction
 } from "./actions";
 import { requestSetCurrentMarketplace } from "../MarketplaceDetails/actions";
 
@@ -160,5 +163,34 @@ export function* requestDisableMarketplaceActionSaga() {
 	yield takeLeading(
 		requestDisableMarketplaceAction,
 		requestDisableMarketplaceWatcher
+	);
+}
+
+function* requestDeleteMarketplaceWatcher({ payload }) {
+	try {
+		const { adminId, marketPlaceId, navigation, navigateTo } = payload;
+		const result = yield call(deleteMarketplaceApi, adminId, marketPlaceId);
+		if (result.success) {
+			yield put(receiveDeleteMarketplaceAction(result));
+			yield put(requestGetUserMarketplaceAction());
+			yield put(
+				requestSetCurrentMarketplace({
+					marketPlace: {},
+					navigation,
+					navigateTo
+				})
+			);
+		} else {
+			yield put(receiveDeleteMarketplaceAction(result));
+		}
+	} catch (error) {
+		yield put(receiveDeleteMarketplaceAction(error));
+	}
+}
+
+export function* requestDeleteMarketplaceActionSaga() {
+	yield takeLeading(
+		requestDeleteMarketplaceAction,
+		requestDeleteMarketplaceWatcher
 	);
 }
