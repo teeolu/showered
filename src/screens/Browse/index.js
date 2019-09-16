@@ -137,20 +137,14 @@ class Browse extends Component {
 				}}>
 				<View
 					style={{
-						flex: 0.3,
-						flexDirection: "row",
-						alignItems: "center",
-						justifyContent: "space-between",
+						flex: 0.2,
 						...styles.header
 					}}>
-					<Text h1 bold>
-						Browse
-					</Text>
 					<View
 						style={{
 							flexDirection: "row",
 							alignItems: "center",
-							justifyContent: "space-between"
+							justifyContent: "flex-end"
 						}}>
 						<TouchableOpacity
 							style={{
@@ -162,13 +156,13 @@ class Browse extends Component {
 								justifyContent: "space-between",
 								marginVertical: theme.sizes.padding / 3
 							}}>
+							<Text style={{ paddingHorizontal: 10 }}>Sort</Text>
 							<SortDropdown
 								filters={this.state}
 								onPressFilter={this.onPressFilter}
 								triggerFilter={this.triggerFilter}
 								clearFilter={this.clearFilter}
 							/>
-							<Text style={{ paddingHorizontal: 10 }}>Sort</Text>
 						</TouchableOpacity>
 						<TouchableOpacity
 							style={{
@@ -180,15 +174,18 @@ class Browse extends Component {
 								justifyContent: "space-between",
 								marginVertical: theme.sizes.padding / 3
 							}}>
+							<Text style={{ paddingHorizontal: 10 }}>Filter</Text>
 							<FilterDropdown
 								filters={this.state.filters}
 								onPressFilter={this.onPressFilter}
 								triggerFilter={this.triggerFilter}
 								clearFilter={this.clearFilter}
 							/>
-							<Text style={{ paddingHorizontal: 10 }}>Filter</Text>
 						</TouchableOpacity>
 					</View>
+					<Text h1 bold>
+						Browse
+					</Text>
 				</View>
 
 				<View
@@ -256,7 +253,7 @@ const styles = StyleSheet.create({
 		paddingBottom: theme.sizes.base
 	},
 	active: {
-		borderBottomColor: theme.colors.secondary,
+		borderBottomColor: theme.colors.lightblue,
 		borderBottomWidth: 3
 	},
 	categories: {
