@@ -14,17 +14,21 @@ import {
 import {
 	FontAwesome,
 	MaterialIcons,
+	Entypo,
 	Ionicons
 } from "react-native-vector-icons";
 
 import { theme } from "../../constants";
 import { articlesInfo } from "../../constants/mocks";
 import { Card, Block, Text } from "../../components";
-import { serviceDetailsStatus } from "../../modules/MarketplaceDetails/reducers";
+import { serviceDetailsStatus } from "../../modules/MarketplaceServiceDetails/reducers";
 
 const { width, height } = Dimensions.get("window");
 
 class MarketPlaceDetails extends Component {
+	state = {
+		showInfo: false
+	};
 	scrollX = new Animated.Value(0);
 
 	componentDidMount() {
@@ -36,6 +40,13 @@ class MarketPlaceDetails extends Component {
 			requestGetUserMarketplacePendingAdminAction,
 			currentMarketplace: { _id }
 		} = this.props;
+
+		setTimeout(() => {
+			this.setState({ showInfo: true });
+		}, 1000);
+		setTimeout(() => {
+			this.setState({ showInfo: false });
+		}, 4000);
 		requestGetMarketplaceDetailsAction({ marketPlaceId: _id });
 		requestGetAdminsMarketplaceAction({ marketPlaceId: _id });
 		requestGetStaffsMarketplaceAction({ marketPlaceId: _id });
@@ -164,19 +175,60 @@ class MarketPlaceDetails extends Component {
 									resizeMode="cover"
 									style={{
 										width,
-										height: width * 0.65,
-										display: "flex",
-										alignContent: "center"
+										height: width * 0.65
 									}}>
-									<TouchableOpacity
-										style={{ margin: theme.sizes.margin }}
-										onPress={() => navigation.pop()}>
-										<Ionicons
-											name="ios-arrow-round-back"
-											color={theme.colors.blue}
-											size={theme.sizes.font * 4}
-										/>
-									</TouchableOpacity>
+									<View
+										style={{
+											...styles.flex,
+											...styles.row,
+											justifyContent: "space-between",
+											alignContent: "center"
+										}}>
+										<TouchableOpacity
+											style={{ margin: theme.sizes.margin }}
+											onPress={() => navigation.pop()}>
+											<Ionicons
+												name="ios-arrow-round-back"
+												color={theme.colors.white}
+												size={theme.sizes.font * 4}
+											/>
+										</TouchableOpacity>
+										<View
+											style={{
+												marginTop: theme.sizes.margin * 1.5,
+												marginRight: theme.sizes.margin,
+												...styles.flex,
+												...styles.row,
+												justifyContent: "flex-end",
+												alignContent: "center"
+											}}>
+											{this.state.showInfo && !currentMarketplace.published && (
+												<View
+													style={{
+														backgroundColor: theme.colors.white,
+														height: 40,
+														width: "auto",
+														borderRadius: 78,
+														...styles.flex,
+														...styles.row,
+														justifyContent: "center",
+														alignItems: "center"
+													}}>
+													<Text
+														style={{
+															fontSize: 14
+														}}>
+														marketplace is not public
+													</Text>
+												</View>
+											)}
+											<Entypo
+												name="info-with-circle"
+												color={theme.colors.white}
+												size={theme.sizes.font * 3}
+											/>
+										</View>
+									</View>
 								</ImageBackground>
 							))}
 						</ScrollView>

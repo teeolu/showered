@@ -25,7 +25,7 @@ import {
 	requestDeleteMarketplaceAction,
 	receiveDeleteMarketplaceAction
 } from "./actions";
-import { requestSetCurrentMarketplace } from "../MarketplaceDetails/actions";
+import { requestSetCurrentMarketplace } from "../MarketplaceServiceDetails/actions";
 
 function* addMarketplaceActionWatcher({ payload }) {
 	try {
@@ -38,6 +38,11 @@ function* addMarketplaceActionWatcher({ payload }) {
 					marketPlace: result.payload.docs,
 					navigation,
 					navigateTo
+				})
+			);
+			yield put(
+				requestGetUserMarketplaceAction({
+					marketPlaceId: dataToSubmit.marketPlaceId
 				})
 			);
 		} else {

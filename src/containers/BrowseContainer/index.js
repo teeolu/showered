@@ -1,32 +1,60 @@
-import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
+import React, { PureComponent } from "react";
+import { connect } from "react-redux";
 
-import { requestLoginAction } from '../../modules/auth/action';
-import Browse from '../../screens/Browse';
+import Browse from "../../screens/Browse";
+import { requestGetAllBrowseServiceDetailsAction } from "../../modules/browse/actions";
 
 class BrowseContainer extends PureComponent {
-    render() {
-        const { requestLoginAction, isLoading, request } = this.props;
-        return (
-            <Browse
-                requestLoginAction={requestLoginAction}
-                isLoading={isLoading}
-                request={request}
-                {...this.props} />
-        )
-    }
+	render() {
+		const {
+			requestLoginAction,
+			requestGetAllBrowseServiceDetailsAction,
+			isLoading,
+			request,
+			allServiceDetailsData,
+			allServiceDetailsFilterData
+		} = this.props;
+
+		return (
+			<Browse
+				requestLoginAction={requestLoginAction}
+				allServiceDetailsFilterData={allServiceDetailsFilterData}
+				requestGetAllBrowseServiceDetailsAction={
+					requestGetAllBrowseServiceDetailsAction
+				}
+				allServiceDetailsData={allServiceDetailsData}
+				isLoading={isLoading}
+				request={request}
+				{...this.props}
+			/>
+		);
+	}
 }
 
-const mapStateToProps = ({ authReducer }) => {
-    const { isLoading, request } = authReducer;
-    return {
-        isLoading,
-        request
-    }
-}
-
-const mapDispatchToProps = {
-    requestLoginAction
+const mapStateToProps = ({ browseReducer }) => {
+	const {
+		isLoading,
+		request,
+		error,
+		errorMessage,
+		allServiceDetailsData,
+		allServiceDetailsFilterData
+	} = browseReducer;
+	return {
+		isLoading,
+		request,
+		error,
+		errorMessage,
+		allServiceDetailsData,
+		allServiceDetailsFilterData
+	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BrowseContainer);
+const mapDispatchToProps = {
+	requestGetAllBrowseServiceDetailsAction
+};
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(BrowseContainer);

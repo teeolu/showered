@@ -5,7 +5,7 @@ import { TouchableOpacity } from "react-native";
 import { requestGetUserMarketplaceAction } from "../../modules/marketPlace/actions";
 import UserProfile from "../../screens/UserProfile";
 import { Block, Text, Icon } from "../../components";
-import { requestSetCurrentMarketplace } from "../../modules/MarketplaceDetails/actions";
+import { requestSetCurrentMarketplace } from "../../modules/MarketplaceServiceDetails/actions";
 
 class UserProfileContainer extends PureComponent {
 	static navigationOptions = ({ navigation }) => ({

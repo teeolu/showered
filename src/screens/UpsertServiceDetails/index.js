@@ -15,34 +15,10 @@ import ServiceDetailsPrice from "./ServiceDetailsPrice";
 import UploadServiceDetailsImage from "./ServiceDetailsImage";
 import { validateInput } from "../../utils/inputFunctions";
 import { marketplaceStatus } from "../../modules/marketPlace/reducers";
-import { serviceDetailsStatus } from "../../modules/MarketplaceDetails/reducers";
+import { serviceDetailsStatus } from "../../modules/MarketplaceServiceDetails/reducers";
 const { width } = Dimensions.get("window");
 
 class UpsertServiceDetails extends Component {
-	static navigationOptions = ({ navigation }) => ({
-		headerLeftContainerStyle: {
-			paddingLeft: 24
-		},
-		headerRightContainerStyle: {
-			paddingRight: 24
-		},
-		headerLeft: (
-			<TouchableOpacity onPress={navigation.openDrawer}>
-				<Icon menu />
-			</TouchableOpacity>
-		),
-		headerRight: (
-			<TouchableOpacity>
-				<Icon notification />
-			</TouchableOpacity>
-		),
-		headerTitle: (
-			<Block row middle>
-				<Text h4>Overview</Text>
-			</Block>
-		)
-	});
-
 	constructor(props, context) {
 		super(props);
 		this.scrollView;
@@ -53,6 +29,7 @@ class UpsertServiceDetails extends Component {
 			description,
 			price,
 			serviceName,
+			tags,
 			uploadedImageArray
 		} = item;
 		this.state = {
@@ -75,9 +52,15 @@ class UpsertServiceDetails extends Component {
 					error: edit ? false : true,
 					errorMessage: "",
 					rules: {
-						maxLength: 40,
 						minLength: 3
 					}
+				},
+				tags: {
+					value: edit ? tags[-1] : "",
+					tagsArray: edit ? tags : [],
+					error: false,
+					errorMessage: "",
+					rules: {}
 				},
 				price: {
 					value: edit ? price.toString() : "",
@@ -88,12 +71,10 @@ class UpsertServiceDetails extends Component {
 					}
 				},
 				delivery: {
-					value: edit ? "false" : "",
-					error: edit ? false : true,
+					value: edit ? edit : false,
+					error: false,
 					errorMessage: "",
-					rules: {
-						required: false
-					}
+					rules: {}
 				},
 				uploadedImageArray: {
 					error: edit ? false : true,
@@ -116,8 +97,46 @@ class UpsertServiceDetails extends Component {
 		}
 	};
 
-	handleChange = type => text => {
+	handleChange = (type, yesNo) => text => {
 		let newState = { ...this.state };
+		if (type === "delivery") {
+			newState.fields[type].value = yesNo;
+			return this.setState(prevState => ({
+				...prevState,
+				...newState,
+				formError: false,
+				errorMessage: ""
+			}));
+		}
+
+		if (type === "tags") {
+			var newText = text.split(",");
+			newText.length >= 2
+				? (newState.fields[type] = {
+						...newState.fields[type],
+						value: newText[newText.length - 1],
+						tagsArray: [
+							...newState.fields[type].tagsArray,
+							...newText.slice(0, -1)
+						],
+						error: false,
+						errorMessage: ""
+				  })
+				: (newState.fields[type] = {
+						...newState.fields[type],
+						value: newText[newText.length - 1],
+						tagsArray: [...newState.fields[type].tagsArray],
+						error: false,
+						errorMessage: ""
+				  });
+
+			return this.setState(prevState => ({
+				...prevState,
+				...newState,
+				formError: false,
+				errorMessage: ""
+			}));
+		}
 		newState.fields[type] = {
 			...newState.fields[type],
 			value: text,
@@ -150,13 +169,13 @@ class UpsertServiceDetails extends Component {
 			navigation
 		} = this.props;
 		let item = navigation.getParam("item", {});
-		const marketPlaceId = navigation.getParam("marketPlaceId");
+		const { _id, category } = this.props.currentMarketplace;
 
 		var { error, errorMessage } = validateInput(this.state.fields);
 		if (error) {
 			return this.setState({
 				formError: true,
-				errorMessage: "Some of your input is empty or invalid"
+				errorMessage: errorMessage
 			});
 		}
 
@@ -169,7 +188,9 @@ class UpsertServiceDetails extends Component {
 			return requestEditMarketplaceServiceDetailsAction({
 				dataToSubmit: {
 					...item,
-					...dataToSubmit
+					...dataToSubmit,
+					tags: this.state.fields.tags.tagsArray,
+					category
 				},
 				_id: item._id,
 				navigation,
@@ -180,8 +201,9 @@ class UpsertServiceDetails extends Component {
 		requestAddMarketplaceServiceDetailsAction({
 			dataToSubmit: {
 				...dataToSubmit,
-				delivery: false,
-				marketPlaceId
+				tags: this.state.fields.tags.tagsArray,
+				category,
+				marketPlaceId: _id
 			},
 			navigation,
 			navigateTo: "ServiceDetailsInfo"
@@ -214,6 +236,16 @@ class UpsertServiceDetails extends Component {
 		this.setState(prevState => ({
 			currentIndex: prevState.currentIndex >= 0 ? newIndex : 0
 		}));
+	};
+
+	removeTag = (index, tag) => {
+		if (this.state.fields.tags.tagsArray[index] === tag) {
+			let newState = { ...this.state };
+			newState.fields.tags.tagsArray.splice(index, 1);
+			this.setState({
+				...newState
+			});
+		}
 	};
 
 	render() {
@@ -273,6 +305,7 @@ class UpsertServiceDetails extends Component {
 							styles={styles}
 							handleChange={this.handleChange}
 							inputInfo={this.state.fields}
+							removeTag={this.removeTag}
 							blur={arg => this.blurReact(arg)}
 						/>
 						<UploadServiceDetailsImage

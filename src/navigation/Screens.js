@@ -8,7 +8,7 @@ import Map from "../screens/Map";
 import Vehicles from "../screens/Vehicles";
 import MarketPlaceContainer from "../containers/UpsertMarketPlaceContainer";
 import BrowseContainer from "../containers/BrowseContainer";
-import CategoryDetailsContainer from "../containers/MarketPlaceDetailsContainer";
+import MarketplaceDetailsContainer from "../containers/MarketPlaceDetailsContainer";
 import DrawerComponent from "../components/DrawerComponent";
 import UserProfileContainer from "../containers/UserProfileContainer";
 import MarketPlaceServiceDetailsContainer from "../containers/UpsertServiceDetailsContainer";
@@ -53,9 +53,9 @@ const MarketPlaceSettingsStack = createStackNavigator({
 	MoreMarketplaceSettingStack
 });
 
-const CategoryDetailStack = createStackNavigator(
+const MarketplaceDetailstack = createStackNavigator(
 	{
-		CategoryDetails: CategoryDetailsContainer,
+		MarketplaceDetails: MarketplaceDetailsContainer,
 		MarketPlaceSettingsStack,
 		ServiceDetails: MarketPlaceServiceDetailsContainer,
 		ServiceDetailsInfo: ServiceDetailsContainer
@@ -67,20 +67,30 @@ const CategoryDetailStack = createStackNavigator(
 
 const MarketPlaceDetailsStack = createStackNavigator(
 	{
-		CategoryDetailStack
+		MarketplaceDetailstack
 	},
 	{
 		headerMode: "none"
 	}
 );
 
-const BrowseStack = createStackNavigator({
-	Browse: BrowseContainer
-});
+const BrowseStack = createStackNavigator(
+	{
+		Browse: BrowseContainer
+	},
+	{
+		headerMode: "none"
+	}
+);
 
 const OverviewStack = createStackNavigator({
 	Overview: OverviewContainer,
-	BrowseStack
+	BrowseStack: {
+		screen: BrowseStack,
+		headerOptions: {
+			headerMode: "none"
+		}
+	}
 });
 
 const UserProfileStack = createStackNavigator(

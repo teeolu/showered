@@ -31,7 +31,7 @@ import {
 import {
 	requestGetAdminsMarketplaceAction,
 	requestGetStaffsMarketplaceAction
-} from "../MarketplaceDetails/actions";
+} from "../MarketplaceServiceDetails/actions";
 import {
 	requestGetUserMarketplacePendingAdminAction,
 	requestGetUserMarketplacePendingStaffAction

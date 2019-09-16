@@ -5,7 +5,7 @@ import {
 	requestGetMarketplaceDetailsAction,
 	requestGetAdminsMarketplaceAction,
 	requestGetStaffsMarketplaceAction
-} from "../../modules/MarketplaceDetails/actions";
+} from "../../modules/MarketplaceServiceDetails/actions";
 import {
 	requestGetUserMarketplacePendingAdminAction,
 	requestGetUserMarketplacePendingStaffAction

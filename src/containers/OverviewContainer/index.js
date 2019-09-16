@@ -4,7 +4,7 @@ import { TouchableOpacity } from "react-native";
 
 import { Block, Text, Icon } from "../../components";
 import Overview from "../../screens/Overview/Overview";
-import { requestSetCurrentMarketplace } from "../../modules/MarketplaceDetails/actions";
+import { requestSetCurrentMarketplace } from "../../modules/MarketplaceServiceDetails/actions";
 
 class OverviewContainer extends Component {
 	static navigationOptions = ({ navigation }) => ({

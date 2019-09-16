@@ -99,7 +99,7 @@ class UserProfile extends Component {
 		this.props.requestSetCurrentMarketplace({
 			marketPlace: marketPlace.marketPlaceAsAdmin,
 			navigation: this.props.navigation,
-			navigateTo: "CategoryDetails"
+			navigateTo: "MarketplaceDetails"
 		});
 	};
 
@@ -185,11 +185,20 @@ class UserProfile extends Component {
 															</Text>
 														</Block>
 														<Block>
+															<Text
+																paragraph
+																right
+																color={
+																	item.marketPlaceAsAdmin.publish
+																		? theme.colors.green
+																		: theme.colors.red
+																}>
+																{item.marketPlaceAsAdmin.publish
+																	? "active"
+																	: "inactive"}
+															</Text>
 															<Text paragraph right color="black">
 																$6,432
-															</Text>
-															<Text paragraph right color="gray">
-																1,232 miles
 															</Text>
 														</Block>
 													</Block>
