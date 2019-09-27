@@ -1,26 +1,24 @@
-import React, { Component } from 'react';
-import { NavigationActions } from 'react-navigation';
-import { Text, View, StyleSheet, ImageBackground, Image } from 'react-native';
+import React, { Component } from "react";
+import { NavigationActions } from "react-navigation";
+import { Text, View, StyleSheet, ImageBackground, Image } from "react-native";
 
-import { theme } from '../constants';
-import { Button } from '.';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { theme } from "../constants";
+import { Button } from ".";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const routes = [
-	{ navigateTo: "OverviewStack", screen: "Home" },
+	{ navigateTo: "Overview", screen: "Home" },
 	{ navigateTo: "Browse", screen: "Browse places" },
 	{ navigateTo: "Settings", screen: "Settings" }
-]
+];
 
 export default class DrawerComponent extends Component {
-
-	navigateToScreen = (route) => (
-		() => {
-			const navigateAction = NavigationActions.navigate({
-				routeName: route
-			});
-			this.props.navigation.dispatch(navigateAction);
-		})
+	navigateToScreen = route => () => {
+		const navigateAction = NavigationActions.navigate({
+			routeName: route
+		});
+		this.props.navigation.dispatch(navigateAction);
+	};
 
 	render() {
 		return (
@@ -28,28 +26,39 @@ export default class DrawerComponent extends Component {
 				<View style={styles.headerContainer}>
 					<ImageBackground
 						source={{
-							uri: 'https://source.unsplash.com/1600x900/?joy,love,happiness'
+							uri: "https://source.unsplash.com/1600x900/?joy,love,happiness"
 						}}
 						style={{
-							flex: 1, width: 280, justifyContent: 'flex-end'
-						}} >
+							flex: 1,
+							width: 280,
+							justifyContent: "flex-end"
+						}}>
 						<TouchableWithoutFeedback
-							onPress={this.navigateToScreen("UserProfileStack")}
-							style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+							onPress={this.navigateToScreen("UserProfile")}
+							style={{
+								display: "flex",
+								flexDirection: "row",
+								alignItems: "center"
+							}}>
 							<Image
 								source={{
-									uri: 'https://source.unsplash.com/1600x900/?female'
+									uri: "https://source.unsplash.com/1600x900/?female"
 								}}
 								style={{
 									width: 60,
 									height: 60,
 									borderRadius: 30,
-									backgroundColor: 'red',
+									backgroundColor: "red",
 									margin: 10
-								}} />
+								}}
+							/>
 							<View>
-								<Text h3 style={{ color: '#fff', fontSize: 18 }}>Olusola Oyinloye</Text>
-								<Text h3 style={{ color: '#fff', fontSize: 12 }}>View profile</Text>
+								<Text h3 style={{ color: "#fff", fontSize: 18 }}>
+									Olusola Oyinloye
+								</Text>
+								<Text h3 style={{ color: "#fff", fontSize: 12 }}>
+									View profile
+								</Text>
 							</View>
 						</TouchableWithoutFeedback>
 					</ImageBackground>
@@ -58,9 +67,19 @@ export default class DrawerComponent extends Component {
 					{routes.map(route => (
 						<View
 							key={route.navigateTo}
-							style={[styles.screenStyle, (this.props.activeItemKey == route.navigateTo) ? styles.activeBackgroundColor : null]}>
+							style={[
+								styles.screenStyle,
+								this.props.activeItemKey == route.navigateTo
+									? styles.activeBackgroundColor
+									: null
+							]}>
 							<Text
-								style={[styles.screenTextStyle, (this.props.activeItemKey == route.navigateTo) ? styles.selectedTextStyle : null]}
+								style={[
+									styles.screenTextStyle,
+									this.props.activeItemKey == route.navigateTo
+										? styles.selectedTextStyle
+										: null
+								]}
 								onPress={this.navigateToScreen(route.navigateTo)}>
 								{route.screen}
 							</Text>
@@ -68,44 +87,46 @@ export default class DrawerComponent extends Component {
 					))}
 					<Button
 						full
-						style={{ marginBottom: 12, width: '100%' }}
-						onPress={this.navigateToScreen("MarketPlaceContainer")}
+						style={{ marginBottom: 12, width: "100%" }}
+						onPress={this.navigateToScreen("UpsertMarketPlaceContainer")}
 						isLoading={false}>
-						<Text style={{ color: 'white' }} button>Add a market place</Text>
+						<Text style={{ color: "white" }} button>
+							Add a market place
+						</Text>
 					</Button>
 				</View>
 			</View>
-		)
+		);
 	}
 }
 
 const styles = StyleSheet.create({
 	container: {
-		alignItems: 'center',
+		alignItems: "center"
 	},
 	headerContainer: {
-		height: 200,
+		height: 200
 	},
 	headerText: {
-		color: '#fff8f8',
+		color: "#fff8f8"
 	},
 	screenContainer: {
 		padding: theme.sizes.base,
 		backgroundColor: theme.colors.white,
-		width: '100%',
+		width: "100%"
 	},
 	screenStyle: {
-		flexDirection: 'row',
-		alignItems: 'center',
+		flexDirection: "row",
+		alignItems: "center",
 		marginBottom: theme.sizes.base,
-		width: '100%'
+		width: "100%"
 	},
 	screenTextStyle: {
 		fontSize: 20,
-		textAlign: 'center'
+		textAlign: "center"
 	},
 	selectedTextStyle: {
-		color: '#00adff'
+		color: "#00adff"
 	},
 	activeBackgroundColor: {
 		borderRadius: theme.sizes.radius,

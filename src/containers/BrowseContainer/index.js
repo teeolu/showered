@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 
 import Browse from "../../screens/Browse";
 import { requestGetAllBrowseServiceDetailsAction } from "../../modules/browse/actions";
+import { requestSetCurrentServiceDetails } from "../../modules/MarketplaceServiceDetails/actions";
 
 class BrowseContainer extends PureComponent {
 	render() {
@@ -12,12 +13,14 @@ class BrowseContainer extends PureComponent {
 			isLoading,
 			request,
 			allServiceDetailsData,
-			allServiceDetailsFilterData
+			allServiceDetailsFilterData,
+			requestSetCurrentServiceDetails
 		} = this.props;
-
 		return (
 			<Browse
+				{...this.props}
 				requestLoginAction={requestLoginAction}
+				requestSetCurrentServiceDetails={requestSetCurrentServiceDetails}
 				allServiceDetailsFilterData={allServiceDetailsFilterData}
 				requestGetAllBrowseServiceDetailsAction={
 					requestGetAllBrowseServiceDetailsAction
@@ -25,7 +28,6 @@ class BrowseContainer extends PureComponent {
 				allServiceDetailsData={allServiceDetailsData}
 				isLoading={isLoading}
 				request={request}
-				{...this.props}
 			/>
 		);
 	}
@@ -51,7 +53,8 @@ const mapStateToProps = ({ browseReducer }) => {
 };
 
 const mapDispatchToProps = {
-	requestGetAllBrowseServiceDetailsAction
+	requestGetAllBrowseServiceDetailsAction,
+	requestSetCurrentServiceDetails
 };
 
 export default connect(

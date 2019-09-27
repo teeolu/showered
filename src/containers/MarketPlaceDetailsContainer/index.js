@@ -4,7 +4,8 @@ import MarketPlaceDetails from "../../screens/MarketPlaceDetails";
 import {
 	requestGetMarketplaceDetailsAction,
 	requestGetAdminsMarketplaceAction,
-	requestGetStaffsMarketplaceAction
+	requestGetStaffsMarketplaceAction,
+	requestSetCurrentServiceDetails
 } from "../../modules/MarketplaceServiceDetails/actions";
 import {
 	requestGetUserMarketplacePendingAdminAction,
@@ -20,6 +21,8 @@ class MarketPlaceDetailsContainer extends PureComponent {
 			serviceDetailsRequest,
 			marketplaceServiceDetailsData,
 			requestGetAdminsMarketplaceAction,
+			requestSetCurrentServiceDetails,
+			marketPlaceAdmins,
 			currentMarketplace,
 			requestGetStaffsMarketplaceAction,
 			serviceDetailsError,
@@ -27,11 +30,14 @@ class MarketPlaceDetailsContainer extends PureComponent {
 		} = this.props;
 		return (
 			<MarketPlaceDetails
+				{...this.props}
 				userdata={userdata}
 				serviceDetailsLoading={serviceDetailsLoading}
+				requestSetCurrentServiceDetails={requestSetCurrentServiceDetails}
 				requestGetUserMarketplacePendingStaffAction={
 					requestGetUserMarketplacePendingStaffAction
 				}
+				marketPlaceAdmins={marketPlaceAdmins}
 				requestGetUserMarketplacePendingAdminAction={
 					requestGetUserMarketplacePendingAdminAction
 				}
@@ -42,7 +48,6 @@ class MarketPlaceDetailsContainer extends PureComponent {
 				serviceDetailsError={serviceDetailsError}
 				currentMarketplace={currentMarketplace}
 				requestGetMarketplaceDetailsAction={requestGetMarketplaceDetailsAction}
-				{...this.props}
 			/>
 		);
 	}
@@ -66,7 +71,8 @@ const mapDispatchToProps = {
 	requestGetAdminsMarketplaceAction,
 	requestGetStaffsMarketplaceAction,
 	requestGetUserMarketplacePendingAdminAction,
-	requestGetUserMarketplacePendingStaffAction
+	requestGetUserMarketplacePendingStaffAction,
+	requestSetCurrentServiceDetails
 };
 
 export default connect(

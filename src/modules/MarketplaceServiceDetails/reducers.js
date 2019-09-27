@@ -11,7 +11,8 @@ import {
 	receiveGetAdminsMarketplaceAction,
 	requestGetStaffsMarketplaceAction,
 	receiveGetStaffsMarketplaceAction,
-	receiveSetCurrentMarketplace
+	receiveSetCurrentMarketplace,
+	receiveSetCurrentServiceDetails
 } from "./actions";
 
 const defaultState = {
@@ -21,7 +22,8 @@ const defaultState = {
 	marketplaceServiceDetailsData: [],
 	marketPlaceAdmins: [],
 	marketPlaceStaffs: [],
-	currentMarketplace: {}
+	currentMarketplace: {},
+	currentServiceDetails: {}
 };
 
 export const serviceDetailsStatus = {
@@ -189,6 +191,25 @@ export const serviceDetailsReducer = handleActions(
 					...state,
 					isLoading: false,
 					currentMarketplace: {},
+					error: true
+				};
+			}
+		},
+		[receiveSetCurrentServiceDetails]: {
+			next(state, action) {
+				const { payload } = action;
+				return {
+					...state,
+					isLoading: false,
+					currentServiceDetails: payload
+				};
+			},
+			throw(state, action) {
+				const { payload } = action;
+				return {
+					...state,
+					isLoading: false,
+					currentServiceDetails: {},
 					error: true
 				};
 			}

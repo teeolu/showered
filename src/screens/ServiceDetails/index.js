@@ -20,28 +20,15 @@ class ServiceDetails extends Component {
 		header: null
 	};
 
-	constructor(props) {
-		super(props);
-
-		this.navigateToBrowse = this.navigateToBrowse.bind(this);
-	}
-
-	navigateToBrowse = () => {
-		this.props.navigation.navigate("Browse");
-	};
-
 	render() {
-		const { navigation } = this.props,
+		const { navigation, currentServiceDetails } = this.props,
 			{
-				delivery,
-				description,
 				marketPlaceId,
-				isStaff,
-				price,
 				serviceName,
 				uploadedImageArray
-			} = navigation.getParam("item", {}),
+			} = currentServiceDetails,
 			authorised = navigation.getParam("authorized", false);
+
 		return (
 			<SafeAreaView style={styles.overview}>
 				<ImageBackground

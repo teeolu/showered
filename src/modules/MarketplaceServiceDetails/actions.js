@@ -36,6 +36,14 @@ export const receiveSetCurrentMarketplace = createAction(
 	"RECEIVE_SET_CURRENT_MARKETPLACE"
 );
 
+// Set current market place service details
+export const requestSetCurrentServiceDetails = createAction(
+	"REQUEST_SET_CURRENT_SERVICE_DETAILS"
+);
+export const receiveSetCurrentServiceDetails = createAction(
+	"RECEIVE_SET_CURRENT_SERVICE_DETAILS"
+);
+
 // get staff marketplace
 export const requestGetStaffsMarketplaceAction = createAction(
 	"REQUEST_GET_STAFFS_MARKETPLACE_ACTION"

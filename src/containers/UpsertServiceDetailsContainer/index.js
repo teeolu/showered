@@ -16,7 +16,7 @@ import {
 } from "../../modules/MarketplaceServiceDetails/actions";
 import MarketPlaceServiceDetails from "../../screens/UpsertServiceDetails";
 
-class MarketPlaceServiceDetailsContainer extends PureComponent {
+class UpsertServiceDetailsContainer extends PureComponent {
 	static navigationOptions = ({ navigation }) => ({
 		headerLeftContainerStyle: {
 			paddingLeft: 24
@@ -108,4 +108,4 @@ const mapDispatchToProps = {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(MarketPlaceServiceDetailsContainer);
+)(UpsertServiceDetailsContainer);

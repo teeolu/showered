@@ -3,6 +3,7 @@ import {
 	Dimensions,
 	StyleSheet,
 	ScrollView,
+	RefreshControl,
 	View,
 	TouchableOpacity
 } from "react-native";
@@ -13,12 +14,14 @@ import { theme, mocks } from "../../constants";
 import { categoryNames } from "../UpsertMarketPlace/SelectCategory";
 import FilterDropdown from "../../components/FilterDropdown";
 import SortDropdown from "../../components/SortDropdown";
+import { browseStatus } from "../../modules/browse/reducers";
 
 const { width } = Dimensions.get("window");
 
 class Browse extends Component {
 	state = {
 		isFiltering: false,
+		refreshing: false,
 		active: "1",
 		limit: 30,
 		sortBy: {},
@@ -71,6 +74,18 @@ class Browse extends Component {
 		});
 	};
 
+	componentDidUpdate = (prevProps, prevState) => {
+		if (this.state.refreshing) {
+			if (
+				prevProps.isLoading !== this.props.isLoading &&
+				!this.props.isLoading &&
+				prevProps.request === browseStatus.getAllServiceDetails
+			) {
+				this.setState({ refreshing: false });
+			}
+		}
+	};
+
 	triggerFilter = () => {
 		this.setState(
 			{
@@ -93,7 +108,12 @@ class Browse extends Component {
 				key={`tab-${tab.name}`}
 				onPress={() => this.handleTab(tab)}
 				style={[styles.tab, isActive ? styles.active : null]}>
-				<Text size={16} medium gray={!isActive} secondary={isActive}>
+				<Text
+					size={isActive ? 20 : 16}
+					medium
+					style={{
+						color: isActive ? theme.colors.blue : theme.colors.gray
+					}}>
 					{tab.name}
 				</Text>
 			</TouchableOpacity>
@@ -111,11 +131,17 @@ class Browse extends Component {
 		});
 	};
 
+	onRefresh = () => {
+		this.setState({ refreshing: true });
+		this.fetchData();
+	};
+
 	render() {
 		const {
 			navigation,
 			allServiceDetailsData,
-			allServiceDetailsFilterData
+			allServiceDetailsFilterData,
+			requestSetCurrentServiceDetails
 		} = this.props;
 		const categories = (() => {
 			if (!this.state.isFiltering) {
@@ -129,88 +155,92 @@ class Browse extends Component {
 		})();
 
 		return (
-			<View
-				style={{
-					flex: 1,
-					flexDirection: "column",
-					backgroundColor: theme.colors.white
-				}}>
+			<ScrollView
+				showsVerticalScrollIndicator={false}
+				refreshControl={
+					<RefreshControl
+						refreshing={this.state.refreshing}
+						onRefresh={this.onRefresh}
+					/>
+				}
+				style={{}}>
 				<View
 					style={{
-						flex: 0.2,
-						...styles.header
+						flex: 1,
+						flexDirection: "column",
+						backgroundColor: theme.colors.white
 					}}>
 					<View
 						style={{
-							flexDirection: "row",
-							alignItems: "center",
-							justifyContent: "flex-end"
+							flex: 0.2,
+							...styles.header
 						}}>
-						<TouchableOpacity
+						<View
 							style={{
-								borderRadius: theme.sizes.radius,
-								height: theme.sizes.base * 3,
-								justifyContent: "center",
 								flexDirection: "row",
 								alignItems: "center",
-								justifyContent: "space-between",
-								marginVertical: theme.sizes.padding / 3
+								justifyContent: "flex-end"
 							}}>
-							<Text style={{ paddingHorizontal: 10 }}>Sort</Text>
-							<SortDropdown
-								filters={this.state}
-								onPressFilter={this.onPressFilter}
-								triggerFilter={this.triggerFilter}
-								clearFilter={this.clearFilter}
-							/>
-						</TouchableOpacity>
-						<TouchableOpacity
-							style={{
-								borderRadius: theme.sizes.radius,
-								height: theme.sizes.base * 3,
-								justifyContent: "center",
-								flexDirection: "row",
-								alignItems: "center",
-								justifyContent: "space-between",
-								marginVertical: theme.sizes.padding / 3
-							}}>
-							<Text style={{ paddingHorizontal: 10 }}>Filter</Text>
-							<FilterDropdown
-								filters={this.state.filters}
-								onPressFilter={this.onPressFilter}
-								triggerFilter={this.triggerFilter}
-								clearFilter={this.clearFilter}
-							/>
-						</TouchableOpacity>
+							<TouchableOpacity
+								style={{
+									borderRadius: theme.sizes.radius,
+									height: theme.sizes.base * 3,
+									justifyContent: "center",
+									flexDirection: "row",
+									alignItems: "center",
+									justifyContent: "space-between",
+									marginVertical: theme.sizes.padding / 3
+								}}>
+								<Text style={{ paddingHorizontal: 10 }}>Sort</Text>
+								<SortDropdown
+									filters={this.state}
+									onPressFilter={this.onPressFilter}
+									triggerFilter={this.triggerFilter}
+									clearFilter={this.clearFilter}
+								/>
+							</TouchableOpacity>
+							<TouchableOpacity
+								style={{
+									borderRadius: theme.sizes.radius,
+									height: theme.sizes.base * 3,
+									justifyContent: "center",
+									flexDirection: "row",
+									alignItems: "center",
+									justifyContent: "space-between",
+									marginVertical: theme.sizes.padding / 3
+								}}>
+								<Text style={{ paddingHorizontal: 10 }}>Filter</Text>
+								<FilterDropdown
+									filters={this.state.filters}
+									onPressFilter={this.onPressFilter}
+									triggerFilter={this.triggerFilter}
+									clearFilter={this.clearFilter}
+								/>
+							</TouchableOpacity>
+						</View>
+						<Text h1 bold>
+							Browse
+						</Text>
 					</View>
-					<Text h1 bold>
-						Browse
-					</Text>
-				</View>
 
-				<View
-					style={{
-						shadowColor: theme.colors.black,
-						shadowOffset: { width: 0, height: 2 },
-						shadowOpacity: 0.1,
-						shadowRadius: 13,
-						elevation: 2,
-						flexDirection: "row",
-						...styles.tabs
-					}}>
-					<ScrollView horizontal showsHorizontalScrollIndicator={false}>
-						{categoryNames.map(tab => this.renderTab(tab))}
-					</ScrollView>
-				</View>
-
-				<ScrollView
-					showsVerticalScrollIndicator={false}
-					style={{
-						flex: 1
-					}}>
+					<View
+						style={{
+							shadowColor: theme.colors.black,
+							shadowOffset: { width: 0, height: 2 },
+							shadowOpacity: 0.1,
+							shadowRadius: 13,
+							elevation: 2,
+							flexDirection: "row",
+							...styles.tabs
+						}}>
+						<ScrollView horizontal showsHorizontalScrollIndicator={false}>
+							{categoryNames.map(tab => this.renderTab(tab))}
+						</ScrollView>
+					</View>
 					<View
 						style={{
 							flexDirection: "row",
+							flex: 1,
 							justifyContent: "space-between",
 							...styles.categories
 						}}>
@@ -221,13 +251,15 @@ class Browse extends Component {
 									styles={styles}
 									key={category._id}
 									navigation={navigation}
-									active={this.state.active}
+									requestSetCurrentServiceDetails={
+										requestSetCurrentServiceDetails
+									}
 								/>
 							);
 						})}
 					</View>
-				</ScrollView>
-			</View>
+				</View>
+			</ScrollView>
 		);
 	}
 }

@@ -70,7 +70,7 @@ class UserProfile extends Component {
 
 	addMarketplace = () => {
 		return (
-			<TouchableOpacity onPress={() => this.navigateTo("MarketPlaceContainer")}>
+			<TouchableOpacity onPress={() => this.navigateTo("UpsertMarketPlaceContainer")}>
 				<View
 					style={{
 						display: "flex",

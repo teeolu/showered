@@ -9,7 +9,7 @@ const colors = {
 	black: "#2E384D",
 	black2: "#69707F",
 	black3: "#8798AD",
-	white: "#FFFFFF",
+	white: "#fff",
 	gray: "#BFC5D2",
 	gray2: "#F4F6FC",
 	gray3: "#FFF3FE",

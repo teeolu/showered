@@ -1,71 +1,69 @@
-import React, { Component } from 'react'
-import { StyleSheet, View } from 'react-native'
+import React, { Component } from "react";
+import { StyleSheet, View } from "react-native";
 
-import Block from './Block';
-import Text from './Text';
-import * as theme from '../constants/theme';
+import Block from "./Block";
+import Text from "./Text";
+import * as theme from "../constants/theme";
 
 export default class Card extends Component {
-  static defaultProps = {
-    shadow: true,
-    border: true,
-    title: null,
-  }
+	static defaultProps = {
+		shadow: true,
+		border: true,
+		title: null
+	};
 
-  renderHeader = () => {
-    const { title, headingRight } = this.props;
-    if (!title) return null;
+	renderHeader = () => {
+		const { title, headingRight } = this.props;
+		if (!title) return null;
 
-    return (
-      <Block row space="between" style={styles.header}>
-        <Text h4>{title}</Text>
-        {headingRight && (
-          <View>{headingRight}</View>
-        )}
-      </Block>
-    )
-  }
+		return (
+			<Block row space="between" style={styles.header}>
+				<Text h4>{title}</Text>
+				{headingRight && <View>{headingRight}</View>}
+			</Block>
+		);
+	};
 
-  render() {
-    const { shadow, border, style, children, ...props } = this.props;
-    const cardStyles = [
-      styles.card,
-      shadow && styles.shadow,
-      border && styles.border,
-      style,
-    ];
+	render() {
+		const { shadow, border, style, children, ...props } = this.props;
+		const cardStyles = [
+			styles.card,
+			shadow && styles.shadow,
+			border && styles.border,
+			style
+		];
 
-    return (
-      <Block style={cardStyles} {...props}>
-        {this.renderHeader()}
-        {children}
-      </Block>
-    )
-  }
+		return (
+			<Block style={cardStyles} {...props}>
+				{this.renderHeader()}
+				{children}
+			</Block>
+		);
+	}
 }
 
 const styles = StyleSheet.create({
-  card: {
-    flex: 1,
-    padding: 25,
-    backgroundColor: theme.colors.white,
-  },
-  header: {
-    paddingBottom: 24,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  border: {
-    borderColor: theme.colors.card,
-    borderWidth: 1,
-  },
-  shadow: {
-    shadowColor: theme.colors.shadow,
-    shadowOpacity: 1,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 0 },
-    elevation: 2,
-  }
+	card: {
+		flex: 1,
+		padding: 25,
+		backgroundColor: theme.colors.white
+	},
+	header: {
+		paddingBottom: 24,
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center"
+	},
+	border: {
+		// borderColor: theme.colors.card,
+		// borderWidth: 1
+	},
+	shadow: {
+		// shadowColor: theme.colors.shadow,
+		// shadowOpacity: 1,
+		// shadowRadius: 10,
+		// shadowOffset: { width: 0, height: 0 },
+		// elevation: 2
+	}
 });

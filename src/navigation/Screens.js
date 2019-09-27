@@ -1,17 +1,12 @@
 import React from "react";
 import { createDrawerNavigator, createStackNavigator } from "react-navigation";
 
-import Analytics from "../screens/Analytics";
-import Chat from "../screens/Chat";
-import Settings from "../screens/Settings";
-import Map from "../screens/Map";
-import Vehicles from "../screens/Vehicles";
-import MarketPlaceContainer from "../containers/UpsertMarketPlaceContainer";
+import UpsertMarketPlaceContainer from "../containers/UpsertMarketPlaceContainer";
 import BrowseContainer from "../containers/BrowseContainer";
 import MarketplaceDetailsContainer from "../containers/MarketPlaceDetailsContainer";
 import DrawerComponent from "../components/DrawerComponent";
 import UserProfileContainer from "../containers/UserProfileContainer";
-import MarketPlaceServiceDetailsContainer from "../containers/UpsertServiceDetailsContainer";
+import UpsertServiceDetailsContainer from "../containers/UpsertServiceDetailsContainer";
 import ServiceDetailsContainer from "../containers/ServiceDetailsContainer";
 import MarketPlaceSettingsContainer from "../containers/MarketPlaceSettingsContainer";
 import AdminSettingContainer from "../containers/MarketPlaceSettingsContainer/AdminSettingContainer";
@@ -53,21 +48,10 @@ const MarketPlaceSettingsStack = createStackNavigator({
 	MoreMarketplaceSettingStack
 });
 
-const MarketplaceDetailstack = createStackNavigator(
-	{
-		MarketplaceDetails: MarketplaceDetailsContainer,
-		MarketPlaceSettingsStack,
-		ServiceDetails: MarketPlaceServiceDetailsContainer,
-		ServiceDetailsInfo: ServiceDetailsContainer
-	},
-	{
-		headerMode: "none"
-	}
-);
-
 const MarketPlaceDetailsStack = createStackNavigator(
 	{
-		MarketplaceDetailstack
+		MarketplaceDetails: MarketplaceDetailsContainer,
+		MarketPlaceSettingsStack
 	},
 	{
 		headerMode: "none"
@@ -76,7 +60,13 @@ const MarketPlaceDetailsStack = createStackNavigator(
 
 const BrowseStack = createStackNavigator(
 	{
-		Browse: BrowseContainer
+		Browse: BrowseContainer,
+		ServiceDetailsInfo: {
+			screen: ServiceDetailsContainer,
+			navigationOptions: {
+				headerMode: "none"
+			}
+		}
 	},
 	{
 		headerMode: "none"
@@ -85,39 +75,34 @@ const BrowseStack = createStackNavigator(
 
 const OverviewStack = createStackNavigator({
 	Overview: OverviewContainer,
-	BrowseStack: {
-		screen: BrowseStack,
-		headerOptions: {
-			headerMode: "none"
-		}
-	}
+	BrowseStack
 });
 
-const UserProfileStack = createStackNavigator(
+const MarketPlaceStack = createStackNavigator(
 	{
-		UserProfile: UserProfileContainer,
 		MarketPlaceDetailsStack,
-		BrowseStack
+		ServiceDetails: UpsertServiceDetailsContainer
 	},
 	{
 		headerMode: "none"
 	}
 );
 
-const MarketPlaceStack = createStackNavigator({
-	MarketPlaceContainer
-});
+const UserProfileStack = createStackNavigator(
+	{
+		UserProfile: UserProfileContainer,
+		MarketPlaceStack
+	},
+	{
+		headerMode: "none"
+	}
+);
 
 export default createDrawerNavigator(
 	{
 		OverviewStack,
 		UserProfileStack,
-		Analytics,
-		Chat,
-		Settings,
-		Map,
-		Vehicles,
-		MarketPlaceStack
+		UpsertMarketPlaceContainer
 	},
 	{
 		contentComponent: DrawerComponent

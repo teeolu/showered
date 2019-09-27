@@ -19,7 +19,9 @@ import {
 	requestGetStaffsMarketplaceAction,
 	receiveGetStaffsMarketplaceAction,
 	requestSetCurrentMarketplace,
-	receiveSetCurrentMarketplace
+	receiveSetCurrentMarketplace,
+	receiveSetCurrentServiceDetails,
+	requestSetCurrentServiceDetails
 } from "./actions";
 
 function* addServiceDetailsActionWatcher({ payload }) {
@@ -135,15 +137,24 @@ export function* requestGetStaffsMarketplaceActionSaga() {
 }
 
 function* setCurrentMarketplaceWatcher({ payload }) {
-	try {
-		const { marketPlace, navigation, navigateTo } = payload;
-		yield put(receiveSetCurrentMarketplace(marketPlace));
-		if (navigation) return navigation.navigate(navigateTo);
-	} catch (error) {
-		yield put(receiveSetCurrentMarketplace(error));
-	}
+	const { marketPlace, navigation, navigateTo } = payload;
+	yield put(receiveSetCurrentMarketplace(marketPlace));
+	if (navigation) return navigation.navigate(navigateTo);
 }
 
 export function* requestGetSetCurrentMarketplaceActionSaga() {
 	yield takeLeading(requestSetCurrentMarketplace, setCurrentMarketplaceWatcher);
+}
+
+function* setCurrentServiceDetailsWatcher({ payload }) {
+	const { serviceDetails, item = {}, navigation, navigateTo } = payload;
+	yield put(receiveSetCurrentServiceDetails(serviceDetails));
+	if (navigation) return navigation.navigate(navigateTo, item);
+}
+
+export function* requestGetSetCurrentServiceDetailsActionSaga() {
+	yield takeLeading(
+		requestSetCurrentServiceDetails,
+		setCurrentServiceDetailsWatcher
+	);
 }
