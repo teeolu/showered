@@ -26,24 +26,7 @@ class Overview extends Component {
 		this.navigateToBrowse = this.navigateToBrowse.bind(this);
 	}
 
-	componentDidMount() {
-		// this.props.navigation.dispatch(
-		// 	NavigationActions.reset({
-		// 		index: 0,
-		// 		actions: [NavigationActions.navigate({ routeName: "overview" })]
-		// 	})
-		// );
-		// Let’s consider a situation when someone logs out of the application. I
-		// n that case you would want them to go to Home (assumed) without being able to go back.
-		// Here’s how you can do that.
-		// this.props.navigation.dispatch(
-		// 	NavigationActions.reset({
-		// 	 index: 0,
-		// 	 key: null,
-		// 	 actions: [NavigationActions.navigate({ routeName: "login" })]
-		// 	})
-		//  )
-	}
+	componentDidMount() {}
 
 	scrollX = new Animated.Value(0);
 

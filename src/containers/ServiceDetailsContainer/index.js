@@ -4,6 +4,10 @@ import ServiceDetails from "../../screens/ServiceDetails";
 import { requestSetCurrentServiceDetails } from "../../modules/MarketplaceServiceDetails/actions";
 
 class ServiceDetailsContainer extends Component {
+	static navigationOptions = {
+		header: null
+	};
+
 	render() {
 		const {
 			userdata,

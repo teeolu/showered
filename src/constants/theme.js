@@ -12,12 +12,13 @@ const colors = {
 	white: "#fff",
 	gray: "#BFC5D2",
 	gray2: "#F4F6FC",
-	gray3: "#FFF3FE",
+	gray3: "#f5f5f5",
 	caption: "#B0BAC9",
 	input: "rgba(224, 231, 255, 0.20)", // '#E0E7FF' 20%
 	border: "#D6DDF6",
 	card: "rgba(46,91,255,0.08)",
 	shadow: "rgba(46,91,255,0.07)",
+	active: "#ffe234",
 
 	accent: "#F3534A",
 	primary: "#0AC4BA",
@@ -48,70 +49,70 @@ const sizes = {
 
 const fonts = {
 	h1: {
-		fontFamily: "Rubik-Light",
+		fontFamily: "Montserrat-Medium",
 		fontSize: sizes.h1,
 		color: colors.black,
 		letterSpacing: -0.6,
 		lineHeight: 57
 	},
 	h2: {
-		fontFamily: "Rubik-Light",
+		fontFamily: "Montserrat-Medium",
 		fontSize: sizes.h2,
 		color: colors.black,
 		letterSpacing: 0,
 		lineHeight: 32
 	},
 	h3: {
-		fontFamily: "Rubik-Light",
+		fontFamily: "Montserrat-Medium",
 		fontSize: sizes.h3,
 		color: colors.black,
 		letterSpacing: 0,
 		lineHeight: 32
 	},
 	h4: {
-		fontFamily: "Rubik-Medium",
+		fontFamily: "Montserrat-Medium",
 		fontSize: sizes.h4,
 		color: colors.black,
 		letterSpacing: 0,
 		lineHeight: 18
 	},
 	paragraph: {
-		fontFamily: "Rubik-Regular",
+		fontFamily: "Montserrat-Regular",
 		fontSize: sizes.paragraph,
 		color: colors.black,
 		letterSpacing: 0,
 		lineHeight: 22
 	},
 	paragraphGray: {
-		fontFamily: "Rubik-Regular",
+		fontFamily: "Montserrat-Regular",
 		fontSize: sizes.paragraph,
 		color: colors.gray,
 		letterSpacing: 0,
 		lineHeight: 22
 	},
 	paragraphGray2: {
-		fontFamily: "Rubik-Regular",
+		fontFamily: "Montserrat-Regular",
 		fontSize: sizes.paragraph,
 		color: colors.gray2,
 		letterSpacing: 0,
 		lineHeight: 22
 	},
 	caption: {
-		fontFamily: "Rubik-Regular",
+		fontFamily: "Montserrat-Regular",
 		fontSize: sizes.caption,
 		color: colors.black3,
 		letterSpacing: 1.12,
 		lineHeight: 15
 	},
 	captionMedium: {
-		fontFamily: "Rubik-Medium",
+		fontFamily: "Montserrat-Medium",
 		fontSize: sizes.captionMedium,
 		color: colors.black3,
 		letterSpacing: 1.12,
 		lineHeight: 14
 	},
 	button: {
-		fontFamily: "Rubik-Medium",
+		fontFamily: "Montserrat-Medium",
 		fontSize: sizes.font,
 		color: colors.white,
 		letterSpacing: 0,

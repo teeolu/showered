@@ -4,6 +4,8 @@ import {
 	StyleSheet,
 	ScrollView,
 	RefreshControl,
+	StatusBar,
+	SafeAreaView,
 	View,
 	TouchableOpacity
 } from "react-native";
@@ -15,6 +17,7 @@ import { categoryNames } from "../UpsertMarketPlace/SelectCategory";
 import FilterDropdown from "../../components/FilterDropdown";
 import SortDropdown from "../../components/SortDropdown";
 import { browseStatus } from "../../modules/browse/reducers";
+import { Ionicons } from "@expo/vector-icons";
 
 const { width } = Dimensions.get("window");
 
@@ -155,111 +158,123 @@ class Browse extends Component {
 		})();
 
 		return (
-			<ScrollView
-				showsVerticalScrollIndicator={false}
-				refreshControl={
-					<RefreshControl
-						refreshing={this.state.refreshing}
-						onRefresh={this.onRefresh}
-					/>
-				}
-				style={{}}>
-				<View
-					style={{
-						flex: 1,
-						flexDirection: "column",
-						backgroundColor: theme.colors.white
-					}}>
+			<SafeAreaView>
+				<ScrollView
+					showsVerticalScrollIndicator={false}
+					refreshControl={
+						<RefreshControl
+							refreshing={this.state.refreshing}
+							onRefresh={this.onRefresh}
+						/>
+					}
+					style={{}}>
+					<StatusBar translucent {...this.props} />
 					<View
 						style={{
-							flex: 0.2,
-							...styles.header
+							flex: 1,
+							flexDirection: "column",
+							backgroundColor: theme.colors.white
 						}}>
 						<View
 							style={{
-								flexDirection: "row",
-								alignItems: "center",
-								justifyContent: "flex-end"
+								flex: 0.2,
+								...styles.header
 							}}>
-							<TouchableOpacity
+							<View
 								style={{
-									borderRadius: theme.sizes.radius,
-									height: theme.sizes.base * 3,
-									justifyContent: "center",
 									flexDirection: "row",
 									alignItems: "center",
-									justifyContent: "space-between",
-									marginVertical: theme.sizes.padding / 3
+									justifyContent: "flex-end"
 								}}>
-								<Text style={{ paddingHorizontal: 10 }}>Sort</Text>
-								<SortDropdown
-									filters={this.state}
-									onPressFilter={this.onPressFilter}
-									triggerFilter={this.triggerFilter}
-									clearFilter={this.clearFilter}
-								/>
-							</TouchableOpacity>
-							<TouchableOpacity
-								style={{
-									borderRadius: theme.sizes.radius,
-									height: theme.sizes.base * 3,
-									justifyContent: "center",
-									flexDirection: "row",
-									alignItems: "center",
-									justifyContent: "space-between",
-									marginVertical: theme.sizes.padding / 3
-								}}>
-								<Text style={{ paddingHorizontal: 10 }}>Filter</Text>
-								<FilterDropdown
-									filters={this.state.filters}
-									onPressFilter={this.onPressFilter}
-									triggerFilter={this.triggerFilter}
-									clearFilter={this.clearFilter}
-								/>
-							</TouchableOpacity>
+								<TouchableOpacity
+									style={styles.back}
+									onPress={() => navigation.pop()}>
+									<Ionicons
+										name="ios-arrow-round-back"
+										color={theme.colors.green}
+										size={theme.sizes.font * 3}
+									/>
+								</TouchableOpacity>
+								<TouchableOpacity
+									style={{
+										borderRadius: theme.sizes.radius,
+										height: theme.sizes.base * 3,
+										justifyContent: "center",
+										flexDirection: "row",
+										alignItems: "center",
+										justifyContent: "space-between",
+										marginVertical: theme.sizes.padding / 3
+									}}>
+									<Text style={{ paddingHorizontal: 10 }}>Sort</Text>
+									<SortDropdown
+										filters={this.state}
+										onPressFilter={this.onPressFilter}
+										triggerFilter={this.triggerFilter}
+										clearFilter={this.clearFilter}
+									/>
+								</TouchableOpacity>
+								<TouchableOpacity
+									style={{
+										borderRadius: theme.sizes.radius,
+										height: theme.sizes.base * 3,
+										justifyContent: "center",
+										flexDirection: "row",
+										alignItems: "center",
+										justifyContent: "space-between",
+										marginVertical: theme.sizes.padding / 3
+									}}>
+									<Text style={{ paddingHorizontal: 10 }}>Filter</Text>
+									<FilterDropdown
+										filters={this.state.filters}
+										onPressFilter={this.onPressFilter}
+										triggerFilter={this.triggerFilter}
+										clearFilter={this.clearFilter}
+									/>
+								</TouchableOpacity>
+							</View>
+							<Text h1 bold>
+								Browse
+							</Text>
 						</View>
-						<Text h1 bold>
-							Browse
-						</Text>
-					</View>
 
-					<View
-						style={{
-							shadowColor: theme.colors.black,
-							shadowOffset: { width: 0, height: 2 },
-							shadowOpacity: 0.1,
-							shadowRadius: 13,
-							elevation: 2,
-							flexDirection: "row",
-							...styles.tabs
-						}}>
-						<ScrollView horizontal showsHorizontalScrollIndicator={false}>
-							{categoryNames.map(tab => this.renderTab(tab))}
-						</ScrollView>
+						<View
+							style={{
+								shadowColor: theme.colors.black,
+								shadowOffset: { width: 0, height: 2 },
+								shadowOpacity: 0.1,
+								shadowRadius: 13,
+								elevation: 2,
+								flexDirection: "row",
+								...styles.tabs
+							}}>
+							<ScrollView horizontal showsHorizontalScrollIndicator={false}>
+								{categoryNames.map(tab => this.renderTab(tab))}
+							</ScrollView>
+						</View>
+						<View
+							style={{
+								flexDirection: "row",
+								flex: 1,
+								justifyContent: "space-between",
+								...styles.categories
+							}}>
+							{Object.values(categories).map(category => {
+								return (
+									<CategoryItem
+										category={category}
+										styles={styles}
+										key={category._id}
+										navigation={navigation}
+										requestSetCurrentServiceDetails={
+											requestSetCurrentServiceDetails
+										}
+									/>
+								);
+							})}
+						</View>
 					</View>
-					<View
-						style={{
-							flexDirection: "row",
-							flex: 1,
-							justifyContent: "space-between",
-							...styles.categories
-						}}>
-						{Object.values(categories).map(category => {
-							return (
-								<CategoryItem
-									category={category}
-									styles={styles}
-									key={category._id}
-									navigation={navigation}
-									requestSetCurrentServiceDetails={
-										requestSetCurrentServiceDetails
-									}
-								/>
-							);
-						})}
-					</View>
-				</View>
-			</ScrollView>
+				</ScrollView>
+			</SafeAreaView>
 		);
 	}
 }

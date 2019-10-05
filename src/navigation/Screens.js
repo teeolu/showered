@@ -58,15 +58,19 @@ const MarketPlaceDetailsStack = createStackNavigator(
 	}
 );
 
+const ServiceDetailsInfoStack = createStackNavigator({
+	ServiceDetailsInfo: {
+		screen: ServiceDetailsContainer,
+		navigationOptions: {
+			header: null
+		}
+	}
+});
+
 const BrowseStack = createStackNavigator(
 	{
 		Browse: BrowseContainer,
-		ServiceDetailsInfo: {
-			screen: ServiceDetailsContainer,
-			navigationOptions: {
-				headerMode: "none"
-			}
-		}
+		ServiceDetailsInfoStack
 	},
 	{
 		headerMode: "none"
@@ -75,7 +79,12 @@ const BrowseStack = createStackNavigator(
 
 const OverviewStack = createStackNavigator({
 	Overview: OverviewContainer,
-	BrowseStack
+	BrowseStack: {
+		screen: BrowseStack,
+		navigationOptions: {
+			header: null
+		}
+	}
 });
 
 const MarketPlaceStack = createStackNavigator(
@@ -88,15 +97,10 @@ const MarketPlaceStack = createStackNavigator(
 	}
 );
 
-const UserProfileStack = createStackNavigator(
-	{
-		UserProfile: UserProfileContainer,
-		MarketPlaceStack
-	},
-	{
-		headerMode: "none"
-	}
-);
+const UserProfileStack = createStackNavigator({
+	UserProfile: UserProfileContainer,
+	MarketPlaceStack
+});
 
 export default createDrawerNavigator(
 	{

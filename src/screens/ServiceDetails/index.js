@@ -1,23 +1,330 @@
 import React, { Component } from "react";
 import {
 	TouchableOpacity,
-	Image,
-	SafeAreaView,
 	ImageBackground,
 	ScrollView,
+	Image,
+	Animated,
 	Dimensions,
+	Platform,
 	StyleSheet,
+	FlatList,
 	View
 } from "react-native";
-import { MaterialIcons, Ionicons } from "react-native-vector-icons";
 
 import { Text } from "../../components";
 import * as theme from "../../constants/theme";
-const { width } = Dimensions.get("window");
+import {
+	Feather,
+	MaterialIcons,
+	EvilIcons,
+	FontAwesome,
+	Entypo,
+	AntDesign
+} from "@expo/vector-icons";
+const { width, height } = Dimensions.get("window");
 
 class ServiceDetails extends Component {
 	static navigationOptions = {
 		header: null
+	};
+
+	scrollX = new Animated.Value(0);
+
+	renderDots() {
+		const dotPosition = Animated.divide(this.scrollX, width);
+		return (
+			<View
+				style={[
+					styles.flex,
+					styles.row,
+					{
+						justifyContent: "center",
+						position: "absolute",
+						alignItems: "center",
+						bottom: 10,
+						left: width / 2
+					}
+				]}>
+				{this.props.currentServiceDetails.uploadedImageArray.map(
+					(item, index) => {
+						const borderWidth = dotPosition.interpolate({
+							inputRange: [index - 1, index, index + 1],
+							outputRange: [0, 2.5, 0],
+							extrapolate: "clamp"
+						});
+						return (
+							<Animated.View
+								key={`step-${index}`}
+								style={[
+									styles.dots,
+									styles.activeDot,
+									{ borderWidth: borderWidth }
+								]}
+							/>
+						);
+					}
+				)}
+			</View>
+		);
+	}
+
+	renderDestination = item => {
+		const { navigation } = this.props;
+		return (
+			<TouchableOpacity activeOpacity={1}>
+				<ImageBackground
+					style={[styles.flex, styles.destination, styles.shadow]}
+					source={{ uri: item.secureUrl }}></ImageBackground>
+			</TouchableOpacity>
+		);
+	};
+
+	renderAddToFavorite = () => {
+		return (
+			<TouchableOpacity
+				activeOpacity={0.5}
+				style={[
+					styles.flex,
+					styles.row,
+					styles.shadow,
+					{
+						justifyContent: "center",
+						position: "absolute",
+						alignItems: "center",
+						top: 0,
+						right: 0,
+						height: 60,
+						width: 60,
+						borderRadius: 30,
+						backgroundColor: "#fff",
+						zIndex: 5,
+						transform: [{ translateX: -20 }, { translateY: -30 }]
+					}
+				]}>
+				<MaterialIcons
+					name="favorite-border"
+					size={theme.sizes.font * 2}
+					color={theme.colors.red}
+				/>
+			</TouchableOpacity>
+		);
+	};
+
+	renderBackarrowContainer = () => {
+		return (
+			<View
+				style={[
+					styles.flex,
+					styles.row,
+					{
+						position: "absolute",
+						justifyContent: "space-between",
+						alignItems: "center",
+						top: 0,
+						left: 0,
+						height: 150,
+						paddingHorizontal: theme.sizes.padding,
+						width
+					}
+				]}>
+				<TouchableOpacity onPress={() => this.props.navigation.pop()}>
+					<Feather
+						name="x"
+						size={theme.sizes.font * 2}
+						color={theme.colors.white}
+						style={{}}
+					/>
+				</TouchableOpacity>
+				<View
+					style={[
+						styles.flex,
+						styles.row,
+						{
+							alignItems: "center",
+							marginLeft: 190,
+							justifyContent: "flex-end"
+						}
+					]}>
+					<TouchableOpacity>
+						<EvilIcons
+							name="share-google"
+							size={theme.sizes.font * 3}
+							color={theme.colors.white}
+							style={{
+								marginRight: 10
+							}}
+						/>
+					</TouchableOpacity>
+					<TouchableOpacity>
+						<Entypo
+							name="dots-three-vertical"
+							size={theme.sizes.font * 2}
+							color={theme.colors.white}
+						/>
+					</TouchableOpacity>
+				</View>
+			</View>
+		);
+	};
+
+	renderHeading = () => {
+		return (
+			<View
+				style={[styles.column, styles.destinations, { position: "relative" }]}>
+				<FlatList
+					horizontal
+					pagingEnabled
+					scrollEnabled
+					showsHorizontalScrollIndicator={false}
+					decelerationRate={0}
+					scrollEventThrottle={16}
+					snapToAlignment="center"
+					style={{ overflow: "visible" }}
+					data={this.props.currentServiceDetails.uploadedImageArray}
+					keyExtractor={(item, index) => `${index}`}
+					onScroll={Animated.event([
+						{ nativeEvent: { contentOffset: { x: this.scrollX } } }
+					])}
+					renderItem={({ item }) => this.renderDestination(item)}
+				/>
+				{this.renderDots()}
+				{this.renderBackarrowContainer()}
+			</View>
+		);
+	};
+
+	renderRatings = rating => {
+		const stars = new Array(5).fill(0);
+		return stars.map((_, index) => {
+			const activeStar = Math.floor(rating) >= index + 1;
+			return (
+				<FontAwesome
+					name="star"
+					key={`star-${index}`}
+					size={theme.sizes.font}
+					color={theme.colors[activeStar ? "active" : "gray"]}
+					style={{ marginRight: 4 }}
+				/>
+			);
+		});
+	};
+
+	renderOurExtrabenefit = () => {
+		return (
+			<View
+				style={{
+					padding: theme.sizes.padding,
+					backgroundColor: theme.colors.gray3
+				}}>
+				<Text
+					h4
+					style={{
+						paddingVertical: theme.sizes.padding / 2,
+						paddingLeft: theme.sizes.padding / 2
+					}}>
+					Extra services
+				</Text>
+				{[
+					"Delivery available",
+					"Free seat reservation when you order for four"
+				].map(el => (
+					<View
+						key={el}
+						style={{
+							...styles.center,
+							paddingHorizontal: theme.sizes.padding / 2
+						}}>
+						<AntDesign
+							name="minus"
+							size={theme.sizes.font * 2}
+							color={theme.colors.caption}
+						/>
+						<Text
+							style={{
+								color: theme.colors.black3
+							}}>
+							{el}
+						</Text>
+					</View>
+				))}
+			</View>
+		);
+	};
+
+	renderReviews = () => {
+		return (
+			<View
+				style={{
+					padding: theme.sizes.padding,
+					backgroundColor: theme.colors.gray3
+				}}>
+				<Text
+					h4
+					style={{
+						paddingVertical: theme.sizes.padding / 2,
+						paddingLeft: theme.sizes.padding / 2
+					}}>
+					reviews
+				</Text>
+				{["Delivery available"].map(el => (
+					<View
+						key={el}
+						style={{
+							...styles.center,
+							alignItems: "flex-start",
+							paddingHorizontal: theme.sizes.padding / 2
+						}}>
+						<ImageBackground
+							style={{
+								height: 50,
+								width: 50,
+								marginRight: 10
+							}}
+							imageStyle={{ borderRadius: 25 }}
+							source={{
+								uri: this.props.currentServiceDetails.uploadedImageArray[0]
+									.secureUrl
+							}}
+						/>
+						<View>
+							<View
+								style={{
+									...styles.center,
+									justifyItem: "space-between",
+									paddingRight: theme.sizes.padding * 2.5,
+									paddingBottom: theme.sizes.padding / 2
+								}}>
+								<Text
+									h4
+									style={{
+										color: theme.colors.black,
+										fontSize: theme.sizes.font
+									}}>
+									Adewuyi sam
+								</Text>
+								<View
+									style={{
+										justifySelf: "flex-end"
+									}}>
+									<Text
+										caption
+										style={{
+											fontSize: theme.sizes.font * 0.8
+										}}>
+										22mins ago
+									</Text>
+								</View>
+							</View>
+							<View style={{ ...styles.center }}>
+								{this.renderRatings(4)}
+								<Text caption> (34 Votes)</Text>
+							</View>
+						</View>
+					</View>
+				))}
+			</View>
+		);
 	};
 
 	render() {
@@ -30,141 +337,187 @@ class ServiceDetails extends Component {
 			authorised = navigation.getParam("authorized", false);
 
 		return (
-			<SafeAreaView style={styles.overview}>
-				<ImageBackground
-					source={{ uri: uploadedImageArray[0].secureUrl }}
-					style={styles.backgroundImage}>
-					<View style={styles.overlay} />
-					<ScrollView contentContainerStyle={{ display: "flex" }}>
-						<View
-							style={{ alignItems: "center", marginHorizontal: 30, flex: 1 }}>
-							<View
+			<ScrollView style={styles.overview}>
+				<ScrollView>{this.renderHeading()}</ScrollView>
+				<View
+					style={{
+						padding: theme.sizes.padding,
+						position: "relative",
+						backgroundColor: theme.colors.gray3
+					}}>
+					{this.renderAddToFavorite()}
+					<View
+						style={{
+							padding: theme.sizes.padding / 2,
+							marginVertical: 10,
+							borderBottomColor: theme.colors.black3,
+							borderBottomWidth: 2
+						}}>
+						<Text h2>Mt. Catlin Hotel</Text>
+						<View style={styles.center}>
+							<Text
 								style={{
-									display: "flex",
-									width: "100%",
-									flexDirection: "row",
-									justifyContent: "space-between",
-									alignItems: "center",
-									paddingVertical: 10
+									color: theme.colors.black,
+									fontSize: theme.sizes.font * 1.2
 								}}>
-								<TouchableOpacity
-									style={styles.back}
-									onPress={() => navigation.goBack()}>
-									<Ionicons
-										name="ios-arrow-round-back"
-										color={theme.colors.white}
-										size={theme.sizes.font * 3}
-									/>
-								</TouchableOpacity>
-								<View
-									style={{
-										display: "flex",
-										flexDirection: "row",
-										alignItems: "center"
-									}}>
-									<TouchableOpacity>
-										<MaterialIcons
-											name="favorite-border"
-											onPress={() => null}
-											style={{ margin: 10 }}
-											color={theme.colors.red}
-											size={theme.sizes.font * 4}
-										/>
-									</TouchableOpacity>
-									{authorised && (
-										<TouchableOpacity
-											style={{
-												borderColor: theme.colors.blue,
-												borderWidth: 1,
-												borderRadius: 30
-											}}>
-											<MaterialIcons
-												name="edit"
-												onPress={() =>
-													navigation.navigate("ServiceDetails", {
-														item: navigation.getParam("item"),
-														marketPlaceId
-													})
-												}
-												style={{ margin: 10 }}
-												color={theme.colors.blue}
-												size={theme.sizes.font * 2}
-											/>
-										</TouchableOpacity>
-									)}
-								</View>
-							</View>
-							<Image
-								style={styles.productImg}
-								source={{
-									uri:
-										"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3v7KDJN7TAoJa5sFaPWcp1HX8JFcpF3z5K3ngz4L6kWoEP7Ca"
-								}}
+								$897
+							</Text>
+							<Entypo
+								name="dot-single"
+								color={theme.colors.black3}
+								size={theme.sizes.font * 2}
 							/>
-							<Text style={styles.name}>{serviceName}</Text>
-							<Text style={styles.price}>$ 12.22</Text>
-							<Text style={styles.description}>
-								Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-								commodo ligula eget dolor. Aenean massa. Cum sociis natoque
-								penatibus et magnis dis parturient montes, nascetur ridiculus
-								mus. Donec quam felis, ultricies nec
+							<Text
+								style={{
+									color: theme.colors.black,
+									fontSize: theme.sizes.font * 1.2
+								}}>
+								New York
 							</Text>
 						</View>
-						<View style={styles.starContainer}>
-							<Image
-								style={styles.star}
-								source={{
-									uri: "https://img.icons8.com/color/40/000000/star.png"
-								}}
+					</View>
+					<View
+						style={{ padding: theme.sizes.padding / 2, marginVertical: 10 }}>
+						<Text h4>About Mt. Catlin</Text>
+						<Text
+							style={{
+								fontSize: theme.sizes.font,
+								lineHeight: theme.sizes.font * 2,
+								color: theme.colors.caption
+							}}
+							bold>
+							padding: theme. sizes. padding / 2, border Bottom Color: theme.
+							colors. black3, border Bottom Width: 2, padding:
+							theme.sizes.padding / 2,
+						</Text>
+					</View>
+				</View>
+				<View
+					style={{
+						paddingHorizontal: theme.sizes.padding,
+						paddingVertical: theme.sizes.padding * (2 / 3),
+						backgroundColor: "#fdfdfd"
+					}}>
+					<View style={{ ...styles.center, padding: theme.sizes.padding / 2 }}>
+						<View
+							style={{
+								...styles.center,
+								paddingRight: 20,
+								borderRightColor: theme.colors.caption,
+								borderRightWidth: 2
+							}}>
+							<Feather
+								name="sun"
+								color={theme.colors.gray}
+								size={theme.sizes.font * 2.5}
 							/>
-							<Image
-								style={styles.star}
-								source={{
-									uri: "https://img.icons8.com/color/40/000000/star.png"
-								}}
-							/>
-							<Image
-								style={styles.star}
-								source={{
-									uri: "https://img.icons8.com/color/40/000000/star.png"
-								}}
-							/>
-							<Image
-								style={styles.star}
-								source={{
-									uri: "https://img.icons8.com/color/40/000000/star.png"
-								}}
-							/>
-							<Image
-								style={styles.star}
-								source={{
-									uri: "https://img.icons8.com/color/40/000000/star.png"
-								}}
-							/>
+							<View
+								style={{
+									marginLeft: 10
+								}}>
+								<Text
+									style={{
+										fontSize: 18
+									}}
+									h3>
+									22&deg;
+								</Text>
+								<Text
+									style={{
+										fontSize: theme.sizes.font,
+										color: theme.colors.black3
+									}}>
+									sunny
+								</Text>
+							</View>
 						</View>
-						<View style={styles.separator} />
-						<View style={styles.addToCarContainer}>
-							<TouchableOpacity
-								style={styles.shareButton}
-								onPress={() => this.clickEventListener()}>
-								<Text style={styles.shareButtonText}>Add To Cart</Text>
-							</TouchableOpacity>
+						<View
+							style={{
+								...styles.center,
+								paddingLeft: 20
+							}}>
+							<View
+								style={{
+									marginLeft: 10
+								}}>
+								<View
+									style={{
+										...styles.center
+									}}>
+									<Text
+										style={{
+											fontSize: 18
+										}}
+										h3>
+										8.4{" "}
+									</Text>
+									<Text
+										light
+										style={{
+											fontSize: theme.sizes.font,
+											color: theme.colors.black3
+										}}>
+										+6k reviews
+									</Text>
+								</View>
+								<View
+									style={{
+										...styles.center
+									}}>
+									{this.renderRatings(4)}
+								</View>
+							</View>
+							<View
+								style={{
+									...styles.center,
+									paddingLeft: 10
+								}}>
+								<View
+									style={{
+										height: 40,
+										width: 40,
+										borderRadius: 20,
+										borderWidth: 3,
+										borderColor: "#fff",
+										padding: 2,
+										backgroundColor: theme.colors.caption
+									}}></View>
+								<View
+									style={{
+										height: 40,
+										width: 40,
+										borderRadius: 20,
+										borderWidth: 3,
+										borderColor: "#fff",
+										padding: 2,
+										backgroundColor: theme.colors.caption,
+										transform: [{ translateX: -10 }]
+									}}></View>
+								<View
+									style={{
+										height: 40,
+										width: 40,
+										borderRadius: 20,
+										borderWidth: 3,
+										borderColor: "#fff",
+										padding: 2,
+										backgroundColor: theme.colors.caption,
+										transform: [{ translateX: -20 }]
+									}}></View>
+							</View>
 						</View>
-					</ScrollView>
-				</ImageBackground>
-			</SafeAreaView>
+					</View>
+				</View>
+				<View style={{ height: 7, backgroundColor: "#f2f2f2" }}></View>
+				{this.renderOurExtrabenefit()}
+				<View style={{ height: 7, backgroundColor: "#f2f2f2" }}></View>
+				{this.renderReviews()}
+			</ScrollView>
 		);
 	}
 }
+
 const styles = StyleSheet.create({
-	overlay: {
-		...StyleSheet.absoluteFillObject,
-		backgroundColor: "rgba(0,0,0,0.7)"
-	},
-	backgroundImage: {
-		flex: 1,
-		resizeMode: "cover" // or 'stretch'
-	},
 	overview: {
 		flex: 1,
 		flexDirection: "column",
@@ -173,8 +526,24 @@ const styles = StyleSheet.create({
 	flex: {
 		flex: 1
 	},
-	margin: {
-		marginHorizontal: 25
+	rating: {
+		fontSize: theme.sizes.font * 2,
+		color: theme.colors.white,
+		fontWeight: "bold"
+	},
+	dots: {
+		width: 10,
+		height: 10,
+		borderRadius: 5,
+		marginHorizontal: 6,
+		backgroundColor: theme.colors.black2
+	},
+	relative: { position: "absolute" },
+	activeDot: {
+		borderColor: theme.colors.white
+	},
+	destinations: {
+		height: height * 0.5
 	},
 	driver: {
 		marginBottom: 11
@@ -182,91 +551,26 @@ const styles = StyleSheet.create({
 	column: {
 		flexDirection: "column"
 	},
+	shadow: {
+		shadowColor: theme.colors.black,
+		shadowRadius: 10,
+		shadowOffset: { width: 15, height: 2 },
+		shadowOpacity: 0.1,
+		elevation: Platform.OS === "android" ? 50 : 0
+	},
 	row: {
 		flexDirection: "row"
 	},
-	productImg: {
-		width: 200,
-		height: 200
+	destination: {
+		width: width,
+		height: width,
+		paddingHorizontal: theme.sizes.padding,
+		paddingVertical: theme.sizes.padding * 0.66
 	},
-	name: {
-		fontSize: 28,
-		color: "#696969",
-		fontWeight: "bold"
-	},
-	price: {
-		marginTop: 10,
-		fontSize: 18,
-		color: "green",
-		fontWeight: "bold"
-	},
-	description: {
-		textAlign: "center",
-		marginTop: 10,
-		color: "#696969"
-	},
-	star: {
-		width: 40,
-		height: 40
-	},
-	btnColor: {
-		height: 30,
-		width: 30,
-		borderRadius: 30,
-		marginHorizontal: 3
-	},
-	btnSize: {
-		height: 40,
-		width: 40,
-		borderRadius: 40,
-		borderColor: "#778899",
-		borderWidth: 1,
-		marginHorizontal: 3,
-		backgroundColor: "white",
-
+	center: {
+		display: "flex",
 		flexDirection: "row",
-		justifyContent: "center",
 		alignItems: "center"
-	},
-	starContainer: {
-		justifyContent: "center",
-		marginHorizontal: 30,
-		flexDirection: "row",
-		marginTop: 20
-	},
-	contentColors: {
-		justifyContent: "center",
-		marginHorizontal: 30,
-		flexDirection: "row",
-		marginTop: 20
-	},
-	contentSize: {
-		justifyContent: "center",
-		marginHorizontal: 30,
-		flexDirection: "row",
-		marginTop: 20
-	},
-	separator: {
-		height: 2,
-		backgroundColor: "#eeeeee",
-		marginTop: 20,
-		marginHorizontal: 30
-	},
-	shareButton: {
-		marginTop: 10,
-		height: 45,
-		flexDirection: "row",
-		justifyContent: "center",
-		alignItems: "center",
-		borderRadius: 30,
-		backgroundColor: "#00BFFF"
-	},
-	shareButtonText: {
-		color: "#FFFFFF",
-		fontSize: 20
-	},
-	addToCarContainer: {
-		marginHorizontal: 30
 	}
 });
 

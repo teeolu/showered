@@ -1,11 +1,17 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
+import { TouchableOpacity } from "react-native";
 
+import { Block, Text, Icon } from "../../components";
 import Browse from "../../screens/Browse";
 import { requestGetAllBrowseServiceDetailsAction } from "../../modules/browse/actions";
 import { requestSetCurrentServiceDetails } from "../../modules/MarketplaceServiceDetails/actions";
 
 class BrowseContainer extends PureComponent {
+	static navigationOptions = ({ navigation }) => ({
+		header: null
+	});
+
 	render() {
 		const {
 			requestLoginAction,
